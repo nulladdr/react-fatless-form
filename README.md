@@ -319,6 +319,7 @@ interface FeedbackOptions = {
 #### Methods
 
 #### `addFeedback(message: string, options?: FeedbackOptions): void`
+
 Adds a new feedback notification to the list.
 
 ##### Parameters
@@ -327,6 +328,7 @@ Adds a new feedback notification to the list.
 - `options: FeedbackOptions` - Optional configuration object
 
 #### `removeFeedback(id: number): void`
+
 Removes feedback immediately and triggers its onClose callback, if provided.
 
 ##### Parameters
@@ -334,6 +336,7 @@ Removes feedback immediately and triggers its onClose callback, if provided.
 - `id: number`: Unique identifier of the feedback to be removed.
 
 #### `subscribe(listener: (feedbacks: Feedback[]) => void): () => void`
+
 Registers a listener for real-time feedback updates.
 
 ##### Parameters
@@ -347,9 +350,11 @@ A function to unsubscribe the listener.
 #### Internal Methods
 
 #### `startFadeOut(id: number): void`
+
 Initiates the fade-out animation for a feedback notification before removing it.
 
 #### `notifyListeners(): void`
+
 Notifies all registered listeners of feedback updates.
 
 #### Usage
@@ -944,13 +949,13 @@ The `Input` component is a versatile form control that dynamically renders diffe
 
 ### Examples
 
-##### 1. Text Input
+#### 1. Text Input
 
 ```tsx
 <Input name="username" type="text" label="Username" placeholder="Enter your username" />
 ```
 
-##### 2. Single Checkbox (Default)
+#### 2. Single Checkbox (Default)
 
 ```tsx
 <Input
@@ -960,7 +965,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
 ```
 
-##### 3. Single Checkbox (Slider)
+#### 3. Single Checkbox (Slider)
 
 ```tsx
 <Input
@@ -971,7 +976,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
 ```
 
-##### 4. Multiple Checkboxes
+#### 4. Multiple Checkboxes
 
 ```tsx
 <Input
@@ -985,7 +990,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
  ```
 
-##### 5. Date Input
+#### 5. Date Input
 
 ```tsx
     <Input
@@ -997,7 +1002,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
     />
 ```
 
-##### 6. File Input
+#### 6. File Input
 
 ```tsx
 <Input name="files" type="file" label="Relevant Files" accept=".pdf,.docx" multiple />
@@ -1035,7 +1040,7 @@ const schema = yup.object({
             if (!files || files.length === 0) return true;
             return files
                 .every((file) => file.size <= 2 * 1024 * 1024); // Max 2MB
-        });
+        }),
     preferredCountriesOfWork: yup
         .array()
         .of(yup
