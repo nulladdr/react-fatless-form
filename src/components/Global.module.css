@@ -1,0 +1,44 @@
+.inputWrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.inputWrapper::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: var(--label-offset, 10px);
+    height: 1px;
+    width: var(--label-width, 50px);
+    background-color: var(--mask-background);
+    z-index: 1;
+}
+
+.inputWrapper.inputWrapperError {
+    border: 1px solid rgb(184, 0, 0);
+}
+
+.label {
+    margin-left: var(--label-offset, 10px);
+    position: absolute;
+    top: -12px;
+    padding: 0 4px;
+    font-size: 0.75rem;
+    color: #808080;
+    transition: color 0.3s, transform 0.3s, top 0.3s;
+    background-color: transparent;
+    z-index: 2;
+}
+
+.label.errorLabel {
+    color: rgb(184, 0, 0);
+}
+
+.errorMessage {
+    color: rgb(184, 0, 0);
+    font-size: 0.8rem;
+    margin-top: 1px;
+}

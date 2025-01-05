@@ -1,0 +1,206 @@
+.dateInput {
+    position: relative;
+    z-index: 1;
+    padding: 8px;
+    background-color: transparent;
+    width: 100%;
+    height: 38px;
+    border: none;
+}
+
+.dateInput:focus {
+    outline: none;
+}
+
+.calendarToggleButton {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.calendarToggleButton span {
+    font-size: 1.5rem;
+    line-height: 1;
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.calendarToggleButton:hover span {
+    transform: scale(1.2);
+}
+
+time.icon {
+    font-size: 1em;
+    display: block;
+    position: relative;
+    width: 7em;
+    height: 7em;
+    background-color: #fff;
+    margin: 2em auto;
+    border-radius: 0.6em;
+    box-shadow: 0 1px 0 #bdbdbd, 0 2px 0 #fff, 0 3px 0 #bdbdbd, 0 4px 0 #fff, 0 5px 0 #bdbdbd, 0 0 0 1px #bdbdbd;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: rotate(0deg) skewY(0deg);
+    transform: rotate(0deg) skewY(0deg);
+    -webkit-transform-origin: 50% 10%;
+    transform-origin: 50% 10%;
+}
+
+time.icon * {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    font-weight: bold;
+    font-style: normal;
+    text-align: center;
+}
+
+time.icon strong {
+    position: absolute;
+    top: 0;
+    padding: 0.4em 0;
+    color: #fff;
+    background-color: #fd9f1b;
+    border-bottom: 1px dashed #f37302;
+    box-shadow: 0 2px 0 #fd9f1b;
+}
+
+time.icon em {
+    position: absolute;
+    bottom: 0.3em;
+    color: #fd9f1b;
+}
+
+time.icon span {
+    width: 100%;
+    font-size: 2.8em;
+    letter-spacing: -0.05em;
+    padding-top: 0.8em;
+    color: #2f2f2f;
+}
+
+time.icon:hover,
+time.icon:focus {
+    -webkit-animation: swing 0.6s ease-out;
+    animation: swing 0.6s ease-out;
+}
+
+.calendarDropdown {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    z-index: 2;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 16px;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.calendarDropdown.open {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.calendarHeader select {
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.daysOfWeek,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.dayLabel {
+    text-align: center;
+    font-weight: normal;
+}
+
+.day {
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+    border: none;
+}
+
+.day:hover {
+    background: #e0e0e0;
+}
+
+.daySelected {
+    background: #0078d4;
+    color: white;
+}
+
+@-webkit-keyframes swing {
+    0% {
+        -webkit-transform: rotate(0deg) skewY(0deg);
+    }
+
+    20% {
+        -webkit-transform: rotate(12deg) skewY(4deg);
+    }
+
+    60% {
+        -webkit-transform: rotate(-9deg) skewY(-3deg);
+    }
+
+    80% {
+        -webkit-transform: rotate(6deg) skewY(-2deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(0deg) skewY(0deg);
+    }
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(0deg) skewY(0deg);
+    }
+
+    20% {
+        transform: rotate(12deg) skewY(4deg);
+    }
+
+    60% {
+        transform: rotate(-9deg) skewY(-3deg);
+    }
+
+    80% {
+        transform: rotate(6deg) skewY(-2deg);
+    }
+
+    100% {
+        transform: rotate(0deg) skewY(0deg);
+    }
+}
