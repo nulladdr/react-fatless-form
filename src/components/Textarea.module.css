@@ -1,13 +1,11 @@
-.defaultInput {
-    position: relative;
+.textArea {
     z-index: 1;
-    padding: 8px;
     background-color: transparent;
     width: 100%;
-    height: 38px;
     border: none;
+    margin-top: 5px;
 }
 
-.defaultInput:focus {
+.textArea:focus {
     outline: none;
 }

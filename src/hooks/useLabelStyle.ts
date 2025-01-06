@@ -7,35 +7,41 @@ import { useEffect, useRef, useState } from "react";
  * @param label - The label text.
  * @returns [labelRef, dynamicStyles]
  */
-export function useLabelStyle(
-    label: string
-) {
+export function useLabelStyle(label: string) {
     const labelRef = useRef<HTMLLabelElement>(null);
     const [labelWidth, setLabelWidth] = useState(0);
     const [parentBackground, setParentBackground] = useState("transparent");
 
     useEffect(() => {
         if (labelRef.current) {
+            // Measure label width
             const rect = labelRef.current.getBoundingClientRect();
             setLabelWidth(rect.width);
 
-            const parentElement = labelRef.current?.parentElement?.offsetParent;
+            // Find nearest ancestor with non-transparent background
+            const findNonTransparentBackground = (element: HTMLElement | null): string => {
+                while (element) {
+                    const backgroundColor = getComputedStyle(element).backgroundColor;
 
-            if (parentElement) {
-                const getBackgroundColor = (element: Element) => {
-                    const computedStyle = getComputedStyle(element);
-                    return computedStyle.backgroundColor || "rgba(0, 0, 0, 0)";
-                };
+                    // Check for non-transparent background
+                    if (
+                        backgroundColor !== "rgba(0, 0, 0, 0)" &&
+                        backgroundColor !== "transparent"
+                    ) {
+                        return backgroundColor;
+                    }
 
-                let backgroundColor = getBackgroundColor(parentElement);
-
-                if (backgroundColor === "rgba(0, 0, 0, 0)") {
-                    const bodyBackground = getBackgroundColor(document.body);
-                    backgroundColor = bodyBackground === "rgba(0, 0, 0, 0)" ? "#fff" : bodyBackground;
+                    element = element.parentElement;
                 }
 
-                setParentBackground(backgroundColor);
-            }
+                // Default to body background or white if none found
+                const bodyBackground = getComputedStyle(document.body).backgroundColor;
+                return bodyBackground === "rgba(0, 0, 0, 0)" ? "#fff" : bodyBackground;
+            };
+
+            const parentElement = labelRef.current.parentElement;
+            const backgroundColor = findNonTransparentBackground(parentElement);
+            setParentBackground(backgroundColor);
         }
     }, [label]);
 

@@ -1,9 +1,24 @@
 .inputWrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     width: 100%;
     border-radius: 4px;
     border: 1px solid #ccc;
+    height: 40px;
+    transition: border-color 0.3s ease;
+}
+
+.inputWrapper:focus-within {
+    border-color: #0078d4;
+}
+
+.inputWrapper.open {
+    border-color: #007bff; /* Highlight color when dropdown is open */
+}
+
+.inputWrapper:focus-within .label {
+    color: #0078d4;
 }
 
 .inputWrapper::before {
@@ -24,11 +39,11 @@
 .label {
     margin-left: var(--label-offset, 10px);
     position: absolute;
-    top: -12px;
+    top: -10px;
     padding: 0 4px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #808080;
-    transition: color 0.3s, transform 0.3s, top 0.3s;
+    transition: color 0.3s ease;
     background-color: transparent;
     z-index: 2;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useLabelStyle } from '../../hooks/useLabelStyle'
 import globalStyles from '../Global.module.css';
@@ -96,7 +96,16 @@ export function SelectBox({
     const [labelRef, dynamicStyles] = useLabelStyle(label)
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const toggleDropdown = () => setIsOpen((prev) => !prev);
+    const toggleDropdown = (event: React.MouseEvent<HTMLDivElement>) => {
+        setIsOpen((prev) => !prev);
+
+        const wrapper = event.currentTarget as HTMLElement;
+    if (wrapper.classList.contains("open")) {
+        wrapper.classList.remove("open");
+    } else {
+        wrapper.classList.add("open");
+    }
+    }
     const closeDropdown = () => setIsOpen(false);
 
     const handleOptionClick = (val: string | number) => {

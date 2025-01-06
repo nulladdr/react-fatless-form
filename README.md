@@ -6,11 +6,11 @@ _A lightweight React form library designed for simplicity that simplifies form h
 
 ## Why _fatless_?
 
-I totally get it - most form packages out there come with way too much baggage. They bring along a laundry list of dependencies, leave a huge footprint in your codebase, and force you to deal with unnecessary complexity. It’s like they’re trying to do everything when all you want is a clean, simple solution that just works.
+This package doesn't come with any baggage. It doesn't bring along a laundry list of dependencies, doesn't leave a huge footprint in your codebase, and doesn't force you to deal with unnecessary complexity. It doesn't try to do everything - it's a clean, simple solution that just works.
 
 That’s why I went with the name `react-fatless-form`. It’s my way of saying, “Hey, this is the lean form package you’ve been looking for.” No fluff, no bloated abstractions, and no over-engineered features you’ll never use. It’s light, sleek, and designed to keep your codebase as clean as possible while still delivering all the functionality you actually need.
 
-Think of it as a form library that’s been on a diet 😄. It’s still powerful, but it won’t weigh your project down. So if you’re tired of packages that feel like dragging a sofa through your app, give `react-fatless-form` a shot. You’ll feel the difference right away.
+Think of it as a form library that’s been on a diet :smile:. It’s still powerful, but it won’t weigh your project down. So if you’re looking for a form package that doesn't feel like dragging a sofa through your app, give `react-fatless-form` a shot. You’ll feel the difference right away.
 
 ## Features
 
@@ -29,16 +29,16 @@ Think of it as a form library that’s been on a diet 😄. It’s still powerfu
 
 ## Installation
 
-To get started, install `react-fatless-form`.
+To get started, install `react-fatless-form` and its peer dependency - [yup].
 
 ```bash
-npm install react-fatless-form
+npm install react-fatless-form yup
 ```
 
 or using Yarn:
 
 ```bash
-yarn add react-fatless-form
+yarn add react-fatless-form yup
 ```
 
 ## Provider
@@ -1016,40 +1016,42 @@ import { FormProvider, useForm, handleSubmit, Input } from "react-fatless-form";
 
 // Define a schema
 const schema = yup.object({
-    username: yup
-        .required("Name is required"),
-    age: yup
-        .number()
-        .typeError("Age must be a number")
-        .min(18, "Must be at least 18")
-        .required("Age is required"),
-    dateAvailable: yup
-        .date()
-        .typeError("Must be a valid date")
-        .required("Availability date is required"),
-    relevantFiles: yup
-        .required("This field is required")
-        .min(1, "At least one file must be availed")
-        .test("fileType", "Invalid file type", (files) => {
-            if (!files || files.length === 0) return true;
-            return files
-                .every((file) => ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"]
-                .includes(file.type));
-        })
-        .test("fileSize", "File is too large", (files) => {
-            if (!files || files.length === 0) return true;
-            return files
-                .every((file) => file.size <= 2 * 1024 * 1024); // Max 2MB
-        }),
-    preferredCountriesOfWork: yup
-        .array()
-        .of(yup
-            .string()
-            .typeError("Each item must be a string")
-            .required("Country is required")
-        )
-        .min(1, "At least one country must be selected")
-        .required("This field is required");
+  username: yup
+    .string()
+    .required("Username is required"),
+  age: yup
+      .number()
+      .typeError("Age must be a number")
+      .min(18, "Must be at least 18")
+      .required("Age is required"),
+  dateAvailable: yup
+      .date()
+      .typeError("Must be a valid date")
+      .required("Availability date is required"),
+  relevantFiles: yup
+      .array()
+      .required("This field is required")
+      .min(1, "At least one file must be availed")
+      .test("fileType", "Invalid file type", (files) => {
+          if (!files || files.length === 0) return true;
+          return files
+              .every((file) => ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"]
+              .includes(file.type));
+      })
+      .test("fileSize", "File is too large", (files) => {
+          if (!files || files.length === 0) return true;
+          return files
+              .every((file) => file.size <= 2 * 1024 * 1024); // Max 2MB
+      }),
+  preferredCountriesOfWork: yup
+      .array()
+      .of(yup
+          .string()
+          .typeError("Each item must be a string")
+          .required("Country is required")
+      )
+      .min(1, "At least one country must be selected")
+      .required("This field is required")
 });
 
 function MyForm() {
@@ -1068,30 +1070,32 @@ function MyForm() {
             form,
             schema,
             async (values) => {
-                const result = await api.submitData(values);
-                if (!result.ok) throw result; // Ensure errors are thrown for handleSubmit to catch
+                console.log(values);
             },
             "Submission successful!"
         );
     };
 
     return (
+        <div className="App">
         <FormProvider form={form}>
             <form onSubmit={onSubmit}>
                 <Input name="username" type="text" label="Username" placeholder="Your username" />
                 <Input name="age" type="number" label="Age" placeholder="Your age" />
-                <Input name="dateAvailable" type="date" label="Commencement Date" />
-                <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
+                <Input name="dateAvailable" type="date" label="Date Available" />
                 <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
-                    {label: "Kenya", value: "ke"}
-                    {label: "Ethiopia", value: "et"}
-                    {label: "Nigeria", value: "ng"}
+                    {label: "Kenya", value: "ke"},
+                    {label: "Ethiopia", value: "et"},
+                    {label: "Nigeria", value: "ng"},
                     {label: "South Africa", value: "sa"}
                 ]} placeholder="Select countries" multiple />
-    
+                <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
+
                 <button type="submit">Submit</button>
             </form>
         </FormProvider>
+        <FeedbackContainer />
+        </div>
     );
 }
 ```

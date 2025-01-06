@@ -8,7 +8,6 @@
     cursor: pointer;
     justify-content: space-between;
     display: flex;
-    height: 40px;
     align-items: center;
 }
 
@@ -17,6 +16,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-left: 10px;
+    font-size: 0.9rem;
 }
 
 .arrow {
@@ -58,6 +58,8 @@
 
 .actionButton:hover {
     text-decoration: none;
+    color: #333;
+    transition: color 0.2s ease;
 }
 
 .searchContainer {
@@ -129,10 +131,4 @@
     padding: 10px;
     text-align: center;
     color: #ccc;
-}
-
-.errorMessage {
-    color: rgb(184, 0, 0);
-    font-size: 0.8rem;
-    margin-top: 1px;
 }

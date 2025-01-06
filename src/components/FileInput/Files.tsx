@@ -1,3 +1,5 @@
+import React from "react";
+
 type FilesProps = {
     fileList: File[];
     selectedFiles: Set<File>;

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useField } from "../hooks/useField";
 import { Checkbox } from "./Checkbox";
@@ -7,6 +6,7 @@ import DefaultInput from "./DefaultInput";
 import { FileInput, FileInputType } from "./FileInput";
 import { Radio, RadioInputProps } from "./Radio";
 import { SelectBox, SelectInputType } from "./SelectBox";
+import Textarea from "./Textarea";
 
 type CommonProps = {
     name: string;
@@ -211,13 +211,12 @@ export type InputProps =
  * @param {InputProps} props - Props for configuring the input field.
  */
 export function Input({ type, ...rest }: InputProps) {
-    // @ts-ignore
-    const field = useField(rest.name);
+    const { touched, ...field } = useField(rest.name);
 
     return (
-        <div style={{ margin: "5px" }}>
+        <div style={{ margin: "17px 10px" }}>
             {type === "textarea" ? (
-                <textarea {...field} {...rest}></textarea>
+                <Textarea {...field} {...rest} />
             ) : type === "checkbox" ? (
                 <Checkbox
                     type={type}

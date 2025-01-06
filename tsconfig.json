@@ -1,17 +1,43 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "jsx": "react-jsx",
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "dist",
-    "lib": ["ESNext", "DOM"],
-    "types": ["node", "react", "react-dom"],
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  },
-  "include": ["src", "globals.d.ts"]
+      "target": "ES2016",
+      "module": "ESNext",
+      "jsx": "react",
+      "sourceMap": true,
+      "declarationDir": "./dist",
+      "outDir": "dist",
+      "strict": true,
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "declaration": true,
+  
+      "noEmit": false,
+      "baseUrl": "./src",
+      "lib": ["DOM", "DOM.Iterable", "ESNext"],
+      "types": ["node", "react", "react-dom"],
+      "paths": {
+        "*": [
+          "*",
+        ]
+      },
+      "allowJs": true,
+      "isolatedModules": true,
+      "noImplicitAny": true,
+      "resolveJsonModule": true,
+      "strictNullChecks": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "downlevelIteration": true,
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitReturns": true
+    },
+    "include": ["src", "*.tsx", "*.ts", "globals.d.ts"],
+    "exclude": [
+      "coverage",
+      "config",
+      "dist"
+    ]
 }

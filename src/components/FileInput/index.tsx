@@ -39,7 +39,7 @@ export function FileInput({
     } = useFileSelection(fileArray, onChange);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+        <>
             <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -54,13 +54,12 @@ export function FileInput({
                     borderRadius: "5px",
                     backgroundColor: isDragging ? "#e6f7ff" : "#fff",
                     height: "50px",
-                    width: "100%",
                     ...style,
                 }}
             >
                 <label htmlFor={name} style={{ display: "flex", alignItems: "center", color: "#A9A9A9", cursor: "pointer" }}>
                     &#10514;
-                    <span style={{ marginLeft: "5px" }}>{`Click to upload or drop ${label} here`}</span>
+                    <span style={{ marginLeft: "5px", fontSize: "0.9rem" }}>{`Click to upload or drop ${label} here`}</span>
                 </label>
                 <span style={{ color: "#A9A9A9" }}>{accept ? accept.replace(/,/g, ", ") : "Any file"}</span>
             </div>
@@ -77,7 +76,7 @@ export function FileInput({
 
             <div style={{ marginTop: "10px" }}>
                 {fileArray.length === 0 ? (
-                    <span style={{ color: error ? "rgb(184, 0, 0)" : "#A9A9A9" }}>{error ? error : 'No file uploaded yet'}</span>
+                    <span style={{ color: error ? "rgb(184, 0, 0)" : "#A9A9A9", fontSize: ".8rem" }}>{error ? error : 'No file uploaded yet'}</span>
                 ) : (
                     <div>
                         {fileArray.length > 1 && (
@@ -101,6 +100,6 @@ export function FileInput({
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }

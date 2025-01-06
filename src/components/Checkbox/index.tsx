@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styles from './Switch.module.css';
 export interface BaseCheckboxProps {
     type: "checkbox";
