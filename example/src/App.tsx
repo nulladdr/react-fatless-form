@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import * as yup from "yup";
 import './App.css';
@@ -43,7 +42,7 @@ const schema = yup.object({
       .min(1, "At least one country must be selected")
       .required("This field is required")
 });
-// @ts-nocheck
+
 function App() {
   const form = useForm<{ 
     username: string; 
@@ -78,7 +77,7 @@ function App() {
           <form onSubmit={onSubmit}>
               <Input name="username" type="text" label="Username" placeholder="Your username" />
               <Input name="age" type="number" label="Age" placeholder="Your age" />
-              <Input name="dateAvailable" type="date" label="Date Available" />
+              <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} />
               <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
                   {label: "Kenya", value: "ke"},
                   {label: "Ethiopia", value: "et"},

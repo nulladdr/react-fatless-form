@@ -25,8 +25,8 @@ export type InputProps =
     } & CommonProps)
     | ({
         type: "date";
-        minDate?: string;
-        maxDate?: string;
+        minDate?: Date;
+        maxDate?: Date;
         placeholder?: string;
     } & CommonProps)
     | ({
@@ -69,6 +69,9 @@ export type InputProps =
         type: "text" | "number" | "password";
         placeholder?: string;
         autofocus?: boolean;
+        autocomplete?: "on" | "off";
+        maxlength?: number;
+        pattern?: string;
     } & CommonProps);
 
 /**
