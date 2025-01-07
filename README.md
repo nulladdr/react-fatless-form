@@ -1,5 +1,7 @@
 # react-fatless-form  🥬
 
+![License](https://img.shields.io/github/license/aderahenry/react-fatless-form) ![npm version](https://img.shields.io/npm/v/react-fatless-form)
+
 _A lightweight React form library designed for simplicity that simplifies form handling and validation without unnecessary complexity or bloat._
 
 `react-fatless-form` simplifies form management in React applications without leaving a huge footprint in your codebase. Whether you're building simple or complex forms, this package ensures a clean and intuitive experience with minimal setup.
