@@ -10,8 +10,7 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./style": "./dist/index.css"
+    }
   },
   "files": [
     "dist"
@@ -71,6 +70,9 @@
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@rollup/plugin-url": "^8.0.2",
+    "@svgr/rollup": "^8.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
@@ -98,18 +100,9 @@
     "yup": "^1.6.1"
   },
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0",
     "yup": "^1.6.1"
   },
-  "license": "MIT",
-  "dependencies": {
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@rollup/plugin-url": "^8.0.2",
-    "@svgr/rollup": "^8.1.0"
-  },
-  "resolutions": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
+  "license": "MIT"
 }
