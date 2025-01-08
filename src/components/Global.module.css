@@ -13,7 +13,7 @@
     border-color: #0078d4;
 }
 
-.inputWrapper.open {
+.inputWrapper.selectBoxOpen {
     border-color: #007bff; /* Highlight color when dropdown is open */
 }
 

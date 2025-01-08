@@ -96,16 +96,7 @@ export function SelectBox({
     const [labelRef, dynamicStyles] = useLabelStyle(label)
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const toggleDropdown = (event: React.MouseEvent<HTMLDivElement>) => {
-        setIsOpen((prev) => !prev);
-
-        const wrapper = event.currentTarget as HTMLElement;
-    if (wrapper.classList.contains("open")) {
-        wrapper.classList.remove("open");
-    } else {
-        wrapper.classList.add("open");
-    }
-    }
+    const toggleDropdown = () => setIsOpen((prev) => !prev);
     const closeDropdown = () => setIsOpen(false);
 
     const handleOptionClick = (val: string | number) => {
@@ -167,9 +158,21 @@ export function SelectBox({
         return placeholder;
     };
 
+    const getClassNames = () => {
+        return [
+            globalStyles.inputWrapper,
+            styles.control,
+            isOpen && globalStyles.selectBoxOpen,
+            error && globalStyles.inputWrapperError,
+            className
+        ]
+            .filter(Boolean)
+            .join(' ');
+    };
+
     return (
         <div className={styles.selectBox} ref={dropdownRef}>
-            <div className={`${globalStyles.inputWrapper} ${styles.control} ${className || ''} ${error ? globalStyles.inputWrapperError : ''}`} onClick={toggleDropdown} style={{ ...dynamicStyles, ...style }}>
+            <div className={getClassNames()} onClick={toggleDropdown} style={{ ...dynamicStyles, ...style }}>
                 <label ref={labelRef} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>{label}</label>
                 <span className={styles.value} style={{ color: !String(value) ? '#ccc' : 'inherit' }}>{displayValue()}</span>
                 <span className={styles.arrow}>{isOpen ? '\u005E' : '\u2304'}</span>
