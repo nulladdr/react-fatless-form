@@ -40,7 +40,7 @@ import * as yup from "yup";
  *
  * @throws {Error} Will not throw an error, but will instead return validation errors as a structured object.
  */
-export function validateSchema<T extends Record<string, any>>(schema: yup.ObjectSchema<T>, values: T) {
+export function validateSchema<T extends Record<string, any>>(schema: yup.ObjectSchema<T>, values: T): Partial<Record<keyof T, string>> {
     try {
         schema.validateSync(values, { abortEarly: false });
         return {};
