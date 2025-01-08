@@ -93,11 +93,11 @@ export function useForm<T>(initialValues: T): {
 
 #### Return value
 
-The useForm hook returns an object containing the following state and functions:
+The useForm hook returns an object containing the following **state**, and **functions**:
 
 ##### State
 
-##### `values: T`
+##### 1. `values: T`
 
 The current state of the form’s values. Example:
 
@@ -108,7 +108,7 @@ The current state of the form’s values. Example:
 }
 ```
 
-##### `errors: Partial<Record<keyof T, string>>`
+##### 2. `errors: Partial<Record<keyof T, string>>`
 
 An object storing validation errors for each field. Example:
 
@@ -118,7 +118,7 @@ An object storing validation errors for each field. Example:
 }
 ```
 
-##### `touched: Partial<Record<keyof T, boolean>>`
+##### 3. `touched: Partial<Record<keyof T, boolean>>`
 
 An object tracking whether a field has been interacted with. Example:
 
@@ -128,7 +128,7 @@ An object tracking whether a field has been interacted with. Example:
 }
 ```
 
-##### `submissionStatus:` "idle" | "submitting" | "success" | "error"
+##### 4. `submissionStatus:` "idle" | "submitting" | "success" | "error"
 
 The current status of the form submission. Possible values:
 
@@ -139,7 +139,7 @@ The current status of the form submission. Possible values:
 
 ##### Functions
 
-##### `setFieldValue(field: keyof T, value: T[keyof T]) => void`
+##### 1. `setFieldValue(field: keyof T, value: T[keyof T]) => void`
 
 Updates the value of a specific field. Example:
 
@@ -147,7 +147,7 @@ Updates the value of a specific field. Example:
 form.setFieldValue("username", "JaneDoe")
 ```
 
-##### `setFieldArrayValue(field: keyof T, value: string | string[]) => void`
+##### 2. `setFieldArrayValue(field: keyof T, value: string | string[]) => void`
 
 Sets the value of a field as a string or an array of strings. Example:
 
@@ -155,7 +155,7 @@ Sets the value of a field as a string or an array of strings. Example:
 form.setFieldArrayValue("tags", ["React", "JavaScript"]);
 ```
 
-##### `setFieldError(field: keyof T, error: string) => void`
+##### 3. `setFieldError(field: keyof T, error: string) => void`
 
 Sets an error message for a specific field. Example
 
@@ -163,7 +163,7 @@ Sets an error message for a specific field. Example
  form.setFieldError("username", "Username is required");
 ```
 
-##### `setFieldTouched(field: keyof T, touched: boolean) => void`
+##### 4. `setFieldTouched(field: keyof T, touched: boolean) => void`
 
 Marks a field as touched or untouched. Example:
 
@@ -171,11 +171,11 @@ Marks a field as touched or untouched. Example:
 form.setFieldTouched("username", true);
 ```
 
-##### `validate(validateFn: (values: T) => Partial<Record<keyof T, string>>) => boolean`
+##### 5. `validate(validateFn: (values: T) => Partial<Record<keyof T, string>>) => boolean`
 
 Validates the form using a custom validation function. `validateFn` receives the current form values and returns an object with field-specific error messages. Returns `true` if validation passes (no errors), otherwise `false`.
 
-##### `resetForm() => void`
+##### 6. `resetForm() => void`
 
 Resets the form’s values, errors, and touched fields to their initial state. Example:
 
@@ -183,7 +183,7 @@ Resets the form’s values, errors, and touched fields to their initial state. E
 form.resetForm();
 ```
 
-##### `updateSubmissionStatus(status: "idle" | "submitting" | "success" | "error") => void`
+##### 7. `updateSubmissionStatus(status: "idle" | "submitting" | "success" | "error") => void`
 
 Updates the submissionStatus to reflect the current state of submission. Example:
 
@@ -191,7 +191,7 @@ Updates the submissionStatus to reflect the current state of submission. Example
 form.updateSubmissionStatus("submitting");
 ```
 
-##### `resetSubmissionStatus() => void`
+##### 8. `resetSubmissionStatus() => void`
 
 Resets the submissionStatus to "idle". Example:
 
@@ -199,11 +199,11 @@ Resets the submissionStatus to "idle". Example:
 form.resetSubmissionStatus()
 ```
 
-> **Note:** Leaving the form in a `"success"` or `"error"` state can cause issues when using `useForm` in multiple places. For example, submission-related logic tied to `"idle"` won't execute if the form never returns to the `"idle"` state. You must ensure `resetSubmissionStatus` is called to reset the form's state. More on this later.
+>:no_good_man: Leaving the form in a `"success"` or `"error"` state can cause issues when using `useForm` in multiple places. For example, submission-related logic tied to `"idle"` won't execute if the form never returns to the `"idle"` state. You must ensure `resetSubmissionStatus` is called to reset the form's state. More on this later.
 
 #### Example usage
 
-> **Note:** This example will be used throughout the remaining documentation, undergoing progressive refinements.
+>:love_you_gesture: This example will be used throughout the remaining documentation, undergoing progressive refinements.
 
 ```tsx
 import { FormProvider, useForm } from "react-fatless-form";
@@ -280,7 +280,7 @@ function MyForm() {
 
 The **FeedbackManager** class is a centralized utility for managing feedback notifications - specifically toasts and alerts, with features like auto-dismissal, customizable durations, and fade-out animations. It follows a subscription-based model, making it easy to integrate with UI components for real-time feedback updates.
 
-### Features
+#### Features
 
 - **Supports Feedback Types:** "toast" and "alert".
 - **Visual Variants:** "info", "success", "error", and "warning".
@@ -289,7 +289,7 @@ The **FeedbackManager** class is a centralized utility for managing feedback not
 - **Subscription Model:** Provides real-time updates to registered listeners.
 - **UI Integration:** Works seamlessly with the FeedbackContainer component for rendering feedback notifications.
 
-### API Documentation
+#### API Documentation
 
 #### Types
 
@@ -320,7 +320,7 @@ interface FeedbackOptions = {
 
 #### Methods
 
-#### `addFeedback(message: string, options?: FeedbackOptions): void`
+#### 1. `addFeedback(message: string, options?: FeedbackOptions): void`
 
 Adds a new feedback notification to the list.
 
@@ -329,7 +329,7 @@ Adds a new feedback notification to the list.
 - `message: string` - The feedback message to display.
 - `options: FeedbackOptions` - Optional configuration object
 
-#### `removeFeedback(id: number): void`
+#### 2. `removeFeedback(id: number): void`
 
 Removes feedback immediately and triggers its onClose callback, if provided.
 
@@ -337,7 +337,7 @@ Removes feedback immediately and triggers its onClose callback, if provided.
 
 - `id: number`: Unique identifier of the feedback to be removed.
 
-#### `subscribe(listener: (feedbacks: Feedback[]) => void): () => void`
+#### 3. `subscribe(listener: (feedbacks: Feedback[]) => void): () => void`
 
 Registers a listener for real-time feedback updates.
 
@@ -351,17 +351,17 @@ A function to unsubscribe the listener.
 
 #### Internal Methods
 
-#### `startFadeOut(id: number): void`
+#### 1. `startFadeOut(id: number): void`
 
 Initiates the fade-out animation for a feedback notification before removing it.
 
-#### `notifyListeners(): void`
+#### 2. `notifyListeners(): void`
 
 Notifies all registered listeners of feedback updates.
 
 #### Usage
 
-##### Mounting the FeedbackContainer
+##### Mounting the Feedback Container
 
 The `FeedbackContainer` component listens for updates and renders feedback notifications appropriately. Add it once to your application, typically in your app's root component.
 
@@ -378,7 +378,7 @@ function App() {
 }
 ```
 
-**FeedbackContainer** uses `ReactDOM.createPortal` to render notifications at the root of `document.body`.
+The component uses `ReactDOM.createPortal` to render notifications at the root of `document.body`.
 
 ##### Importing and Instantiating
 
@@ -386,7 +386,7 @@ function App() {
 import { feedbackManager } from 'react-fatless-form';
 ```
 
-###### Adding Feedback
+##### Adding Feedback
 
 ```typescript
 feedbackManager.addFeedback("Operation successful!", {
@@ -398,7 +398,7 @@ feedbackManager.addFeedback("Operation successful!", {
 });
 ```
 
-###### Subscribing to Feedback Updates
+##### Subscribing to Feedback Updates
 
 ```typescript
 const unsubscribe = feedbackManager.subscribe(feedbacks => {
@@ -409,10 +409,10 @@ const unsubscribe = feedbackManager.subscribe(feedbacks => {
 unsubscribe();
 ```
 
-###### Example Integration with UI
+##### Example Integration with UI
 
 ```tsx
-import { feedbackManager } from 'react-fatless-form';
+import { FeedbackContainer, feedbackManager } from 'react-fatless-form';
 
 const App = () => {
   const handleClick = () => {
@@ -524,7 +524,7 @@ function MyForm() {
 
 #### Notes
 
-- The `FeedbackManager` is a singleton instance provided by the `react-fatless-form` package.
+- The `FeedbackManager` is a singleton instance provided by the `react-fatless-form`.
 - To display feedback notifications, ensure the `FeedbackContainer` component is mounted in your application - typically in your app's root component.
 - Fade-out animations provide a smooth user experience and are automatically handled before feedback removal.
 
@@ -532,40 +532,36 @@ function MyForm() {
 
 The `validateSchema` utility function is a simple and efficient tool for validating form values against a schema defined using the [yup] validation library. It provides a structured way to collect validation errors, making it easy to integrate with form handling workflows.
 
-### API Documentation
+#### API Documentation
 
 #### Signature
 
 ```typescript
-export function validateSchema<T>(
+function validateSchema<T extends Record<string, any>>(
     schema: yup.ObjectSchema<T>, 
     values: T
-): Record<string, string>
+): Partial<Record<keyof T, string>>
 ```
 
 #### Parameters
 
-#### `schema: yup.ObjectSchema<T>`
+##### 1. `schema: yup.ObjectSchema<T>`
 
-**Description:** The validation schema defining the rules for the form fields. This is a yup object schema tailored to the structure of the values being validated.
+The validation schema defining the rules for the form fields. This is a yup object schema tailored to the structure of the values being validated.
 
-**Type:** `yup.ObjectSchema<T>` (generic type representing the shape of the values)
+##### 2. `values: T`
 
-#### `values: T`
-
-**Description:** The object containing the form field values to be validated against the schema.
-**Type:** `T` (generic type matching the schema shape)
+The object containing the form field values to be validated against the schema.
 
 #### Return value
 
-**Type:** `Record<string, string>` (generic type matching the schema shape)
-**Description:** An object containing validation errors. Each key represents the name of an invalid field, and its value is the corresponding error message. If no validation errors are found, an empty object is returned (`{}`).
+An object containing validation errors. Each key represents the name of an invalid field, and its value is the corresponding error message. If no validation errors are found, an empty object `{}` is returned.
 
 #### Behavior
 
 ##### Validation Process
 
-- The `validateSchema` function uses the schema.validateSync() method from yup to perform validation.
+- The `validateSchema` function uses the `schema.validateSync()` method from [yup] to perform validation.
 - The `abortEarly: false` option ensures all errors are collected, not just the first one.
 
 ##### Error Handling
@@ -573,7 +569,7 @@ export function validateSchema<T>(
 - If the validation fails, the errors are collected from the inner property of the `yup.ValidationError` object.
 - The errors are returned as a flat object, where each field’s name is mapped to its corresponding error message.
 
-### Example usage
+#### Example usage
 
 ```tsx
 import * as yup from "yup";
@@ -647,7 +643,7 @@ function MyForm() {
                 />
                 {errors.username && <span>{errors.username}</span>}
     
-                <input
+                <input 
                     name: "age"
                     type="number"
                     value={values.age}
@@ -667,7 +663,7 @@ function MyForm() {
 
 The `handleSubmit` utility simplifies form submissions in React applications by integrating schema-based validation, submission status management, and optional feedback notifications. Designed to work seamlessly with the `useForm` hook, it reduces boilerplate code and enforces best practices for managing the form lifecycle.
 
-### Features
+#### Features
 
 - **Schema-Based Validation:** Ensures form data adheres to a defined structure using [yup].
 - **Submission Status Updates:** Automatically updates form status ("submitting", "success", "error") for improved user feedback and state management.
@@ -675,12 +671,12 @@ The `handleSubmit` utility simplifies form submissions in React applications by 
 - **Flexible Feedback Control:** Allows developers to enable or disable default feedback handling for custom solutions.
 - **Promise-Based API:** Fully compatible with async/await for smooth integration.
 
-### API Documentation
+#### API Documentation
 
 #### Signature
 
 ```typescript
-function handleSubmit<T>(
+function handleSubmit<T extends Record<string, any>>(
     form: ReturnType<typeof useForm<T>>, 
     schema: yup.ObjectSchema<T>, 
     onSubmit: (values: T) => Promise<void>, 
@@ -691,11 +687,11 @@ function handleSubmit<T>(
 
 #### Parameters
 
-- `form: ReturnType<typeof useForm<T>>` - The form object returned by the useForm hook.
-- `schema: yup.ObjectSchema<T>` - A yup schema defining the structure and constraints of form values.
+- `form: ReturnType<typeof useForm<T>>` - The form object returned by the `useForm` hook.
+- `schema: yup.ObjectSchema<T>` - A [yup] schema defining the structure and constraints of form values.
 - `onSubmit: (values: T) => Promise<void>` - An async callback for form submission logic. Receives validated form values as an argument.
 - `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
-- `showFeedback?: boolean` - Controls whether feedback notifications are displayed. Defaults to true.
+- `showFeedback?: boolean` - Controls whether feedback notifications are displayed. Defaults to `true`.
 
 #### Returns
 
@@ -703,9 +699,9 @@ function handleSubmit<T>(
 
 #### Usage
 
-##### Schema Definition with yup
+##### Schema Definition with [yup]
 
-```tsx
+```typescript
 import * as yup from "yup";
 import { useForm, feedbackManager, validateSchema } from "react-fatless-form";
 
@@ -718,7 +714,7 @@ const schema = yup.object({
 
 ##### Basic Integration
 
-```tsx
+```typescript
 import { useForm, handleSubmit } from 'react-fatless-form';
 
 const form = useForm({ username: "", age: 0 });
@@ -740,13 +736,13 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promis
 
 ##### Disabling Feedback
 
-```tsx
+```typescript
 import { useForm, feedbackManager } from 'react-fatless-form';
 
 const form = useForm({ username: "", age: 0 });
 
-const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
+const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
     
     await handleSubmit(
         form,
@@ -767,7 +763,7 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promis
         variant: "success",
         autoDismiss: true,
         duration: 5000,
-        onClose: () => form.resetSubmissionStatus(),
+        onClose: () => form.resetSubmissionStatus(), // Reset form submission status to "idle"
     });
 };
 ```
@@ -848,11 +844,49 @@ function MyForm() {
 - **Flexibility:** Customize feedback or rely on built-in options.
 - **Best Practices:** Encourages clean, predictable form handling with clear state transitions.
 
-## The `Input` component ✨
+## Components
 
-The `Input` component is a versatile form control that dynamically renders different input types based on the `type` prop. It integrates seamlessly with form state management, automatically binding to form fields and handling state, validation, and styling. The component integrates seamlessly with form state management, automatically handling `value` and `onChange` props. This allows developers to focus solely on providing the necessary configurations without worrying about manually managing state.
+### `Input` :nerd_face:
 
-### Supported Input Types
+The `Input` component is a versatile and self-sufficient form control designed to handle a wide variety of input scenarios. It dynamically adapts its behavior based on the _type_ prop and comes with built-in features to simplify form management.
+
+#### Features
+
+##### 1. Dynamic Type Handling
+
+Renders different input types (text, number, password, email, etc.) based on the _type_ prop.
+
+##### 2. Custom Datepicker
+
+- Includes a fully custom datepicker component, eliminating the need for external libraries.
+- Provides an intuitive UI for date selection.
+
+##### 3. Custom Drag-and-Drop file picker
+
+- Features a built-in drag-and-drop interface for file uploads.
+- Supports multiple file uploads
+- Displays selected file names, and has the feature to select and remove
+
+##### 4. Integrated Form State Management
+
+- Automatically binds to form fields, handling value and onChange props.
+- Manages field state and validation seamlessly.
+
+##### 5. Developer-Friendly
+
+- Fully self-sufficient and requires no external dependencies for advanced features like datepickers or drag-and-drop file uploads.
+- Provides a simple API, allowing developers to focus on configuration without worrying about state management or third-party library integration.
+
+##### 6. Customizable and Themed
+
+- Supports custom styles via _className_ and _style_ props.
+- Adapts to form-level and global styling conventions.
+
+##### 7. Type-Safe Props
+
+Each input type enforces its own specific props, ensuring valid usage.
+
+#### Supported Input Types
 
 - **Text-based Inputs**: Includes `text`, `number`, `password`, etc.
 - **Textarea**: Multi-line text input with options for rows, columns, and wrapping.
@@ -862,13 +896,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 - **Date Picker**: Renders a date input with optional minimum and maximum date constraints.
 - **File Input**: For uploading files, with support for specifying file types and allowing multiple file uploads.
 
-### Key Features
-
-- **Dynamic Rendering**: Automatically renders the correct form control based on the `type` prop.
-- **Type-Safe Props**: Each input type enforces its own specific props, ensuring valid usage.
-- **Styling Options**: Supports `className` and `style` props for customization.
-
-#### Common Props
+##### Common Props
 
 | Prop            | Type                                   | Description                                                                                       |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -879,16 +907,16 @@ The `Input` component is a versatile form control that dynamically renders diffe
 | `className` | `string` (optional) |Adds custom CSS classes to the input field for styling.|
 | `style` | `React.CSSProperties` (optional) | Adds inline styles for the input field. |
 
-#### Type-Specific Props
+##### Type-Specific Props
 
-##### Text Inputs (type: "text" | "number" | "password")
+###### Text Inputs (type: "text" | "number" | "password")
 
 | Prop            | Type                                   | Description                                                                                      |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
 | `placeholder`        | `string`                                   | Placeholder text for the input.                   |
 | `autofocus`      | `boolean`                        | Automatically focuses the input field on mount. |
 
-##### Textarea (type: "textarea")
+###### Textarea (type: "textarea")
 
 | Prop            | Type                                   | Description                                                                                      |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -898,7 +926,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 | `readonly` | `boolean` | Prevents modification of the text if true. |
 | `maxlength` | `number` | Maximum number of characters allowed. |
 
-##### Checkbox (type: "checkbox")
+###### Checkbox (type: "checkbox")
 
 | Prop            | Type                                   | Description                                                                                      |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -906,19 +934,19 @@ The `Input` component is a versatile form control that dynamically renders diffe
 | `options`      | `{ label: string; value: any }[]`                        | Array of checkbox options for grouped checkboxes. |
 | `slider` | `string` | "rounded" or "default" - If provided, renders a single checkbox as a switch. "default" renders a rounded switch. "rounded" renders a rounded switch. |
 
-##### Behavior
+###### Behavior
 
-###### Single Checkbox
+###### :point_right: Single Checkbox
 
 - If `options` is not provided, it renders a single checkbox.
 - If `slider` is provided, the checkbox is styled as a switch.
 
-###### Multiple Checkboxes
+###### :point_right: Multiple Checkboxes
 
 - If `options` is provided and has at least one item, it renders a list of checkboxes. 
 - If `options` is empty, the component renders nothing.
 
-##### Radio Buttons (type: "radio")
+###### Radio Buttons (type: "radio")
 
 | Prop            | Type                                   | Description                                                                                      |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -949,15 +977,15 @@ The `Input` component is a versatile form control that dynamically renders diffe
 | `accept`        | `string`                                   | Accepted file types (e.g., .pdf, .docx).               |
 | `multiple`      | `boolean`                        | Allows selection of multiple files if true. |
 
-### Examples
+#### Examples
 
-#### 1. Text Input
+##### 1. Text Input
 
 ```tsx
 <Input name="username" type="text" label="Username" placeholder="Enter your username" />
 ```
 
-#### 2. Single Checkbox (Default)
+##### 2. Single Checkbox (Default)
 
 ```tsx
 <Input
@@ -967,7 +995,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
 ```
 
-#### 3. Single Checkbox (Slider)
+##### 3. Single Checkbox (Slider)
 
 ```tsx
 <Input
@@ -978,7 +1006,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
 ```
 
-#### 4. Multiple Checkboxes
+##### 4. Multiple Checkboxes
 
 ```tsx
 <Input
@@ -992,7 +1020,7 @@ The `Input` component is a versatile form control that dynamically renders diffe
 />
  ```
 
-#### 5. Date Input
+##### 5. Date Input
 
 ```tsx
     <Input
@@ -1004,13 +1032,13 @@ The `Input` component is a versatile form control that dynamically renders diffe
     />
 ```
 
-#### 6. File Input
+##### 6. File Input
 
 ```tsx
 <Input name="files" type="file" label="Relevant Files" accept=".pdf,.docx" multiple />
 ```
 
-### Full Example (Recommended)
+## Full Usage Example :sparkles:
 
 ```tsx
 import * as yup from "yup";
@@ -1037,7 +1065,10 @@ const schema = yup.object({
       .test("fileType", "Invalid file type", (files) => {
           if (!files || files.length === 0) return true;
           return files
-              .every((file) => ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"]
+              .every((file) => [
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+                "application/msword"
+              ]
               .includes(file.type));
       })
       .test("fileSize", "File is too large", (files) => {
@@ -1079,25 +1110,25 @@ function MyForm() {
     };
 
     return (
-        <div className="App">
-        <FormProvider form={form}>
-            <form onSubmit={onSubmit}>
-                <Input name="username" type="text" label="Username" placeholder="Your username" />
-                <Input name="age" type="number" label="Age" placeholder="Your age" />
-                <Input name="dateAvailable" type="date" label="Date Available" />
-                <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
-                    {label: "Kenya", value: "ke"},
-                    {label: "Ethiopia", value: "et"},
-                    {label: "Nigeria", value: "ng"},
-                    {label: "South Africa", value: "sa"}
-                ]} placeholder="Select countries" multiple />
-                <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
+        <>
+            <FormProvider form={form}>
+                <form onSubmit={onSubmit}>
+                    <Input name="username" type="text" label="Username" placeholder="Your username" />
+                    <Input name="age" type="number" label="Age" placeholder="Your age" />
+                    <Input name="dateAvailable" type="date" label="Date Available" />
+                    <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
+                        {label: "Kenya", value: "ke"},
+                        {label: "Ethiopia", value: "et"},
+                        {label: "Nigeria", value: "ng"},
+                        {label: "South Africa", value: "sa"}
+                    ]} placeholder="Select countries" multiple />
+                    <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
 
-                <button type="submit">Submit</button>
-            </form>
-        </FormProvider>
-        <FeedbackContainer />
-        </div>
+                    <button type="submit">Submit</button>
+                </form>
+            </FormProvider>
+            <FeedbackContainer />
+        </>
     );
 }
 ```
@@ -1107,6 +1138,7 @@ function MyForm() {
 `react-fatless-form` uses two open source projects to work properly:
 
 - [React] - The library for web and native user interfaces
+- [React DOM] - Serves as the entry point to the DOM and server renderers for React
 - [Yup] - A schema builder for runtime value parsing and validation.
 
 ## License
@@ -1119,6 +1151,7 @@ I'm super chill about how you use this software, basically letting you do whatev
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-[React]: <https://react.dev/>
+[React]: <https://www.npmjs.com/package/react/>
+[React DOM]: <https://www.npmjs.com/package/react-dom/>
 [yup]: <https://www.npmjs.com/package/yup>
 [Adera Henry]: <https://www.linkedin.com/in/aderahenry/>
