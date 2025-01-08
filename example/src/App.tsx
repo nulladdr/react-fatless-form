@@ -2,7 +2,7 @@ import React from 'react';
 import * as yup from "yup";
 import './App.css';
 
-import { FormProvider, useForm, handleSubmit, Input, FeedbackContainer } from "react-fatless-form";
+import { FormProvider, useForm, handleSubmit, Input, FeedbackContainer, feedbackManager } from "react-fatless-form";
 
 const schema = yup.object({
   username: yup
@@ -71,7 +71,13 @@ function App() {
       );
   };
 
+  const resetClickHandler = () => {
+    form.resetForm();
+    feedbackManager.addFeedback("Form was reset", { type: "alert", autoDismiss: false }); // <=== Feedback of type "alert"
+  };
+
   return (
+    <>
     <div className="App">
       <FormProvider form={form}>
           <form onSubmit={onSubmit}>
@@ -86,11 +92,13 @@ function App() {
               ]} placeholder="Select countries" multiple />
               <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
 
-              <button type="submit">Submit</button>
+              <button className="submitButton" type="submit">Submit</button>
+              <button className="resetButton" type="reset" onClick={resetClickHandler}>Reset</button>
           </form>
       </FormProvider>
-      <FeedbackContainer />
     </div>
+    <FeedbackContainer />
+    </>
   );
 }
 
