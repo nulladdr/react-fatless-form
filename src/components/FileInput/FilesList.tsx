@@ -1,15 +1,28 @@
 import React from "react";
+import styles from "./FileInput.module.css";
 
 type FilesProps = {
     fileList: File[];
     selectedFiles: Set<File>;
     onToggleSelect: (file: File) => void;
+    handleSelectAll: () => void;
     onRemoveFiles: () => void;
 };
 
-export function Files({ fileList, selectedFiles, onToggleSelect, onRemoveFiles }: FilesProps) {
+export function FileList({ fileList, selectedFiles, onToggleSelect, handleSelectAll, onRemoveFiles }: FilesProps) {
     return (
-        <div>
+        <div style={{ marginTop: "10px" }}>
+            {fileList.length > 1 && (
+                <div className={styles.selectAllContainer}>
+                    <input
+                        type="checkbox"
+                        checked={fileList.length === selectedFiles.size}
+                        onChange={handleSelectAll}
+                        className={styles.selectAllCheckbox}
+                    />
+                    <span className={styles.selectAllLabel}>Select All</span>
+                </div>
+            )}
             {fileList.map((file, index) => (
                 <div
                     key={index}
@@ -25,7 +38,7 @@ export function Files({ fileList, selectedFiles, onToggleSelect, onRemoveFiles }
                         onChange={() => onToggleSelect(file)}
                         style={{ marginRight: "10px" }}
                     />
-                    <span>{file.name}</span>
+                    <span style={{ fontSize: "0.9rem", color: "#808080" }}>{file.name}</span>
                 </div>
             ))}
             {selectedFiles.size > 0 && (
@@ -39,6 +52,7 @@ export function Files({ fileList, selectedFiles, onToggleSelect, onRemoveFiles }
                         border: "none",
                         cursor: "pointer",
                         textDecoration: "underline",
+                        fontSize: "0.9rem",
                     }}
                 >
                     Remove Selected

@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 55px;
+    border: 1px dashed #0078d4;
+    transition: border-color 0.3s ease, background-color 0.6s ease;
+}
+
+.dragging {
+    background-color: #e6f7ff;
+    border: 1px dashed #0078d4;
+}
+
+.container.error {
+    border: 1px dashed rgb(184, 0, 0);
+}
+
+.uploadSpan {
+    display: flex;
+    align-items: center;
+    color: #a9a9a9;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.3s ease;
+}
+
+.uploadSpan:hover {
+    color: #808080;
+}
+
+.fileInfo {
+    color: #ccc;
+    padding: 8px;
+}
+
+.noFileMessage {
+    margin-top: 1px;
+    font-size: 0.8rem;
+    color: #a9a9a9;
+}
+
+.selectAllContainer {
+    margin-bottom: 10px;
+    color: #a9a9a9;
+}
+
+.selectAllCheckbox {
+    margin-right: 10px;
+}
+
+.selectAllLabel {
+    font-size: 0.9rem;
+    color: #a9a9a9;
+}
