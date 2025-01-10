@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
 import { useFileHandler } from "../../hooks/useFileHandler";
 import { useFileSelection } from "../../hooks/useFileSelection";
-import { Files } from "./Files";
+import { FileList } from "./FilesList";
+import { useLabelStyle } from "../../hooks/useLabelStyle"
+import styles from "./FileInput.module.css";
+import globalStyles from "../Global.module.css";
 
 export type FileInputType = {
     type: "file";
@@ -29,6 +32,8 @@ export function FileInput({
     style,
     error = '',
 }: FileInputType) {
+    const [labelRef, dynamicStyles] = useLabelStyle(label)
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const { handleFiles, fileArray } = useFileHandler({ accept, multiple, value, onChange });
     const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragAndDrop({ handleFiles });
     const {
@@ -38,34 +43,41 @@ export function FileInput({
         handleSelectAll,
     } = useFileSelection(fileArray, onChange);
 
+    const getClassNames = () => {
+        return [
+            globalStyles.inputWrapper,
+            styles.container,
+            isDragging && styles.dragging,
+            error && globalStyles.inputWrapperError && styles.error,
+            className
+        ]
+            .filter(Boolean)
+            .join(' ');
+    };
+
     return (
         <>
             <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={className}
+                className={getClassNames()}
                 style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px",
-                    border: `1px dashed ${error ? 'rgb(184, 0, 0)' : '#0078d4'}`,
-                    borderRadius: "5px",
-                    backgroundColor: isDragging ? "#e6f7ff" : "#fff",
-                    height: "50px",
-                    ...style,
+                    ...dynamicStyles,
+                    ...style
                 }}
             >
-                <label htmlFor={name} style={{ display: "flex", alignItems: "center", color: "#A9A9A9", cursor: "pointer" }}>
+                <label ref={labelRef} htmlFor={name} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>{label}</label>
+                <span className={styles.uploadSpan} onMouseEnter={(e) => (e.currentTarget.style.color = "#808080")} onMouseLeave={(e) => (e.currentTarget.style.color = "#ccc")} onClick={() => fileInputRef.current?.click()}>
                     &#10514;
-                    <span style={{ marginLeft: "5px", fontSize: "0.9rem" }}>{`Click to upload or drop ${label} here`}</span>
-                </label>
-                <span style={{ color: "#A9A9A9" }}>{accept ? accept.replace(/,/g, ", ") : "Any file"}</span>
+                    <span style={{ marginLeft: "5px", fontSize: "0.9rem" }}>{`Click to upload or drag and drop files here`}</span>
+                </span>
+                <span className={styles.fileInfo}>{accept ? accept.replace(/,/g, ", ") : "Any file"}</span>
             </div>
 
             <input
                 id={name}
+                ref={fileInputRef}
                 type="file"
                 name={name}
                 accept={accept}
@@ -74,30 +86,23 @@ export function FileInput({
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
             />
 
-            <div style={{ marginTop: "10px" }}>
+            <div>
                 {fileArray.length === 0 ? (
-                    <span style={{ color: error ? "rgb(184, 0, 0)" : "#A9A9A9", fontSize: ".8rem" }}>{error ? error : 'No file uploaded yet'}</span>
+                    <span
+                        className={
+                            error ? globalStyles.errorMessage : styles.noFileMessage
+                        }
+                    >
+                        {error ? error : "No file uploaded yet"}
+                    </span>
                 ) : (
-                    <div>
-                        {fileArray.length > 1 && (
-                            <div style={{ marginBottom: "10px", color: "#A9A9A9" }}>
-                                <input
-                                    type="checkbox"
-                                    checked={fileArray.length === selectedFiles.size}
-                                    onChange={handleSelectAll}
-                                    style={{ marginRight: "10px" }}
-                                />
-                                <span style={{ color: "#A9A9A9" }}>Select All</span>
-                            </div>
-                        )}
-
-                        <Files
-                            fileList={fileArray}
-                            selectedFiles={selectedFiles}
-                            onToggleSelect={handleToggleSelect}
-                            onRemoveFiles={handleRemoveSelectedFiles}
-                        />
-                    </div>
+                    <FileList
+                        fileList={fileArray}
+                        selectedFiles={selectedFiles}
+                        onToggleSelect={handleToggleSelect}
+                        handleSelectAll={handleSelectAll}
+                        onRemoveFiles={handleRemoveSelectedFiles}
+                    />
                 )}
             </div>
         </>
