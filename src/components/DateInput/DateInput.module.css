@@ -101,7 +101,7 @@ time.icon:focus {
     top: calc(100% + 2px);
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
-    z-index: 2;
+    z-index: 10;
     background: white;
     border: 1px solid #ccc;
     border-radius: 4px;
