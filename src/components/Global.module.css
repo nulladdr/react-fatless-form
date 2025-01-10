@@ -9,15 +9,13 @@
     transition: border-color 0.3s ease;
 }
 
-.inputWrapper:focus-within {
+.inputWrapper:not(.inputWrapperError):focus-within,
+.inputWrapper.selectBoxOpen {
     border-color: #0078d4;
 }
 
-.inputWrapper.selectBoxOpen {
-    border-color: #007bff; /* Highlight color when dropdown is open */
-}
-
-.inputWrapper:focus-within .label {
+.inputWrapper:not(.inputWrapperError):focus-within .label,
+.inputWrapper.selectBoxOpen:not(.inputWrapperError) .label {
     color: #0078d4;
 }
 
