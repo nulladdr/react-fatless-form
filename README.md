@@ -869,7 +869,7 @@ Renders different input types (text, number, password, email, etc.) based on the
 
 ##### 4. Integrated Form State Management
 
-- Automatically binds to form fields, handling value and onChange props.
+- Automatically binds to form fields, handling _value_ and _onChange_ props.
 - Manages field state and validation seamlessly.
 
 ##### 5. Developer-Friendly
@@ -968,6 +968,8 @@ Each input type enforces its own specific props, ensuring valid usage.
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
 | `minDate`        | `Date`                                   | Minimum selectable date.               |
 | `maxDate`      | `Date`                        | Maximum selectable date. |
+| `timePicker`   | `boolean` | Whether to include a time picker along with the date input. |
+| `rightIcon` | `React.JSX.Element` | An optional icon or element to display on the right side of the input field. |
 | `placeholder` | `string` | Placeholder text for the date input. |
 
 ##### File Input (type: "file")

@@ -1,5 +1,6 @@
 import React from 'react';
 import * as yup from "yup";
+import { IoCalendarNumberSharp } from "react-icons/io5";
 import './App.css';
 
 import { FormProvider, useForm, handleSubmit, Input, FeedbackContainer, feedbackManager } from "react-fatless-form";
@@ -47,13 +48,13 @@ function App() {
   const form = useForm<{ 
     username: string; 
     age: number; 
-    dateAvailable: Date;
+    dateAvailable?: Date;
     relevantFiles: File[];
     preferredCountriesOfWork: string[];
   }>({ 
     username: "", 
     age: 18, 
-    dateAvailable: new Date(),
+    dateAvailable: undefined,
     relevantFiles: [],
     preferredCountriesOfWork: [],
   });
@@ -83,7 +84,7 @@ function App() {
           <form onSubmit={onSubmit}>
               <Input name="username" type="text" label="Username" placeholder="Your username" />
               <Input name="age" type="number" label="Age" placeholder="Your age" />
-              <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} />
+              <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} timePicker rightIcon={<IoCalendarNumberSharp color='#ccc' />} />
               <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
                   {label: "Kenya", value: "ke"},
                   {label: "Ethiopia", value: "et"},
