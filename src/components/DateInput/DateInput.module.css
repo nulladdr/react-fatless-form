@@ -57,6 +57,41 @@ time.icon {
     transform-origin: 50% 10%;
 }
 
+.timePicker {
+    position: absolute;
+    top: -1px;
+    left: 99%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 0;
+    scrollbar-color: #ccc transparent;
+    scrollbar-width: thin;
+    width: 90px;
+    z-index: 10;
+}
+  
+.timeOption {
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 0.8rem;
+    color: #9da9bb;
+}
+
+.timeOption:not(.timeOptionSelected):hover {
+    background: #e0e0e0;
+}
+
+.timeOption:active {
+    background: #ddd;
+}
+
 time.icon * {
     display: block;
     width: 100%;
@@ -99,8 +134,7 @@ time.icon:focus {
 .calendarDropdown {
     position: absolute;
     top: calc(100% + 2px);
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    left: 0;
     z-index: 10;
     background: white;
     border: 1px solid #ccc;
@@ -109,13 +143,11 @@ time.icon:focus {
     width: 300px;
     padding: 16px;
     opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .calendarDropdown.open {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
 .calendarHeader {
@@ -141,6 +173,7 @@ time.icon:focus {
 .dayLabel {
     text-align: center;
     font-weight: normal;
+    font-size: 0.8rem;
 }
 
 .day {
@@ -152,10 +185,11 @@ time.icon:focus {
     border: none;
 }
 
-.day:hover {
+.day:not(.daySelected):hover {
     background: #e0e0e0;
 }
 
+.timeOptionSelected,
 .daySelected {
     background: #0078d4;
     color: white;

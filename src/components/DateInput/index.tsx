@@ -19,6 +19,7 @@ import styles from './DateInput.module.css';
  * - **Disabled State**: Fully disables interactions when the `disabled` prop is `true`.
  * - **Date Restrictions**: Use `minDate` and `maxDate` to enforce a selectable date range.
  * - **Keyboard and Mouse Support**: Allows users to input dates manually or pick from the calendar dropdown.
+ * - **Time Picker (Optional)**: Includes an optional time picker for selecting time along with the date.
  * 
  * ## Example Usage:
  * ```tsx
@@ -55,6 +56,12 @@ import styles from './DateInput.module.css';
  *   - The latest date that can be selected.
  *   - Defaults to `undefined` (no restriction).
  *   - Example: `maxDate={new Date(2033, 11, 31)}` restricts selection to dates on or before December 31, 2033.
+ * 
+ * - `timePicker?: boolean`
+ *   - Whether to include a time picker along with the date input.
+ * 
+ * - `rightIcon?: JSX.Element`
+ *   - An optional icon or element to display on the right side of the input field.
  *
  * - `className?: string`
  *   - An optional CSS class to apply custom styles to the input field.
@@ -73,10 +80,12 @@ export type DateInputType = {
     disabled?: boolean;
     minDate?: Date;
     maxDate?: Date;
+    timePicker?: boolean;
     className?: string;
     style?: React.CSSProperties;
     label?: string;
     placeholder?: string;
+    rightIcon?: JSX.Element;
     error?: string;
 }
 
@@ -86,9 +95,11 @@ export function DateInput({
     disabled = false,
     minDate,
     maxDate,
+    timePicker = false,
     className,
     style,
     placeholder = 'DD/MM/YYYY',
+    rightIcon,
     label = '',
     error = '',
 }: DateInputType) {
@@ -160,7 +171,19 @@ export function DateInput({
     };
 
     useEffect(() => {
-        setInputValue(value ? value.toLocaleDateString('en-GB') : '');
+        if (value) {
+            setInputValue(timePicker ? value.toLocaleString('en-GB', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric', 
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hourCycle: 'h12', 
+            }) : value.toLocaleDateString('en-GB'));
+        }else {
+            setInputValue('');
+        }
     }, [value]);
 
     const toggleCalendar = () => {
@@ -173,7 +196,17 @@ export function DateInput({
         if (!isDateDisabled(date)) {
             onChange(date);
             setErrorMessage('');
-            setIsCalendarOpen(false);
+            !timePicker && setIsCalendarOpen(false);
+        }
+    };
+
+    const handleTimeChange = (time: string) => {
+        if (value) {
+            const [hour, minute, period] = time.split(/[: ]/);
+            const hours24 = period === "PM" ? (Number(hour) % 12) + 12 : Number(hour) % 12;
+            const updatedDate = new Date(value);
+            updatedDate.setHours(hours24, Number(minute), 0, 0);
+            onChange(updatedDate);
         }
     };
 
@@ -187,6 +220,7 @@ export function DateInput({
     };
 
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const timeOptionRefs = useRef<HTMLButtonElement[]>([]);
 
     useEffect(() => {
         if (isCalendarOpen) {
@@ -225,6 +259,7 @@ export function DateInput({
                     className={`${styles.day} ${isSelected ? styles.daySelected : ''} ${isDisabled ? styles.dayDisabled : ''}`}
                     onClick={() => handleDateChange(date)}
                     disabled={isDisabled}
+                    type='button'
                 >
                     {day}
                 </button>
@@ -273,8 +308,47 @@ export function DateInput({
                 ))}
             </div>
             <div className={styles.days}>{generateCalendarDays()}</div>
+            {timePicker && renderTimePicker()}
         </div>
     );
+
+    useEffect(() => {
+        if (isCalendarOpen && timePicker && value) {
+            const selectedTimeIndex = value.getHours() * 4 + Math.floor(value.getMinutes() / 15);
+            timeOptionRefs.current[selectedTimeIndex]?.scrollIntoView({
+                behavior: 'instant',
+                block: 'start',
+            });
+        }
+    }, [isCalendarOpen, timePicker, value]);
+
+    const renderTimePicker = () => {
+        if (!timePicker) return null;
+      
+        const times = Array.from({ length: 96 }, (_, i) => {
+            const totalMinutes = i * 15;
+            const hour24 = Math.floor(totalMinutes / 60);
+            const hour = hour24 % 12 || 12;
+            const minute = totalMinutes % 60;
+            const period = hour24 < 12 ? "AM" : "PM";
+            const formattedTime = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")} ${period}`;
+            const isSelected = value && value.getHours() === hour24 && value.getMinutes() === minute;
+      
+            return (
+                <button
+                key={i}
+                ref={(el) => { if (el) timeOptionRefs.current[i] = el; }}
+                onClick={() => handleTimeChange(formattedTime)}
+                className={`${styles.timeOption} ${isSelected ? styles.timeOptionSelected : ""}`}
+                type="button"
+                >
+                {formattedTime}
+                </button>
+            );
+        });
+      
+        return <div className={styles.timePicker}>{times}</div>;
+    };
 
     return (
         <>
@@ -297,7 +371,7 @@ export function DateInput({
                     disabled={disabled}
                     className={styles.calendarToggleButton}
                 >
-                    <span>&#x1F5D3;</span>
+                    <span>{rightIcon || '🗓️'}</span>
                 </button>
                 {isCalendarOpen && renderCalendar()}
             </div>

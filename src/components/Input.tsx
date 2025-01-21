@@ -27,7 +27,9 @@ export type InputProps =
         type: "date";
         minDate?: Date;
         maxDate?: Date;
+        timePicker?: boolean;
         placeholder?: string;
+        rightIcon?: React.JSX.Element;
     } & CommonProps)
     | ({
         type: "select";
