@@ -317,7 +317,7 @@ export function DateInput({
             const selectedTimeIndex = value.getHours() * 4 + Math.floor(value.getMinutes() / 15);
             timeOptionRefs.current[selectedTimeIndex]?.scrollIntoView({
                 behavior: 'instant',
-                block: 'start',
+                block: 'center',
             });
         }
     }, [isCalendarOpen, timePicker, value]);
@@ -347,12 +347,17 @@ export function DateInput({
             );
         });
       
-        return <div className={styles.timePicker}>{times}</div>;
+        return (
+            <div className={styles.timePicker}>
+                <div className={styles.timeHeader}>Select Time</div>
+                {times}
+            </div>
+        );
     };
 
     return (
         <>
-            <div className={`${globalStyles.inputWrapper} ${(error || errorMessage) ? globalStyles.inputWrapperError : ''}`} style={dynamicStyles}>
+            <div className={`${globalStyles.inputWrapper} ${(error || errorMessage) ? globalStyles.inputWrapperError : ''}`} style={{ ...dynamicStyles, ...style }}>
                 <label ref={labelRef} className={`${globalStyles.label} ${(error || errorMessage) ? globalStyles.errorLabel : ''}`}>{label}</label>
                 <input
                     ref={inputRef}
@@ -362,7 +367,6 @@ export function DateInput({
                     placeholder={placeholder}
                     disabled={disabled}
                     className={`${styles.dateInput} ${className || ''}`}
-                    style={style}
                     onFocus={() => setIsCalendarOpen(true)}
                 />
                 <button

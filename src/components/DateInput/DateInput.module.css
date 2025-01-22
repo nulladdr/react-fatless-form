@@ -73,6 +73,20 @@ time.icon {
     width: 90px;
     z-index: 10;
 }
+
+.timeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.7rem;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+    color: #333;
+}
   
 .timeOption {
     padding: 8px;
