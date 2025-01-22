@@ -115,8 +115,8 @@ export function DateInput({
 
     const isDateDisabled = (date: Date): boolean => {
         if (disabled) return true;
-        if (minDate && date < minDate) return true;
-        if (maxDate && date > maxDate) return true;
+        if (minDate && date < new Date(minDate.setHours(0, 0, 0, 0))) return true;
+        if (maxDate && date > new Date(maxDate.setHours(23, 59, 59, 999))) return true;
         return false;
     };
 
@@ -336,13 +336,13 @@ export function DateInput({
       
             return (
                 <button
-                key={i}
-                ref={(el) => { if (el) timeOptionRefs.current[i] = el; }}
-                onClick={() => handleTimeChange(formattedTime)}
-                className={`${styles.timeOption} ${isSelected ? styles.timeOptionSelected : ""}`}
-                type="button"
+                    key={i}
+                    ref={(el) => { if (el) timeOptionRefs.current[i] = el; }}
+                    onClick={() => handleTimeChange(formattedTime)}
+                    className={`${styles.timeOption} ${isSelected ? styles.timeOptionSelected : ""}`}
+                    type="button"
                 >
-                {formattedTime}
+                    {formattedTime}
                 </button>
             );
         });
