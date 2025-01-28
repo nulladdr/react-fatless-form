@@ -1,6 +1,6 @@
 import React from "react";
 
-export type RadioInputProps = {
+export type RadioInputType = {
     type: string;
     name: string;
     label: string;
@@ -22,7 +22,7 @@ export type RadioInputProps = {
  * 
  * @component
  * 
- * @param {RadioInputProps} props - The props for the Radio component.
+ * @param {RadioInputType} props - The props for the Radio component.
  * @param {string} props.name - The name of the radio input group.
  * @param {string} props.label - The label displayed above the radio group.
  * @param {string | number} props.value - The currently selected value of the radio group.
@@ -48,7 +48,7 @@ export type RadioInputProps = {
  * 
  * @returns {JSX.Element | null} The rendered radio button group, or null if no options are provided.
  */
-export function Radio({ name, label, value, onChange, options, type = "radio" }: RadioInputProps) {
+export function Radio({ name, label, value, onChange, options, type = "radio" }: RadioInputType) {
     if (!options || options.length === 0) {
         return null;
     }

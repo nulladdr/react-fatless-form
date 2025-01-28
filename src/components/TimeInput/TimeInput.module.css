@@ -1,0 +1,54 @@
+.timePicker {
+    position: relative;
+    width: 200px;
+}
+
+.input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border: none;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+    font-size: 0.8rem;
+    top: calc(100% + 2px);
+    width: 50%;
+}
+
+.dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.option:not(.selected):hover {
+  background: #e0e0e0;
+}
+
+.selected {
+    background: #0078d4;
+    color: white;
+}

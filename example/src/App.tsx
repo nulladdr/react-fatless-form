@@ -1,6 +1,6 @@
 import React from 'react';
 import * as yup from "yup";
-import { IoCalendarNumberSharp } from "react-icons/io5";
+import { IoCalendarNumberSharp, IoTimeSharp } from "react-icons/io5";
 import './App.css';
 
 import { FormProvider, useForm, handleSubmit, Input, FeedbackContainer, feedbackManager } from "react-fatless-form";
@@ -18,6 +18,7 @@ const schema = yup.object({
       .date()
       .typeError("Must be a valid date")
       .required("Availability date is required"),
+  quittingTime: yup.string().required("Time is required"),
   relevantFiles: yup
       .array()
       .required("This field is required")
@@ -49,12 +50,14 @@ function App() {
     username: string; 
     age: number; 
     dateAvailable?: Date;
+    quittingTime?: string;
     relevantFiles: File[];
     preferredCountriesOfWork: string[];
   }>({ 
     username: "", 
     age: 18, 
     dateAvailable: undefined,
+    quittingTime: undefined,
     relevantFiles: [],
     preferredCountriesOfWork: [],
   });
@@ -74,7 +77,7 @@ function App() {
 
   const resetClickHandler = () => {
     form.resetForm();
-    feedbackManager.addFeedback("Form was reset", { type: "alert", autoDismiss: false }); // <=== Feedback of type "alert"
+    feedbackManager.addFeedback("Form was reset", { type: "alert", autoDismiss: true }); // <=== Feedback of type "alert"
   };
 
   return (
@@ -85,6 +88,7 @@ function App() {
               <Input name="username" type="text" label="Username" placeholder="Your username" />
               <Input name="age" type="number" label="Age" placeholder="Your age" />
               <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} timePicker rightIcon={<IoCalendarNumberSharp color='#ccc' />} />
+              <Input name="quittingTime" type="time" label="Quitting time" minTime="9:00 AM" maxTime="4:30 PM" rightIcon={<IoTimeSharp color='#ccc' />} />
               <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
                   {label: "Kenya", value: "ke"},
                   {label: "Ethiopia", value: "et"},

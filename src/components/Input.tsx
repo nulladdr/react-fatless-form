@@ -4,9 +4,10 @@ import { Checkbox } from "./Checkbox";
 import { DateInput, DateInputType } from './DateInput';
 import DefaultInput from "./DefaultInput";
 import { FileInput, FileInputType } from "./FileInput";
-import { Radio, RadioInputProps } from "./Radio";
+import { Radio, RadioInputType } from "./Radio";
 import { SelectBox, SelectInputType } from "./SelectBox";
 import Textarea from "./Textarea";
+import { TimeInput, TimeInputType } from "./TimeInput";
 
 type CommonProps = {
     name: string;
@@ -28,6 +29,13 @@ export type InputProps =
         minDate?: Date;
         maxDate?: Date;
         timePicker?: boolean;
+        placeholder?: string;
+        rightIcon?: React.JSX.Element;
+    } & CommonProps)
+    | ({
+        type: "time";
+        minTime?: string;
+        maxTime?: string;
         placeholder?: string;
         rightIcon?: React.JSX.Element;
     } & CommonProps)
@@ -90,7 +98,8 @@ export type InputProps =
  * - **Checkbox**: Supports both standalone checkboxes and grouped checkboxes.
  * - **Radio Buttons**: Renders a group of mutually exclusive options.
  * - **Select Dropdown**: A dropdown menu with options for single or multiple selection.
- * - **Date Picker**: Renders a date input with optional minimum and maximum date constraints.
+ * - **Date Picker**: Renders a date input with optional minimum and maximum date constraints. 
+ *   - `timePicker`: Enables time selection if `true`.
  * - **File Input**: For uploading files, with support for specifying file types and allowing multiple file uploads.
  *
  * ### Key Features
@@ -144,6 +153,22 @@ export type InputProps =
  *   - `wrap`: Text wrapping behavior (`hard` or `soft`).
  *   - `readonly`: Prevents text modification if `true`.
  *   - `maxlength`: Maximum number of characters allowed.
+ * 
+ * - **Radio Buttons (`type: "radio"`)**:
+ *   - `options`: Array of `{ label: string; value: string | number }` for radio button options.
+ * 
+ * - **Text-based Inputs (`type: "text" | "number" | "password"`)**:
+ *   - `placeholder`: Placeholder text for the input field.
+ *   - `autofocus`: Automatically focuses on the input field if `true`.
+ *   - `autocomplete`: Enables or disables autocomplete (`on` or `off`).
+ *   - `maxlength`: Maximum number of characters allowed.
+ *   - `pattern`: Regular expression pattern for input validation.
+ * 
+ * - **Time Input (`type: "time"`)**:
+ *   - `minTime`: Minimum selectable time in "hh:mm AM/PM" format.
+ *   - `maxTime`: Maximum selectable time in "hh:mm AM/PM" format.
+ *   - `placeholder`: Placeholder text for the time input.
+ *   - `rightIcon`: Icon to display on the right side of the input.
  *
  * ### Examples
  *
@@ -208,6 +233,16 @@ export type InputProps =
  * />
  * ```
  *
+ * **7. Time Picker**
+ * ```tsx
+ * <Input
+ *   name="appointmentTime"
+ *   type="time"
+ *   label="Appointment Time"
+ *   minTime="09:00 AM"
+ *   maxTime="05:00 PM"
+ * />
+ * 
  * ### Usage Notes
  * - Ensure the `type` matches the expected props; passing invalid props will result in a TypeScript error.
  * - For `checkbox` and `radio` types, `options` should be provided as an array of `{ label, value }`.
@@ -229,7 +264,7 @@ export function Input({ type, ...rest }: InputProps) {
                     {...field}
                 />
             ) : type === "radio" ? (
-                <Radio {...(rest) as RadioInputProps} {...field} />
+                <Radio {...field} {...(rest) as RadioInputType} />
             ) : type === "select" ? (
                 <SelectBox
                     {...field}
@@ -239,6 +274,11 @@ export function Input({ type, ...rest }: InputProps) {
                 <DateInput 
                     {...field} 
                     {...(rest as DateInputType)}
+                />
+            ) : type === "time" ? (
+                <TimeInput
+                    {...field}
+                    {...(rest as TimeInputType)}
                 />
             ) : type === "file" ? (
                 <FileInput

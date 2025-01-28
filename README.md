@@ -894,6 +894,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 - **Radio Buttons**: Renders a group of mutually exclusive options.
 - **Select Dropdown**: A dropdown menu with options for single or multiple selection.
 - **Date Picker**: Renders a date input with optional minimum and maximum date constraints.
+- **Time Picker**: Renders a time input with optional minimum and maximum time constraints.
 - **File Input**: For uploading files, with support for specifying file types and allowing multiple file uploads.
 
 ##### Common Props
@@ -972,6 +973,15 @@ Each input type enforces its own specific props, ensuring valid usage.
 | `rightIcon` | `React.JSX.Element` | An optional icon or element to display on the right side of the input field. |
 | `placeholder` | `string` | Placeholder text for the date input. |
 
+##### Time Input (type: "time")
+
+| Prop            | Type                                   | Description                                                                                      |
+|------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
+| `minTime`        | `string`                                   | Minimum selectable time.               |
+| `maxTime`      | `string`                        | Maximum selectable time. |
+| `rightIcon` | `React.JSX.Element` | An optional icon or element to display on the right side of the input field. |
+| `placeholder` | `string` | Placeholder text for the time input. |
+
 ##### File Input (type: "file")
 
 | Prop            | Type                                   | Description                                                                                      |
@@ -1034,7 +1044,19 @@ Each input type enforces its own specific props, ensuring valid usage.
     />
 ```
 
-##### 6. File Input
+##### 6. Time Input
+
+```tsx
+    <Input
+        name="time"
+        label="Select Time"
+        minTime="09:00 AM"
+        maxTime="05:00 PM"
+        placeholder="Select time"
+    />
+```
+
+##### 7. File Input
 
 ```tsx
 <Input name="files" type="file" label="Relevant Files" accept=".pdf,.docx" multiple />
