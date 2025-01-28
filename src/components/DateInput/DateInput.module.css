@@ -12,32 +12,6 @@
     outline: none;
 }
 
-.calendarToggleButton {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 2px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    z-index: 2;
-}
-
-.calendarToggleButton span {
-    font-size: 1.5rem;
-    line-height: 1;
-    transform-origin: center;
-    transition: transform 0.3s ease-in-out;
-}
-
-.calendarToggleButton:hover span {
-    transform: scale(1.2);
-}
-
 time.icon {
     font-size: 1em;
     display: block;
@@ -72,6 +46,7 @@ time.icon {
     scrollbar-width: thin;
     width: 90px;
     z-index: 10;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .timeHeader {
@@ -95,7 +70,6 @@ time.icon {
     background: transparent;
     border: none;
     font-size: 0.8rem;
-    color: #9da9bb;
 }
 
 .timeOption:not(.timeOptionSelected):hover {

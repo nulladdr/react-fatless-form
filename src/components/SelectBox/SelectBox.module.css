@@ -37,6 +37,8 @@
     max-height: 200px;
     overflow-y: auto;
     margin-top: 1px;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
 }
 
 .actions {
@@ -108,6 +110,15 @@
 
 .search:focus {
     outline: none;
+}
+
+.dropdownHeader {
+    font-size: 0.7rem;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+    color: #333;
 }
 
 .options {

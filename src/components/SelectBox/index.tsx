@@ -174,43 +174,45 @@ export function SelectBox({
         <div className={styles.selectBox} ref={dropdownRef}>
             <div className={getClassNames()} onClick={toggleDropdown} style={{ ...dynamicStyles, ...style }}>
                 <label ref={labelRef} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>{label}</label>
-                <span className={styles.value} style={{ color: !String(value) ? '#ccc' : 'inherit' }}>{displayValue()}</span>
+                <span className={styles.value} style={{ color: !String(value) ? 'rgb(204, 204, 204)' : 'inherit' }}>{displayValue()}</span>
                 <span className={styles.arrow}>{isOpen ? '\u005E' : '\u2304'}</span>
             </div>
 
             {isOpen && (
                 <div className={styles.dropdown}>
-                    {multiple && (
-                        <div className={styles.actions}>
-                            <button type="button" className={styles.actionButton} onClick={handleSelectAll}>
-                                Select All
-                            </button>
-                            {(Array.isArray(value) && value.length > 0) && (
-                                <button type="button" className={styles.actionButton} onClick={handleClearSelected}>
-                                    Clear All
+                    <div className={styles.dropdownHeader}>
+                        {multiple && (
+                            <div className={styles.actions}>
+                                <button type="button" className={styles.actionButton} onClick={handleSelectAll}>
+                                    Select All
+                                </button>
+                                {(Array.isArray(value) && value.length > 0) && (
+                                    <button type="button" className={styles.actionButton} onClick={handleClearSelected}>
+                                        Clear All
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                        <div className={styles.searchContainer}>
+                            <input
+                                type="text"
+                                className={styles.search}
+                                placeholder="Search..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            {search && (
+                                <button
+                                    type="button"
+                                    className={styles.clearButton}
+                                    onClick={() => setSearch('')}
+                                    aria-label="Clear search"
+                                >
+                                    &#x2715;
                                 </button>
                             )}
+                            <span className={styles.searchIcon}>&#128269;</span>
                         </div>
-                    )}
-                    <div className={styles.searchContainer}>
-                        <input
-                            type="text"
-                            className={styles.search}
-                            placeholder="Search..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                        {search && (
-                            <button
-                                type="button"
-                                className={styles.clearButton}
-                                onClick={() => setSearch('')}
-                                aria-label="Clear search"
-                            >
-                                &#x2715;
-                            </button>
-                        )}
-                        <span className={styles.searchIcon}>&#128269;</span>
                     </div>
                     <ul className={styles.options} role="listbox">
                         {filteredOptions.length > 0 ? (

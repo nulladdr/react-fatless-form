@@ -5,46 +5,78 @@ import { feedbackManager, FeedbackVariant } from "../utils/FeedbackManager";
 import styles from './Feedback.module.css';
 
 const getIcon = (variant: FeedbackVariant) => {
-    switch (variant) {
-        case "success":
-            return <span className={styles.icon}>&#x2713;</span>;
-        case "error":
-            return <span className={styles.icon}>&#x2717;</span>;
-        case "warning":
-            return <span className={styles.icon}>&#x26A0;</span>;
-        default:
-            return <span className={styles.icon}>&#9432;</span>;
-    }
+    const icons = {
+        success: <span className={styles.icon}>&#x2713;</span>,
+        error: <span className={styles.icon}>&#x2715;</span>,
+        warning: <span className={styles.icon}>&#x21;</span>,
+        info: <span className={styles.icon}>&#8505;</span>,
+    };
+    return icons[variant] || icons.info;
 };
 
 export function FeedbackContainer() {
     const feedbacks = useFeedback();
+    const alerts = feedbacks.filter(({ type }) => type === "alert");
+    const toasts = feedbacks.filter(({ type }) => type === "toast");
 
     return ReactDOM.createPortal(
-        <div className={styles["toast-container"]}>
-            {feedbacks.map((feedback) => (
-                <div
-                    key={feedback.id}
-                    className={`${styles.feedback} ${styles[feedback.type]} ${styles[feedback.variant]
-                        } ${feedback.isFadingOut ? styles.fadeOut : ""}`}
-                >
-                    <div className={styles.messageContainer}>
-                        {getIcon(feedback.variant)}
-                        {feedback.message}
-                    </div>
-                    {!feedback.autoDismiss && (
+        <>
+            {/* Alert Container */}
+            <div className={styles["alert-container"]}>
+                {alerts.map(({ id, variant, message, isFadingOut }) => (
+                    <div
+                        key={id}
+                        className={`${styles.alert} ${styles[variant]} ${isFadingOut ? styles["fade-out"] : ""}`}
+                    >
+                        <div className={styles["icon-container"]}>
+                            <div className={styles[`icon-${variant}`]}>{getIcon(variant)}</div>
+                        </div>
+                        <div className={styles["message-container"]}>
+                            <p className={styles["message-heading"]}>
+                                {variant.replace(/^\w/, c => c.toUpperCase())}
+                            </p>
+                            <p className={styles["message-body"]}>{message}</p>
+                        </div>
                         <button
                             type="button"
-                            className={styles.btnClose}
+                            className={styles["btn-close"]}
                             aria-label="Close"
-                            onClick={() => feedbackManager.startFadeOut(feedback.id)}
+                            onClick={() => feedbackManager.startFadeOut(id)}
                         >
                             &#x2715;
                         </button>
-                    )}
-                </div>
-            ))}
-        </div>,
+                    </div>
+                ))}
+            </div>
+
+            {/* Toast Container */}
+            <div className={styles["toast-container"]}>
+                {toasts.map(({ id, variant, message, isFadingOut }) => (
+                    <div
+                        key={id}
+                        className={`${styles.toast} ${styles[variant]} ${isFadingOut ? styles["fade-out"] : ""}`}
+                    >
+                        <div className={styles["icon-container"]}>
+                            <div className={styles[`icon-${variant}`]}>{getIcon(variant)}</div>
+                        </div>
+                        <div className={styles["message-container"]}>
+                            <p className={`${styles["message-heading"]} ${styles[`heading-${variant}`]}`}>
+                                {variant.replace(/^\w/, c => c.toUpperCase())}
+                            </p>
+                            <p className={styles["message-body"]}>{message}</p>
+                        </div>
+                        <button
+                            type="button"
+                            className={styles["btn-close"]}
+                            aria-label="Close"
+                            onClick={() => feedbackManager.startFadeOut(id)}
+                        >
+                            &#x2715;
+                        </button>
+                    </div>
+                ))}
+            </div>
+        </>,
         document.body
     );
 }

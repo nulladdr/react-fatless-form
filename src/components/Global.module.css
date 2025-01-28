@@ -46,6 +46,32 @@
     z-index: 2;
 }
 
+.dropdownToggleButton {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.dropdownToggleButton span {
+    font-size: 1.5rem;
+    line-height: 1;
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dropdownToggleButton:hover span {
+    transform: scale(1.2);
+}
+
 .label.errorLabel {
     color: rgb(184, 0, 0);
 }
