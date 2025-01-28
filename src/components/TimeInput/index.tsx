@@ -113,16 +113,16 @@ export function TimeInput({
 
     useEffect(() => {
         if (isOpen && value) {
-            const [time, period] = value.split(' ');
-            const [hours, minutes] = time.split(':').map(Number);
-            const adjustedHours = period === 'PM' && hours !== 12 ? hours + 12 : hours === 12 && period === 'AM' ? 0 : hours;
-            const selectedTimeIndex = adjustedHours * 12 + Math.floor(minutes / 5);
-            timeOptionRefs.current[selectedTimeIndex]?.scrollIntoView({
-                behavior: 'instant',
-                block: 'center',
-            });
+            const selectedTimeIndex = times.findIndex(time => time === value);
+
+            if (selectedTimeIndex !== -1) {
+                timeOptionRefs.current[selectedTimeIndex]?.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                });
+            }
         }
-    }, [isOpen, value]);
+    }, [isOpen, value, times]);
 
     const getClassNames = () => {
         return [
