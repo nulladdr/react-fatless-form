@@ -856,10 +856,10 @@ The `Input` component is a versatile and self-sufficient form control designed t
 
 Renders different input types (text, number, password, email, etc.) based on the _type_ prop.
 
-##### 2. Custom Datepicker
+##### 2. Custom Datepicker, Date/Time picker and Timepicker
 
-- Includes a fully custom datepicker component, eliminating the need for external libraries.
-- Provides an intuitive UI for date selection.
+- Includes a fully custom datepicker, date/time picker and a sandalone timepicker component, eliminating the need for external libraries.
+- Provides an intuitive UI for date, date/time and time selection.
 
 ##### 3. Custom Drag-and-Drop file picker
 
@@ -894,6 +894,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 - **Radio Buttons**: Renders a group of mutually exclusive options.
 - **Select Dropdown**: A dropdown menu with options for single or multiple selection.
 - **Date Picker**: Renders a date input with optional minimum and maximum date constraints.
+- **Date/Time Picker**: Renders a date input with an optional time picker if the `timePicker` prop is set to `true`.
 - **Time Picker**: Renders a time input with optional minimum and maximum time constraints.
 - **File Input**: For uploading files, with support for specifying file types and allowing multiple file uploads.
 
@@ -947,7 +948,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 - If `options` is provided and has at least one item, it renders a list of checkboxes. 
 - If `options` is empty, the component renders nothing.
 
-###### Radio Buttons (type: "radio")
+##### Radio Buttons (type: "radio")
 
 | Prop            | Type                                   | Description                                                                                      |
 |------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
