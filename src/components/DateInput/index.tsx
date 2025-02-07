@@ -207,6 +207,7 @@ export function DateInput({
             const updatedDate = new Date(value);
             updatedDate.setHours(hours24, Number(minute), 0, 0);
             onChange(updatedDate);
+            setIsCalendarOpen(false);
         }
     };
 
