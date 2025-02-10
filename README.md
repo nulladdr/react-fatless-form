@@ -983,6 +983,16 @@ Each input type enforces its own specific props, ensuring valid usage.
 | `rightIcon` | `React.JSX.Element` | An optional icon or element to display on the right side of the input field. |
 | `placeholder` | `string` | Placeholder text for the time input. |
 
+##### Password Input (type: "password")
+
+| Prop            | Type                                   | Description                                                                                      |
+|------------------|----------------------------------------|--------------------------------------------------------------------------------------------------|
+| `showStrengthIndicator`        | `boolean`                                   | Whether to show the strength indicator. Defaults to true.               |
+| `passwordPolicy`      | `(password: string) => { strength: number; message: string }`                        | Custom password policy function. If not provided, a default policy will take effect |
+| `showIcon` | `React.JSX.Element` | Icon for showing the password. |
+| `hideIcon` | `React.JSX.Element` | Icon for hiding the password. |
+| `placeholder` | `string` | Placeholder text for the password input. |
+
 ##### File Input (type: "file")
 
 | Prop            | Type                                   | Description                                                                                      |

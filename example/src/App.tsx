@@ -1,6 +1,6 @@
 import React from 'react';
 import * as yup from "yup";
-import { IoCalendarNumberSharp, IoTimeSharp } from "react-icons/io5";
+import { IoCalendarNumberSharp, IoTimeSharp, IoEye, IoEyeOff } from "react-icons/io5";
 import './App.css';
 
 import { FormProvider, useForm, handleSubmit, Input, FeedbackContainer, feedbackManager } from "react-fatless-form";
@@ -19,6 +19,7 @@ const schema = yup.object({
       .typeError("Must be a valid date")
       .required("Availability date is required"),
   quittingTime: yup.string().required("Time is required"),
+  password: yup.string().required("Password is required"),
   relevantFiles: yup
       .array()
       .required("This field is required")
@@ -51,6 +52,7 @@ function App() {
     age: number; 
     dateAvailable?: Date;
     quittingTime?: string;
+    password?: string,
     relevantFiles: File[];
     preferredCountriesOfWork: string[];
   }>({ 
@@ -58,6 +60,7 @@ function App() {
     age: 18, 
     dateAvailable: undefined,
     quittingTime: undefined,
+    password: "",
     relevantFiles: [],
     preferredCountriesOfWork: [],
   });
@@ -95,6 +98,7 @@ function App() {
                   {label: "Nigeria", value: "ng"},
                   {label: "South Africa", value: "sa"}
               ]} placeholder="Select countries" multiple />
+              <Input name="password" type="password" label="Password" placeholder="Password" showIcon={<IoEye color='#ccc' />} hideIcon={<IoEyeOff color='#ccc' />} />
               <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
 
               <button className="submitButton" type="submit">Submit</button>

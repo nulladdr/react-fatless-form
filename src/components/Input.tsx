@@ -8,6 +8,7 @@ import { Radio, RadioInputType } from "./Radio";
 import { SelectBox, SelectInputType } from "./SelectBox";
 import Textarea from "./Textarea";
 import { TimeInput, TimeInputType } from "./TimeInput";
+import { PasswordInput, PasswordInputProps } from "./PasswordInput";
 
 type CommonProps = {
     name: string;
@@ -76,10 +77,20 @@ export type InputProps =
         autofocus?: boolean;
     } & CommonProps)
     | ({
-        type: "text" | "number" | "password";
+        type: "password";
+        placeholder?: string;
+        showStrengthIndicator?: boolean;
+        passwordPolicy?: (password: string) => { strength: number; message: string };
+        showIcon?: React.ReactNode;
+        hideIcon?: React.ReactNode;
+        autofocus?: boolean;
+    } & CommonProps) 
+    | ({
+        type: "text" | "number" | "email";
         placeholder?: string;
         autofocus?: boolean;
         autocomplete?: "on" | "off";
+        minlength?: number;
         maxlength?: number;
         pattern?: string;
     } & CommonProps);
@@ -132,6 +143,8 @@ export type InputProps =
  *   - `loading`: Displays a loading indicator if `true`.
  *   - `multiple`: Enables multi-select if `true`.
  *   - `placeholder`: Placeholder text for the dropdown.
+ * 
+ * 
  *
  * - **Checkbox (`type: "checkbox"`)**
  *   - `checked`: Indicates if the checkbox is selected.
@@ -169,6 +182,14 @@ export type InputProps =
  *   - `maxTime`: Maximum selectable time in "hh:mm AM/PM" format.
  *   - `placeholder`: Placeholder text for the time input.
  *   - `rightIcon`: Icon to display on the right side of the input.
+ * 
+ * - **Password Input (`type: "password"`)**:
+ *   - `placeholder`: Placeholder text for the password input.
+ *   - `showStrengthIndicator`: Displays a password strength indicator if `true`.
+ *   - `passwordPolicy`: Function that returns an object with `strength` (0-100) and `message` (e.g., "Weak", "Strong").
+ *   - `showIcon`: Custom icon to display when the password is visible.
+ *   - `hideIcon`: Custom icon to display when the password is hidden.
+ *   - `autofocus`: Automatically focuses on the input field if `true`.
  *
  * ### Examples
  *
@@ -242,13 +263,26 @@ export type InputProps =
  *   minTime="09:00 AM"
  *   maxTime="05:00 PM"
  * />
+ * ```
+ *
+ * **8. Password Input**
+ * ```tsx
+ * <Input
+ *   name="password"
+ *   type="password"
+ *   label="Password"
+ *   placeholder="Enter your password"
+ *   showStrengthIndicator
+ *   passwordPolicy={(password) => {
+ *     const strength = password.length > 8 ? 100 : 50;
+ *     const message = strength === 100 ? "Strong" : "Weak";
+ *     return { strength, message };
+ *   }}
+ * />
+ * ```
  * 
  * ### Usage Notes
  * - Ensure the `type` matches the expected props; passing invalid props will result in a TypeScript error.
- * - For `checkbox` and `radio` types, `options` should be provided as an array of `{ label, value }`.
- * - For `select`, `options` must be provided, and `multiple` can enable multi-selection.
- *
- * @param {InputProps} props - Props for configuring the input field.
  */
 export function Input({ type, ...rest }: InputProps) {
     const { touched, ...field } = useField(rest.name);
@@ -270,6 +304,8 @@ export function Input({ type, ...rest }: InputProps) {
                     {...field}
                     {...(rest as SelectInputType)}
                 />
+            ) : type === 'password' ? (
+                <PasswordInput {...field} {...(rest as PasswordInputProps)} />
             ) : type === "date" ? (
                 <DateInput 
                     {...field} 
