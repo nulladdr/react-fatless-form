@@ -170,7 +170,7 @@ export function TimeInput({
                     type="button"
                     onClick={toggleTimePicker}
                     disabled={disabled}
-                    className={globalStyles.dropdownToggleButton}
+                    className={globalStyles.rightIcon}
                 >
                     <span>{rightIcon || '🕑'}</span>
                 </button>

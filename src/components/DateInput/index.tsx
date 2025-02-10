@@ -1,4 +1,4 @@
-import { useLabelStyle } from '../../hooks/useLabelStyle'
+import { useLabelStyle } from 'hooks/useLabelStyle'
 import React, { JSX, useEffect, useRef, useState } from 'react';
 
 import globalStyles from '../Global.module.css';
@@ -376,7 +376,7 @@ export function DateInput({
                     type="button"
                     onClick={toggleCalendar}
                     disabled={disabled}
-                    className={globalStyles.dropdownToggleButton}
+                    className={globalStyles.rightIcon}
                 >
                     <span>{rightIcon || '🗓️'}</span>
                 </button>

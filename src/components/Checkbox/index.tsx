@@ -121,7 +121,7 @@ export function Checkbox(props: CheckboxInputType) {
             />
         );
 
-        const labelElement = label && <span style={{ marginLeft: '8px' }}>{label}</span>;
+        const labelElement = label && <span style={{ marginLeft: '8px', cursor: "pointer" }}>{label}</span>;
 
         if (!slider) {
             return (
@@ -159,7 +159,7 @@ export function Checkbox(props: CheckboxInputType) {
                 {options.map((option, index) => (
                     <label
                         key={`${option.value}-${index}`}
-                        style={{ display: "block", margin: "4px 0" }}
+                        style={{ display: "block", margin: "4px 0", cursor: "pointer" }}
                     >
                         <input
                             id={`${name}-${option.value}`}

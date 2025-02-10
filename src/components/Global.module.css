@@ -46,7 +46,7 @@
     z-index: 2;
 }
 
-.dropdownToggleButton {
+.rightIcon {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -61,14 +61,14 @@
     z-index: 2;
 }
 
-.dropdownToggleButton span {
+.rightIcon span {
     font-size: 1.5rem;
     line-height: 1;
     transform-origin: center;
     transition: transform 0.3s ease-in-out;
 }
 
-.dropdownToggleButton:hover span {
+.rightIcon:hover span {
     transform: scale(1.2);
 }
 
