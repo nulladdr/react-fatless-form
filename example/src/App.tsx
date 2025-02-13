@@ -73,8 +73,8 @@ function App() {
           schema,
           async (values) => {
               console.log(values);
+              return { message: "Form submitted successfully" };
           },
-          "Submission successful!"
       );
   };
 

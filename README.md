@@ -68,7 +68,7 @@ The `useForm` hook is a robust and developer-friendly solution for managing form
 #### Signature
 
 ```typescript
-export function useForm<T>(initialValues: T): {
+function useForm<T>(initialValues: T): {
     values: T;
     errors: Partial<Record<keyof T, string>>;
     touched: Partial<Record<keyof T, boolean>>;
@@ -667,8 +667,7 @@ The `handleSubmit` utility simplifies form submissions in React applications by 
 
 - **Schema-Based Validation:** Ensures form data adheres to a defined structure using [yup].
 - **Submission Status Updates:** Automatically updates form status ("submitting", "success", "error") for improved user feedback and state management.
-- **Feedback Notifications:** Optional toast notifications for submission success or error states.
-- **Flexible Feedback Control:** Allows developers to enable or disable default feedback handling for custom solutions.
+- **Configurable Feedback Handling:** Allows developers to control success and error messages through feedbackConfig.
 - **Promise-Based API:** Fully compatible with async/await for smooth integration.
 
 #### API Documentation
@@ -677,11 +676,14 @@ The `handleSubmit` utility simplifies form submissions in React applications by 
 
 ```typescript
 function handleSubmit<T extends Record<string, any>>(
-    form: ReturnType<typeof useForm<T>>, 
-    schema: yup.ObjectSchema<T>, 
-    onSubmit: (values: T) => Promise<void>, 
-    successMessage?: string, 
-    showFeedback?: boolean
+    form: ReturnType<typeof useForm<T>>,
+    schema: yup.ObjectSchema<T>,
+    onSubmit: (values: T) => Promise<void>,
+    feedbackConfig?: {
+        successMessage?: string;
+        errorMessage?: string;
+        showFeedback?: boolean;
+    }
 ): Promise<void>
 ```
 
@@ -690,8 +692,11 @@ function handleSubmit<T extends Record<string, any>>(
 - `form: ReturnType<typeof useForm<T>>` - The form object returned by the `useForm` hook.
 - `schema: yup.ObjectSchema<T>` - A [yup] schema defining the structure and constraints of form values.
 - `onSubmit: (values: T) => Promise<void>` - An async callback for form submission logic. Receives validated form values as an argument.
-- `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
-- `showFeedback?: boolean` - Controls whether feedback notifications are displayed. Defaults to `true`.
+- `feedbackConfig?: { successMessage?: string; errorMessage?: string; showFeedback?: boolean; }` - Optional configuration object for feedback handling.
+
+  - `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
+  - `errorMessage?: string` - A custom error message to display when submission fails.
+  - `showFeedback?: boolean` - Controls whether feedback notifications are displayed. Defaults to true.
 
 #### Returns
 
@@ -703,7 +708,7 @@ function handleSubmit<T extends Record<string, any>>(
 
 ```typescript
 import * as yup from "yup";
-import { useForm, feedbackManager, validateSchema } from "react-fatless-form";
+import { useForm } from "react-fatless-form";
 
 // Define a schema
 const schema = yup.object({
@@ -727,11 +732,25 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promis
         schema,
         async (values) => {
             const result = await api.submitData(values);
-            if (!result.ok) throw result; // Ensure errors are thrown for handleSubmit to catch
+            if (!result.ok) throw result;
         },
-        "Submission successful!"
+        { successMessage: "Submission successful!" }
     );
 };
+```
+
+##### Customizing Error Messages
+
+```typescript
+await handleSubmit(
+    form,
+    schema,
+    async (values) => {
+        const result = await api.submitData(values);
+        if (!result.ok) throw result;
+    },
+    { successMessage: "Successfully submitted!", errorMessage: "Submission failed. Please try again." }
+);
 ```
 
 ##### Disabling Feedback
@@ -749,12 +768,9 @@ const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<vo
         schema,
         async (values) => {
             const result = await api.submitData(values);
-            if (!result.ok) {
-                throw result; // Ensure errors are thrown for handleSubmit to catch
-            }
+            if (!result.ok) throw result;
         },
-        "Submission successful!",
-        false // Disable default feedback
+        { showFeedback: false }
     );
 
     // Custom feedback handling
@@ -763,7 +779,7 @@ const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<vo
         variant: "success",
         autoDismiss: true,
         duration: 5000,
-        onClose: () => form.resetSubmissionStatus(), // Reset form submission status to "idle"
+        onClose: () => form.resetSubmissionStatus(),
     });
 };
 ```
@@ -780,7 +796,7 @@ form.resetSubmissionStatus();
 
 ##### Custom Feedback
 
-Leverage `feedbackManager` or your own UI for personalized user feedback. The flexibility of disabling `showFeedback` empowers developers to craft unique experiences while adhering to state management requirements.
+Leverage `feedbackManager` or your own UI for personalized user feedback. The flexibility of `feedbackConfig` empowers developers to craft unique experiences while adhering to state management requirements.
 
 #### Example usage
 
@@ -799,15 +815,15 @@ function MyForm() {
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-        
+
         await handleSubmit(
             form,
             schema,
             async (values) => {
                 const result = await api.submitData(values);
-                if (!result.ok) throw result; // Ensure errors are thrown for handleSubmit to catch
+                if (!result.ok) throw result;
             },
-            "Submission successful!"
+            { successMessage: "Submission successful!" }
         );
     };
 
@@ -1060,6 +1076,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 ```tsx
     <Input
         name="time"
+        type="time"
         label="Select Time"
         minTime="09:00 AM"
         maxTime="05:00 PM"
@@ -1096,7 +1113,7 @@ const schema = yup.object({
   relevantFiles: yup
       .array()
       .required("This field is required")
-      .min(1, "At least one file must be availed")
+      .min(1, "At least one file must be provided")
       .test("fileType", "Invalid file type", (files) => {
           if (!files || files.length === 0) return true;
           return files
@@ -1113,11 +1130,6 @@ const schema = yup.object({
       }),
   preferredCountriesOfWork: yup
       .array()
-      .of(yup
-          .string()
-          .typeError("Each item must be a string")
-          .required("Country is required")
-      )
       .min(1, "At least one country must be selected")
       .required("This field is required")
 });
@@ -1138,9 +1150,10 @@ function MyForm() {
             form,
             schema,
             async (values) => {
-                console.log(values);
+                const result = await api.submitData(values);
+                if (!result.ok) throw result;
             },
-            "Submission successful!"
+            { successMessage: "Submission successful!" }
         );
     };
 
@@ -1170,7 +1183,7 @@ function MyForm() {
 
 ## Tech
 
-`react-fatless-form` uses two open source projects to work properly:
+`react-fatless-form` uses three open source projects to work properly:
 
 - [React] - The library for web and native user interfaces
 - [React DOM] - Serves as the entry point to the DOM and server renderers for React
