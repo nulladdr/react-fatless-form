@@ -1,6 +1,6 @@
 {
   "name": "react-fatless-form",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "A lightweight React form package designed for simplicity that simplifies form handling and validation without unnecessary complexity or bloat.",
   "packageManager": "yarn@4.6.0",
   "main": "dist/index.cjs",
