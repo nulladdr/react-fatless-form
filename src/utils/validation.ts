@@ -3,21 +3,23 @@ import * as yup from "yup";
 /**
  * Validates a given schema against a set of values and returns validation errors if any.
  *
- * This utility function leverages the `yup` validation library to perform schema validation
- * and collects all validation errors into a single object for easier integration with form
- * validation workflows. The errors are keyed by the invalid field names, with each key's value
- * being the corresponding error message.
+ * This function uses the `yup` validation library to check if the provided values conform 
+ * to the given schema. It supports configurable error handling through the `abortEarly` option.
+ *
+ * - When `abortEarly` is `true`, validation stops at the first encountered error.
+ * - When `abortEarly` is `false` (default), all validation errors are collected and returned.
  *
  * @template T - The shape of the schema and values being validated.
  *
- * @param {yup.ObjectSchema<T>} schema - The Yup schema defining the validation rules for the input values.
- * @param {T} values - The set of values to be validated against the schema.
+ * @param {yup.ObjectSchema<T>} schema - The Yup schema defining validation rules.
+ * @param {T} values - The object containing values to be validated.
+ * @param {boolean} [abortEarly=false] - Whether to stop at the first validation error (`true`)
+ * or collect all errors (`false`).
  *
- * @returns {Record<string, string>} An object containing validation errors, where:
- *  - The keys represent the paths (field names) of the invalid fields.
- *  - The values represent the error messages for each invalid field.
- *
- *  If no errors are found, an empty object is returned.
+ * @returns {Partial<Record<keyof T, string>>} An object containing validation errors, where:
+ *  - Keys represent the field names with errors.
+ *  - Values are the corresponding error messages.
+ *  - If no errors are found, an empty object `{}` is returned.
  *
  * @example
  * // Define a schema
@@ -29,7 +31,7 @@ import * as yup from "yup";
  * // Example input values
  * const values = { name: "", age: 15 };
  *
- * // Validate the schema
+ * // Validate with default behavior (collect all errors)
  * const errors = validateSchema(schema, values);
  * console.log(errors);
  * // Output:
@@ -38,11 +40,23 @@ import * as yup from "yup";
  * //   age: "Must be at least 18"
  * // }
  *
- * @throws {Error} Will not throw an error, but will instead return validation errors as a structured object.
+ * @example
+ * // Validate with abortEarly = true (stops at the first error)
+ * const errors = validateSchema(schema, values, true);
+ * console.log(errors);
+ * // Output:
+ * // { name: "Name is required" }
+ *
+ * @throws {Error} This function does not throw errors; instead, it returns a structured object
+ * containing validation messages.
  */
-export function validateSchema<T extends Record<string, any>>(schema: yup.ObjectSchema<T>, values: T): Partial<Record<keyof T, string>> {
+export function validateSchema<T extends Record<string, any>>(
+    schema: yup.ObjectSchema<T>, 
+    values: T, 
+    abortEarly: boolean = false // Default: collect all errors
+): Partial<Record<keyof T, string>> {
     try {
-        schema.validateSync(values, { abortEarly: false });
+        schema.validateSync(values, { abortEarly });
         return {};
     } catch (validationError: any) {
         return validationError.inner.reduce((acc: Record<string, string>, err: any) => {

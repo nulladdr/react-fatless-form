@@ -539,7 +539,8 @@ The `validateSchema` utility function is a simple and efficient tool for validat
 ```typescript
 function validateSchema<T extends Record<string, any>>(
     schema: yup.ObjectSchema<T>, 
-    values: T
+    values: T,
+    abortEarly: boolean = false
 ): Partial<Record<keyof T, string>>
 ```
 
@@ -552,6 +553,10 @@ The validation schema defining the rules for the form fields. This is a yup obje
 ##### 2. `values: T`
 
 The object containing the form field values to be validated against the schema.
+
+##### 3. `abortEarly: boolean`
+
+Whether to stop at the first validation error (`true`) or collect all errors (`false` - default).
 
 #### Return value
 
