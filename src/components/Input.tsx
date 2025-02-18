@@ -93,6 +93,7 @@ export type InputProps =
         minlength?: number;
         maxlength?: number;
         pattern?: string;
+        readonly?: boolean;
     } & CommonProps);
 
 /**
