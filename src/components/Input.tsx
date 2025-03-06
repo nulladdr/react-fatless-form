@@ -11,6 +11,7 @@ import { TimeInput, TimeInputType } from "./TimeInput";
 import { PasswordInput, PasswordInputProps } from "./PasswordInput";
 
 type CommonProps = {
+    id?: string;
     name: string;
     label: string;
     disabled?: boolean;
@@ -86,7 +87,7 @@ export type InputProps =
         autofocus?: boolean;
     } & CommonProps) 
     | ({
-        type: "text" | "number" | "email";
+        type: "text" | "number" | "email" | "tel";
         placeholder?: string;
         autofocus?: boolean;
         autocomplete?: "on" | "off";
@@ -94,6 +95,7 @@ export type InputProps =
         maxlength?: number;
         pattern?: string;
         readOnly?: boolean;
+        ref?: React.Ref<HTMLInputElement>;
     } & CommonProps);
 
 /**
@@ -285,46 +287,34 @@ export type InputProps =
  * ### Usage Notes
  * - Ensure the `type` matches the expected props; passing invalid props will result in a TypeScript error.
  */
-export function Input({ type, ...rest }: InputProps) {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ type, ...rest }, ref) => {
     const { touched, ...field } = useField(rest.name);
 
     return (
-        <div style={{ margin: "17px 10px" }}>
-            {type === "textarea" ? (
-                <Textarea {...field} {...rest} />
-            ) : type === "checkbox" ? (
-                <Checkbox
-                    type={type}
-                    {...rest}
-                    {...field}
-                />
-            ) : type === "radio" ? (
-                <Radio {...field} {...(rest) as RadioInputType} />
-            ) : type === "select" ? (
-                <SelectBox
-                    {...field}
-                    {...(rest as SelectInputType)}
-                />
-            ) : type === 'password' ? (
-                <PasswordInput {...field} {...(rest as PasswordInputProps)} />
-            ) : type === "date" ? (
-                <DateInput 
-                    {...field} 
-                    {...(rest as DateInputType)}
-                />
-            ) : type === "time" ? (
-                <TimeInput
-                    {...field}
-                    {...(rest as TimeInputType)}
-                />
-            ) : type === "file" ? (
-                <FileInput
-                    {...field}
-                    {...(rest as FileInputType)}
-                />
-            ) : (
-                <DefaultInput type={type} {...field} {...rest} />
-            )}
-        </div>
+      <div style={{ margin: "17px 10px" }}>
+        {type === "textarea" ? (
+          <Textarea {...field} {...rest} />
+        ) : type === "checkbox" ? (
+          <Checkbox type={type} {...rest} {...field} />
+        ) : type === "radio" ? (
+          <Radio {...field} {...(rest as RadioInputType)} />
+        ) : type === "select" ? (
+          <SelectBox {...field} {...(rest as SelectInputType)} />
+        ) : type === "password" ? (
+          <PasswordInput {...field} {...(rest as PasswordInputProps)} />
+        ) : type === "date" ? (
+          <DateInput {...field} {...(rest as DateInputType)} />
+        ) : type === "time" ? (
+          <TimeInput {...field} {...(rest as TimeInputType)} />
+        ) : type === "file" ? (
+          <FileInput {...field} {...(rest as FileInputType)} />
+        ) : (
+          <DefaultInput type={type} {...field} {...rest} ref={ref} />
+        )}
+      </div>
     );
-};
+  }
+);
+
+export default Input;
