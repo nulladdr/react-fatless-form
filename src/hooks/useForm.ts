@@ -43,6 +43,7 @@ export type FormSubmissionStatus = "idle" | "submitting" | "success" | "error";
  *
  * **Functions:**
  * - **setFieldValue** (`(field: keyof T, value: T[keyof T]) => void`): Updates the value of a specific field.
+ * - **batchSetfieldValues** (`(newValues: Partial<T>) => void`): Updates multiple field values at once.
  * - **setFieldArrayValue** (`(field: keyof T, value: string | string[]) => void`): Sets the value of a field as a string or an array of strings.
  * - **setFieldError** (`(field: keyof T, error: string) => void`): Sets an error message for a specific field.
  * - **setFieldTouched** (`(field: keyof T, touched: boolean) => void`): Marks a field as touched or untouched.
@@ -109,6 +110,13 @@ export function useForm<T>(initialValues: T) {
         setState((prev) => ({
             ...prev,
             values: { ...prev.values, [field]: value },
+        }));
+    }, []);
+
+    const batchSetfieldValues = useCallback((newValues: Partial<T>) => {
+        setState((prev) => ({
+            ...prev,
+            values: { ...prev.values, ...newValues },
         }));
     }, []);
 
@@ -276,6 +284,7 @@ export function useForm<T>(initialValues: T) {
         ...state,
         submissionStatus,
         setFieldValue,
+        batchSetfieldValues,
         setFieldArrayValue,
         setFieldError,
         setFieldTouched,

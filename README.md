@@ -74,6 +74,7 @@ function useForm<T>(initialValues: T): {
     touched: Partial<Record<keyof T, boolean>>;
     submissionStatus: "idle" | "submitting" | "success" | "error";
     setFieldValue: (field: keyof T, value: T[keyof T]) => void;
+    batchSetFieldValues: (values: Partial<T>) => void;
     setFieldArrayValue: (field: keyof T, value: string | string[]) => void;
     setFieldError: (field: keyof T, error: string) => void;
     setFieldTouched: (field: keyof T, touched: boolean) => void;
@@ -147,7 +148,15 @@ Updates the value of a specific field. Example:
 form.setFieldValue("username", "JaneDoe")
 ```
 
-##### 2. `setFieldArrayValue(field: keyof T, value: string | string[]) => void`
+##### 2. `batchSetFieldValues(values: Partial<T>) => void`
+
+Updates multiple field values at once. Example:
+
+```typescript
+form.batchSetFieldValues({ username: "JaneDoe", age: 30 });
+```
+
+##### 3. `setFieldArrayValue(field: keyof T, value: string | string[]) => void`
 
 Sets the value of a field as a string or an array of strings. Example:
 
@@ -155,7 +164,7 @@ Sets the value of a field as a string or an array of strings. Example:
 form.setFieldArrayValue("tags", ["React", "JavaScript"]);
 ```
 
-##### 3. `setFieldError(field: keyof T, error: string) => void`
+##### 4. `setFieldError(field: keyof T, error: string) => void`
 
 Sets an error message for a specific field. Example
 
@@ -163,7 +172,7 @@ Sets an error message for a specific field. Example
  form.setFieldError("username", "Username is required");
 ```
 
-##### 4. `setFieldTouched(field: keyof T, touched: boolean) => void`
+##### 5. `setFieldTouched(field: keyof T, touched: boolean) => void`
 
 Marks a field as touched or untouched. Example:
 
@@ -171,11 +180,11 @@ Marks a field as touched or untouched. Example:
 form.setFieldTouched("username", true);
 ```
 
-##### 5. `validate(validateFn: (values: T) => Partial<Record<keyof T, string>>) => boolean`
+##### 6. `validate(validateFn: (values: T) => Partial<Record<keyof T, string>>) => boolean`
 
 Validates the form using a custom validation function. `validateFn` receives the current form values and returns an object with field-specific error messages. Returns `true` if validation passes (no errors), otherwise `false`.
 
-##### 6. `resetForm() => void`
+##### 7. `resetForm() => void`
 
 Resets the form’s values, errors, and touched fields to their initial state. Example:
 
@@ -183,7 +192,7 @@ Resets the form’s values, errors, and touched fields to their initial state. E
 form.resetForm();
 ```
 
-##### 7. `updateSubmissionStatus(status: "idle" | "submitting" | "success" | "error") => void`
+##### 8. `updateSubmissionStatus(status: "idle" | "submitting" | "success" | "error") => void`
 
 Updates the submissionStatus to reflect the current state of submission. Example:
 
@@ -191,7 +200,7 @@ Updates the submissionStatus to reflect the current state of submission. Example
 form.updateSubmissionStatus("submitting");
 ```
 
-##### 8. `resetSubmissionStatus() => void`
+##### 9. `resetSubmissionStatus() => void`
 
 Resets the submissionStatus to "idle". Example:
 
