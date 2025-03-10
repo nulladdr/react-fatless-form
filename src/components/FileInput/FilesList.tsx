@@ -46,13 +46,12 @@ export function FileList({ fileList, selectedFiles, onToggleSelect, handleSelect
                     type="button"
                     onClick={onRemoveFiles}
                     style={{
-                        marginTop: "10px",
                         backgroundColor: "transparent",
-                        color: "red",
                         border: "none",
                         cursor: "pointer",
                         textDecoration: "underline",
                         fontSize: "0.9rem",
+                        paddingLeft: 0,
                     }}
                 >
                     Remove Selected
