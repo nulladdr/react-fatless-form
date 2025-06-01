@@ -131,11 +131,10 @@ export async function handleSubmit<T extends Record<string, any>>(
 
         resetForm();
     } catch (error: any) {
-        console.error("Submission error:", error);
         updateSubmissionStatus("error");
 
         if (!feedbackConfig || feedbackConfig.showFeedback !== false) {
-            const errorMessage = error?.message || feedbackConfig?.errorMessage || "An error occurred. Please try again.";
+            const errorMessage = error?.message || error.data.message || feedbackConfig?.errorMessage || "An error occurred. Please try again.";
             if (errorMessage) {
                 feedbackManager.addFeedback(errorMessage, { variant: "error", onClose: resetSubmissionStatus });
             }
