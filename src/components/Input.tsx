@@ -292,7 +292,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const { touched, ...field } = useField(rest.name);
 
     return (
-      <div style={{ margin: "17px 10px" }}>
+      <>
         {type === "textarea" ? (
           <Textarea {...field} {...rest} />
         ) : type === "checkbox" ? (
@@ -312,7 +312,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : (
           <DefaultInput type={type} {...field} {...rest} ref={ref} />
         )}
-      </div>
+      </>
     );
   }
 );

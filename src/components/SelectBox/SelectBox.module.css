@@ -9,6 +9,7 @@
     justify-content: space-between;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .value {
@@ -17,34 +18,54 @@
     text-overflow: ellipsis;
     margin-left: 10px;
     font-size: 0.9rem;
+    flex-grow: 1;
 }
 
 .arrow {
     margin-left: 10px;
     margin-right: 10px;
-    font-size: 12px;
+    font-size: 20px;
     color: #808080;
+    transition: transform 0.2s;
 }
 
 .dropdown {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: auto;
-    margin-top: 1px;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s, transform 0.2s;
+  visibility: hidden;
+}
+
+.dropdown.above,
+.dropdown.below {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown.below {
+  top: calc(100% + 4px);
+}
+
+.dropdown.above {
+  bottom: calc(100% + 4px);
 }
 
 .actions {
     display: flex;
     justify-content: space-between;
     padding: 10px 10px 0 10px;
+    margin-bottom: 10px;
 }
 
 .actionButton {
@@ -68,14 +89,16 @@
     align-items: center;
     gap: 8px;
     position: relative;
+    padding: 0 10px;
+    margin-bottom: 5px;
 }
 
 .searchIcon {
     position: absolute;
-    left: 15px;
+    left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 10px;
+    font-size: 12px;
     color: #aaa;
     pointer-events: none;
 }
@@ -96,20 +119,22 @@
 
 .clearButton:hover {
     color: black;
+    opacity: 1;
 }
 
 .search {
     flex: 1;
-    width: calc(100% - 20px);
-    margin: 10px;
-    padding: 5px 10px 5px 30px;
+    width: 100%;
+    padding: 5px 10px 5px 35px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    height: 40px;
 }
 
 .search:focus {
     outline: none;
+    border-color: #666;
 }
 
 .dropdownHeader {
@@ -119,17 +144,21 @@
     background: white;
     z-index: 1;
     color: #333;
+    padding-top: 5px;
 }
 
 .options {
     list-style: none;
-    margin: 0;
+    margin: 10px;
     padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .option {
     padding: 10px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .option:hover,
@@ -141,4 +170,23 @@
     padding: 10px;
     text-align: center;
     color: #ccc;
+}
+
+/* Scrollbar styling */
+.options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.options::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.options::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

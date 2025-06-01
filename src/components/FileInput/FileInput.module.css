@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 55px;
+    height: 56px;
     border: 1px dashed #ccc;
     transition: border-color 0.3s ease, background-color 0.6s ease;
 }
