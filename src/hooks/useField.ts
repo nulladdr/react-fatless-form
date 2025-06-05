@@ -72,7 +72,17 @@ export function useField(name: string) {
                         // Handle checkbox inputs
                         form.setFieldValue(name, target.checked);
                     } else {
-                        form.setFieldValue(name, target.value);
+                        const value = e.target.value;
+
+                        // If it's a valid number string, convert to number
+                        const numeric = Number(value);
+                        if (value === '') {
+                            form.setFieldValue(name, null);
+                        } else if (!isNaN(numeric) && value.trim() !== '') {
+                            form.setFieldValue(name, numeric);
+                        } else {
+                            form.setFieldValue(name, value); // it's a string
+                        }
                     }
                 } else {
                     form.setFieldValue(name, target.value);
