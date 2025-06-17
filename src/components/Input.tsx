@@ -87,7 +87,7 @@ export type InputProps =
         autofocus?: boolean;
     } & CommonProps) 
     | ({
-        type: "text" | "number" | "email" | "tel";
+        type: "text" | "number" | "email" | "tel" | "url";
         placeholder?: string;
         autofocus?: boolean;
         autocomplete?: "on" | "off";
