@@ -295,15 +295,26 @@ Use this hook when:
 - You need programmatic access to form state or behavior inside nested components
 - You want to avoid prop-drilling in large forms
 
+### Type Safety
+
+You can optionally provide a type parameter for full type inference of form values and actions:
+
+```typescript
+const form = useFormContext<MyFormValues>()
+```
+
 ### API Documentation
 
 #### Signature
 
 ```typescript
-function useFormContext(): {
-  form: ReturnType<typeof useForm>;
-};
+function useFormContext<T>(): UseForm<T>
 ```
+
+Where `UseForm<T>` includes all state and actions like:
+
+- `values`, `errors`, `touched`, `submissionStatus`
+- `setFieldValue`, `setFieldError`, `validate`, `resetForm`, etc.
 
 #### Example usage
 
@@ -312,19 +323,23 @@ function useFormContext(): {
 ```tsx
 import { useFormContext } from 'react-fatless-form'
 
-function CustomTextField({ name }: { name: string }) {
-  const { form } = useFormContext()
+type MyFormValues = {
+  email: string
+}
 
-  const value = form.values[name] ?? ''
-  const error = form.errors[name]
-  const touched = form.touched[name]
+function EmailInput() {
+  const form = useFormContext<MyFormValues>()
+  const value = form.values.email ?? ''
+  const error = form.errors.email
+  const touched = form.touched.email
 
   return (
     <>
       <input
+        type='email'
         value={value}
-        onChange={e => form.setFieldValue(name, e.target.value)}
-        onBlur={() => form.setFieldTouched(name, true)}
+        onChange={e => form.setFieldValue('email', e.target.value)}
+        onBlur={() => form.setFieldTouched('email', true)}
       />
       {touched && error && <span style={{ color: 'red' }}>{error}</span>}
     </>
