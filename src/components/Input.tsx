@@ -294,8 +294,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <>
         {type === "textarea" ? (
+          // @ts-ignore
           <Textarea {...field} {...rest} />
         ) : type === "checkbox" ? (
+          // @ts-ignore
           <Checkbox type={type} {...rest} {...field} />
         ) : type === "radio" ? (
           <Radio {...field} {...(rest as RadioInputType)} />
