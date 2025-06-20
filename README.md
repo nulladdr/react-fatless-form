@@ -283,6 +283,55 @@ function MyForm() {
 }
 ```
 
+### `useFormContext`
+
+The `useFormContext` hook provides access to the shared form state and actions from the closest FormProvider. It’s essential when building custom form components that need to read or update form values, errors, or status outside of standard inputs.
+
+### Purpose
+
+Use this hook when:
+
+- You’re building reusable form fields or wrappers
+- You need programmatic access to form state or behavior inside nested components
+- You want to avoid prop-drilling in large forms
+
+### API Documentation
+
+#### Signature
+
+```typescript
+function useFormContext(): {
+  form: ReturnType<typeof useForm>;
+};
+```
+
+#### Example usage
+
+>:warning: `useFormContext` must be called inside a component wrapped with `FormProvider`. Calling it outside this context will throw an error to prevent misuse.
+
+```tsx
+import { useFormContext } from 'react-fatless-form'
+
+function CustomTextField({ name }: { name: string }) {
+  const { form } = useFormContext()
+
+  const value = form.values[name] ?? ''
+  const error = form.errors[name]
+  const touched = form.touched[name]
+
+  return (
+    <>
+      <input
+        value={value}
+        onChange={e => form.setFieldValue(name, e.target.value)}
+        onBlur={() => form.setFieldTouched(name, true)}
+      />
+      {touched && error && <span style={{ color: 'red' }}>{error}</span>}
+    </>
+  )
+}
+```
+
 ## Utilities
 
 ### `FeedbackManager`
