@@ -28,9 +28,18 @@ export type InputProps =
     } & CommonProps)
     | ({
         type: "date";
+        dateFormat?:
+        | 'MM/dd/yyyy'
+        | 'dd/MM/yyyy'
+        | 'yyyy-MM-dd'
+        | 'MMMM dd, yyyy'
+        | 'LLL dd, yyyy';
+        noWeekends?: boolean
         minDate?: Date;
         maxDate?: Date;
         timePicker?: boolean;
+        minTime?: string;
+        maxTime?: string;
         placeholder?: string;
         rightIcon?: React.JSX.Element;
     } & CommonProps)

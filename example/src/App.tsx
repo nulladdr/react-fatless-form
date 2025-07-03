@@ -90,8 +90,8 @@ function App() {
           <form onSubmit={onSubmit}>
               <Input name="username" type="text" label="Username" placeholder="Your username" />
               <Input name="age" type="number" label="Age" placeholder="Your age" />
-              <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} timePicker rightIcon={<IoCalendarNumberSharp color='#ccc' />} />
-              <Input name="quittingTime" type="time" label="Quitting time" minTime="9:00 AM" maxTime="4:30 PM" rightIcon={<IoTimeSharp color='#ccc' />} />
+              <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} timePicker minTime='08:00' maxTime='16:30' dateFormat='MMMM dd, yyyy' noWeekends rightIcon={<IoCalendarNumberSharp color='#ccc' />} />
+              <Input name="quittingTime" type="time" label="Quitting time" minTime="3:00 PM" maxTime="4:30 PM" rightIcon={<IoTimeSharp color='#ccc' />} />
               <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
                   {label: "Kenya", value: "ke"},
                   {label: "Ethiopia", value: "et"},
