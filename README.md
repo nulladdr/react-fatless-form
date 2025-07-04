@@ -1066,7 +1066,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 | `maxDate`      | `Date`                        | Maximum selectable date. |
 | `timePicker`   | `boolean` | Whether to include a time picker along with the date input. |
 | `minTime`      | `string`                        | The earliest time that can be selected (format: `HH:MM`). Only applicable when `timePicker` is true. Example: `09:00` restricts selection to 9AM or later. |
-| `maxTime`      | `string`                        | The latest time that can be selected (format: `HH:MM`). Only applicable when `timePicker` is true. Example: "16:00" restricts selection to 4PM or earlier. |
+| `maxTime`      | `string`                        | The latest time that can be selected (format: `HH:MM`). Only applicable when `timePicker` is true. Example: `16:00` restricts selection to 4PM or earlier. |
 | `dateFormat` | `string` | The format to display dates in the input field. Options: `MM/dd/yyyy`, `dd/MM/yyyy`, `yyyy-MM-dd`, `MMMM dd, yyyy` and `LLL dd, yyyy`. Defaults to `dd/MM/yyyy` |
 | `noWeekends` | `boolean` | When true, disables selection of weekend dates (Saturday and Sunday). Defaults to `false` |
 | `rightIcon` | `React.JSX.Element` | An optional icon or element to display on the right side of the input field. |
@@ -1144,14 +1144,14 @@ Each input type enforces its own specific props, ensuring valid usage.
 ##### 5. Date Input
 
 ```tsx
-<DateInput
+<Input
    value={new Date()} // Pre-select today's date
    onChange={(date) => console.log('Selected Date:', date)} // Handle date selection
    minDate={new Date()} // Restrict to no past dates
    maxDate={new Date(2080, 11, 31)} // Allow dates only up to Dec 31, 2080
    dateFormat="MMMM dd, yyyy" // Use long month name format
-   noWeekends={true} // Disable selection of weekend dates (Saturday and Sunday)
-   timePicker={true} // Enable time selection
+   noWeekends // Disable selection of weekend dates (Saturday and Sunday)
+   timePicker // Enable time selection
    minTime="09:00" // Restrict times to 9AM or later
    maxTime="16:00" // Restrict times to 4PM or earlier
    className="custom-date-input" // Add custom styling to the input field
