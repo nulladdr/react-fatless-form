@@ -21,13 +21,13 @@ import { validateSchema } from "./validation";
  * @param {(values: T) => Promise<{ message?: string } | void>} onSubmit - An asynchronous callback that performs the submission logic. 
  *   - If successful, it may return an object containing `{ message?: string }` (e.g., a success message).
  *   - If an error occurs, it should throw an object with `{ message?: string }` for error handling.
+ * @param {() => void} [onSuccess] - An optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
  * @param {Object} [feedbackConfig] - Optional configuration for user feedback.
  * @param {string} [feedbackConfig.successMessage] - A custom success message. Defaults to `"Done!"` if not provided.
  * @param {string} [feedbackConfig.errorMessage] - A custom error message. Defaults to `"An error occurred. Please try again."` if not provided.
  * @param {boolean} [feedbackConfig.showFeedback] - Whether to show feedback messages. Defaults to `true`. 
  *   - If omitted, **feedback messages will still be shown**.
  *   - If `{}` (an empty object) is passed, a warning is logged, and no feedback will be displayed.
- * @param {() => void} [onSuccess] - An optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
  *
  * @returns {Promise<void>} A Promise that resolves after submission is complete.
  *

@@ -770,6 +770,7 @@ function handleSubmit<T extends Record<string, any>>(
 - `form: ReturnType<typeof useForm<T>>` - The form object returned by the `useForm` hook.
 - `schema: yup.ObjectSchema<T>` - A [yup] schema defining the structure and constraints of form values.
 - `onSubmit: (values: T) => Promise<void>` - An async callback for form submission logic. Receives validated form values as an argument.
+- `onSuccess?: () => void` - Optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
 - `feedbackConfig?: { successMessage?: string; errorMessage?: string; showFeedback?: boolean; }` - Optional configuration object for feedback handling.
 
   - `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
