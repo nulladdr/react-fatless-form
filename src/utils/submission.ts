@@ -27,60 +27,61 @@ import { validateSchema } from "./validation";
  * @param {boolean} [feedbackConfig.showFeedback] - Whether to show feedback messages. Defaults to `true`. 
  *   - If omitted, **feedback messages will still be shown**.
  *   - If `{}` (an empty object) is passed, a warning is logged, and no feedback will be displayed.
+ * @param {() => void} [onSuccess] - An optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
  *
  * @returns {Promise<void>} A Promise that resolves after submission is complete.
  *
  * @example
- * // 1️⃣ Default behavior (implicit feedback handling)
+ * // 1 Default behavior (implicit feedback handling)
  * await handleSubmit(form, schema, async (values) => {
  *     const result = await api.submit(values);
  *     return { message: "Profile updated successfully!" };
  * });
- * // ✅ Uses "Profile updated successfully!" from API if available.
- * // ✅ Falls back to "Done!" if API does not provide a message.
- * // ✅ Displays errors automatically if API throws an error with a message.
+ * // Uses "Profile updated successfully!" from API if available.
+ * // Falls back to "Done!" if API does not provide a message.
+ * // Displays errors automatically if API throws an error with a message.
  *
  * @example
- * // 2️⃣ Custom success message
+ * // 2 Custom success message
  * await handleSubmit(form, schema, async (values) => {
  *     const result = await api.submit(values);
  *     return { message: "Profile updated successfully!" };
  * }, {
  *     successMessage: "Update complete!"
  * });
- * // ✅ Shows "Profile updated successfully!" from API if available.
- * // ✅ Falls back to "Update complete!" if API does not return a message.
+ * // Shows "Profile updated successfully!" from API if available.
+ * // Falls back to "Update complete!" if API does not return a message.
  *
  * @example
- * // 3️⃣ Custom error message
+ * // 3 Custom error message
  * await handleSubmit(form, schema, async (values) => {
  *     const result = await api.submit(values);
  *     if (!result.ok) throw { message: "Server is unreachable." };
  * }, {
  *     errorMessage: "Something went wrong. Try again later."
  * });
- * // ✅ Shows "Server is unreachable." if API throws an error with a message.
- * // ✅ Falls back to "Something went wrong. Try again later." if no error message is provided.
+ * // Shows "Server is unreachable." if API throws an error with a message.
+ * // Falls back to "Something went wrong. Try again later." if no error message is provided.
  *
  * @example
- * // 4️⃣ Disabling feedback (you handle feedback manually)
+ * // 4 Disabling feedback (you handle feedback manually)
  * await handleSubmit(form, schema, async (values) => {
  *     const result = await api.submit(values);
  *     if (!result.ok) throw new Error("Server error");
  * }, {
  *     showFeedback: false
  * });
- * // ❌ No automatic feedback messages.
- * // ✅ You must handle success/error feedback manually.
+ * // No automatic feedback messages.
+ * // You must handle success/error feedback manually.
  *
  * @example
- * // 5️⃣ Empty feedbackConfig (assumes you will handle feedback manually)
+ * // 5 Empty feedbackConfig (assumes you will handle feedback manually)
  * await handleSubmit(form, schema, async (values) => {
  *     await api.submit(values);
  * }, {});
- * // ⚠️ Logs a warning: "Warning: `feedbackConfig` should not be an empty object. Defaulting to no feedback."
- * // ❌ No automatic feedback messages.
- * // ✅ You must handle success/error feedback manually.
+ * // Logs a warning: "Warning: `feedbackConfig` should not be an empty object. Defaulting to no feedback."
+ * // No automatic feedback messages.
+ * // You must handle success/error feedback manually.
  *
  * @description
  * - **Schema-Based Validation:** 
@@ -100,7 +101,8 @@ export async function handleSubmit<T extends Record<string, any>>(
         successMessage?: string;
         errorMessage?: string;
         showFeedback?: boolean;
-    }
+    },
+    onSuccess?: () => void
 ) {
     const { values, updateSubmissionStatus, resetSubmissionStatus, validate, resetForm } = form;
 
@@ -130,6 +132,7 @@ export async function handleSubmit<T extends Record<string, any>>(
         }
 
         resetForm();
+        onSuccess?.();
     } catch (error: any) {
         updateSubmissionStatus("error");
 
