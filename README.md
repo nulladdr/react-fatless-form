@@ -757,6 +757,7 @@ function handleSubmit<T extends Record<string, any>>(
     form: ReturnType<typeof useForm<T>>,
     schema: yup.ObjectSchema<T>,
     onSubmit: (values: T) => Promise<void>,
+    onSuccess?: () => void,
     feedbackConfig?: {
         successMessage?: string;
         errorMessage?: string;

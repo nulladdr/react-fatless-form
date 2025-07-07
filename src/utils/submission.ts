@@ -97,12 +97,12 @@ export async function handleSubmit<T extends Record<string, any>>(
     form: ReturnType<typeof useForm<T>>,
     schema: yup.ObjectSchema<T>,
     onSubmit: (values: T) => Promise<{ message?: string } | void>,
+    onSuccess?: () => void,
     feedbackConfig?: {
         successMessage?: string;
         errorMessage?: string;
         showFeedback?: boolean;
     },
-    onSuccess?: () => void
 ) {
     const { values, updateSubmissionStatus, resetSubmissionStatus, validate, resetForm } = form;
 
