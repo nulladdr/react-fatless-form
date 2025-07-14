@@ -7,7 +7,8 @@
     padding: 10px;
     border: 1px solid #ccc;
     border: none;
-    background: white;
+    background-color: var(--input-bg);
+    color: var(--input-value);
     cursor: pointer;
     text-align: left;
     font-size: 0.8rem;
@@ -18,10 +19,10 @@
     position: absolute;
     left: 0;
     right: 0;
-    max-height: 200px;
+    max-height: 250px;
     overflow-y: auto;
-    background: white;
-    border: 1px solid #ccc;
+    background: var(--timepicker-bg);
+    border: 1px solid var(--timepicker-border);
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
@@ -40,14 +41,15 @@
 .option {
     padding: 10px;
     cursor: pointer;
-    transition: background 0.2s;
+    color: var(--timepicker-text);
+    transition: background-color 0.2s;
 }
 
 .option:not(.selected):hover {
-  background: #e0e0e0;
+  background: var(--timepicker-option-hover);
 }
 
 .selected {
-    background: #0078d4;
+    background: var(--timepicker-option-selected);
     color: white;
 }

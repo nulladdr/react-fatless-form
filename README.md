@@ -1179,6 +1179,22 @@ Each input type enforces its own specific props, ensuring valid usage.
 <Input name="files" type="file" label="Relevant Files" accept=".pdf,.docx" multiple />
 ```
 
+## Theme Support
+
+The package supports theming via the `data-theme` attribute. If no theme is specified:
+
+- Defaults to light theme colors
+- All backgrounds and colors have explicit fallbacks
+- Works without any theme setup
+
+To enable dark mode:
+
+```html
+<form data-theme="dark">
+    <Input ...>
+</form>
+```
+
 ## Full Usage Example :sparkles:
 
 ```tsx
@@ -1190,44 +1206,62 @@ const schema = yup.object({
   username: yup
     .string()
     .required("Username is required"),
+
   age: yup
-      .number()
-      .typeError("Age must be a number")
-      .min(18, "Must be at least 18")
-      .required("Age is required"),
+    .number()
+    .typeError("Age must be a number")
+    .min(18, "Must be at least 18")
+    .required("Age is required"),
+
   dateAvailable: yup
-      .date()
-      .typeError("Must be a valid date")
-      .required("Availability date is required"),
+    .date()
+    .nullable()
+    .typeError("Must be a valid date")
+    .optional(),
+
+  quittingTime: yup
+    .string()
+    .required("Time is required"),
+
+  password: yup
+    .string()
+    .required("Password is required"),
+
   relevantFiles: yup
-      .array()
-      .required("This field is required")
-      .min(1, "At least one file must be provided")
-      .test("fileType", "Invalid file type", (files) => {
-          if (!files || files.length === 0) return true;
-          return files
-              .every((file) => [
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-                "application/msword"
-              ]
-              .includes(file.type));
-      })
-      .test("fileSize", "File is too large", (files) => {
-          if (!files || files.length === 0) return true;
-          return files
-              .every((file) => file.size <= 2 * 1024 * 1024); // Max 2MB
-      }),
+    .array()
+    .of(
+      yup.mixed<File>().test("fileType", "Invalid file type", (file) =>
+        file
+          ? ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"].includes(file.type)
+          : true
+      ).test("fileSize", "File is too large", (file) =>
+        file ? file.size <= 2 * 1024 * 1024 : true
+      )
+    )
+    .min(1, "At least one file must be availed")
+    .required("This field is required"),
+
   preferredCountriesOfWork: yup
-      .array()
-      .min(1, "At least one country must be selected")
-      .required("This field is required")
+    .array()
+    .of(
+      yup
+        .string()
+        .typeError("Each item must be a string")
+        .required("Country is required")
+    )
+    .min(1, "At least one country must be selected")
+    .required("This field is required"),
 });
 
+type FormData = yup.InferType<typeof schema>
+
 function MyForm() {
-    const form = useForm({ 
-        username: "", 
-        age: 18, 
-        dateAvailable: new Date(),
+    const form = useForm<FormData>({
+        username: "",
+        age: 18,
+        dateAvailable: null,
+        quittingTime: "",
+        password: "",
         relevantFiles: [],
         preferredCountriesOfWork: [],
     });
@@ -1249,19 +1283,70 @@ function MyForm() {
     return (
         <>
             <FormProvider form={form}>
-                <form onSubmit={onSubmit}>
-                    <Input name="username" type="text" label="Username" placeholder="Your username" />
-                    <Input name="age" type="number" label="Age" placeholder="Your age" />
-                    <Input name="dateAvailable" type="date" label="Date Available" />
-                    <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
-                        {label: "Kenya", value: "ke"},
-                        {label: "Ethiopia", value: "et"},
-                        {label: "Nigeria", value: "ng"},
-                        {label: "South Africa", value: "sa"}
-                    ]} placeholder="Select countries" multiple />
-                    <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
+                <form onSubmit={onSubmit} data-theme="dark">
+                    <Input 
+                        name="username" 
+                        type="text" 
+                        label="Username" 
+                        placeholder="Your username" 
+                    />
+                    <Input 
+                        name="age" 
+                        type="number" 
+                        label="Age" 
+                        placeholder="Your age" 
+                    />
+                    <Input 
+                        name="dateAvailable" 
+                        type="date" 
+                        label="Date Available" 
+                        minDate={new Date} 
+                        timePicker 
+                        minTime='08:00' 
+                        maxTime='16:30' 
+                        dateFormat='MMMM dd, yyyy' 
+                        noWeekends 
+                        rightIcon={<IoCalendarNumberSharp color='#ccc' />} 
+                    />
+                    <Input 
+                        name="quittingTime" 
+                        type="time" 
+                        label="Quitting time" 
+                        minTime="3:00 PM" 
+                        maxTime="4:30 PM" 
+                        rightIcon={<IoTimeSharp color='#ccc' />} 
+                    />
+                    <Input 
+                        name="preferredCountriesOfWork" 
+                        type="select" 
+                        label="Preferred Countries" 
+                        options={[
+                            {label: "Kenya", value: "ke"},
+                            {label: "Ethiopia", value: "et"},
+                            {label: "Nigeria", value: "ng"},
+                            {label: "South Africa", value: "sa"}
+                        ]} 
+                        placeholder="Select countries" 
+                        multiple 
+                    />
+                    <Input 
+                        name="password" 
+                        type="password" 
+                        label="Password" 
+                        placeholder="Password" 
+                        showIcon={<IoEye color='#ccc' />} 
+                        hideIcon={<IoEyeOff color='#ccc' />} 
+                    />
+                    <Input 
+                        name="relevantFiles" 
+                        type="file" 
+                        label="Relevant files" 
+                        accept=".doc,.docx" 
+                        multiple 
+                    />
 
-                    <button type="submit">Submit</button>
+                    <button className="submitButton" type="submit">Submit</button>
+                    <button className="resetButton" type="reset" onClick={resetClickHandler}>Reset</button>
                 </form>
             </FormProvider>
             <FeedbackContainer />

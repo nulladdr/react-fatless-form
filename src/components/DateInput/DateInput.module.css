@@ -2,15 +2,30 @@
     position: relative;
     z-index: 1;
     padding: 8px;
-    background-color: transparent;
+    background-color: var(--input-bg);
+    color: var(--input-value);
     width: 100%;
     border: none;
     cursor: pointer;
     font-size: 0.8rem;
 }
 
+.dateInput::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1; /* Firefox reduces opacity by default */
+}
+
+.dateInput:disabled {
+    color: var(--input-disabled);
+    cursor: not-allowed;
+}
+
 .dateInput:focus {
     outline: none;
+}
+
+.dateInput:not(:disabled):hover {
+    background-color: var(--input-hover-bg, rgba(0, 0, 0, 0.05));
 }
 
 time.icon {
@@ -34,15 +49,16 @@ time.icon {
 
 .timePicker {
     position: absolute;
-    top: -1px;
-    left: 99.5%;
-    height: 100.25%;
+    left: 100.125%;
+    top: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 0 4px 4px 0;
+    background: var(--timepicker-bg);
+    border-top: 1px solid var(--timepicker-border);
+    border: 1px solid var(--timepicker-border);
+    border-radius: 4px;
     scrollbar-color: #ccc transparent;
     scrollbar-width: thin;
     width: 90px;
@@ -55,13 +71,14 @@ time.icon {
     justify-content: space-between;
     align-items: center;
     padding: 8px;
-    border-bottom: 1px solid #ccc;
     font-size: 0.7rem;
+    color: var(--timepicker-text);
+    background: var(--timepicker-header-bg);
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #ccc;
     position: sticky;
     top: 0;
-    background: white;
     z-index: 1;
-    color: #333;
 }
   
 .timeOption {
@@ -71,10 +88,24 @@ time.icon {
     background: transparent;
     border: none;
     font-size: 0.8rem;
+    color: var(--timepicker-text);
+    transition: background-color 0.2s;
+    width: 100%;
 }
 
-.timeOption:not(.timeOptionSelected):hover {
-    background: #e0e0e0;
+.timeOption:hover:not(.timeOptionSelected):not(.timeOptionDisabled) {
+    background: var(--timepicker-option-hover);
+}
+
+.timeOptionSelected {
+    background: var(--timepicker-option-selected);
+    color: white;
+}
+
+.timeOptionDisabled {
+    color: var(--calendar-day-disabled-text);
+    cursor: not-allowed;
+    display: none;
 }
 
 .timeOption:active {
@@ -125,13 +156,16 @@ time.icon:focus {
     top: calc(100% + 2px);
     left: 0;
     z-index: 10;
-    background: white;
-    border: 1px solid #ccc;
+    background: var(--calendar-bg);
+    color: var(--calendar-text);
+    border: 1px solid var(--calendar-border);
     border-radius: 4px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 320px;
     padding: 16px;
     opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateY(-10px);
 }
 
 .calendarDropdown.open {
@@ -144,12 +178,17 @@ time.icon:focus {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+    background: var(--calendar-header-bg);
+    padding: 8px;
+    border-radius: 4px;
 }
 
 .calendarHeader select {
     padding: 4px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--calendar-border);
+    background: var(--calendar-bg);
+    color: var(--calendar-text);
 }
 
 .daysOfWeek,
@@ -163,26 +202,33 @@ time.icon:focus {
     text-align: center;
     font-weight: normal;
     font-size: 0.8rem;
+    color: var(--calendar-text);
 }
 
 .day {
     text-align: center;
     padding: 8px;
     border-radius: 4px;
-    background: #f9f9f9;
+    background: var(--calendar-day-bg);
+    color: var(--calendar-text);
     cursor: pointer;
     border: none;
+    transition: background-color 0.2s;
 }
 
-.day:not(.daySelected):hover {
-    background: #e0e0e0;
+.day:hover:not(.daySelected):not(.dayDisabled) {
+    background: var(--calendar-day-hover);
 }
 
-.timeOptionSelected,
 .daySelected {
-    background: #0078d4;
+    background: var(--calendar-day-selected);
     color: white;
-    border-radius: 4px;
+}
+
+.dayDisabled {
+    background: var(--calendar-day-disabled);
+    color: var(--calendar-day-disabled-text);
+    cursor: not-allowed;
 }
 
 .calendarDropdown.above {
@@ -195,17 +241,20 @@ time.icon:focus {
     bottom: auto;
 }
 
-.timeRange {
-    font-size: 0.7rem;
-    color: #666;
-    padding: 4px 8px;
-    text-align: center;
-    background-color: #f5f5f5;
-    margin-bottom: 4px;
+.timeOptionsContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 0 0 4px 4px;
 }
 
-.timeOptionDisabled {
-    display: none;
+.timeRange {
+    font-size: 0.7rem;
+    color: var(--timepicker-text);
+    padding: 4px 8px;
+    text-align: center;
+    background-color: var(--timepicker-range-bg);
+    margin-bottom: 4px;
+    border-radius: 4px;
 }
 
 @-webkit-keyframes swing {

@@ -37,13 +37,15 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   z-index: 10;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.2s, transform 0.2s;
   visibility: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
 }
 
 .dropdown.above,
@@ -71,17 +73,16 @@
 .actionButton {
     background: none;
     border: none;
-    color: #A9A9A9;
+    color: var(--action-button-text, #666);
     cursor: pointer;
-    text-decoration: none;
-    font-size: 10px;
-    padding: 0;
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    transition: color 0.2s ease;
 }
 
 .actionButton:hover {
-    text-decoration: none;
-    color: #333;
-    transition: color 0.2s ease;
+    color: var(--action-button-hover-text, #333);
+    border-radius: 3px;
 }
 
 .searchContainer {
@@ -98,8 +99,7 @@
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 12px;
-    color: #aaa;
+    color: var(--clear-button-color);
     pointer-events: none;
 }
 
@@ -108,18 +108,29 @@
     right: 15px;
     background: transparent;
     border: none;
-    font-size: 16px;
     cursor: pointer;
-    color: #333;
+    color: var(--clear-button-color);
     outline: none;
     font-size: 16px;
     opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: all 0.2s ease;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .clearButton:hover {
-    color: black;
+    color: var(--clear-button-hover);
     opacity: 1;
+    background: var(--action-button-hover-bg);
+}
+
+.clearButton:active {
+    color: var(--clear-button-active);
+    transform: scale(0.9);
 }
 
 .search {
@@ -141,10 +152,11 @@
     font-size: 0.7rem;
     position: sticky;
     top: 0;
-    background: white;
+    background: var(--dropdown-header-bg);
+    color: var(--dropdown-header-text);
     z-index: 1;
-    color: #333;
     padding-top: 5px;
+    border-bottom: 1px solid var(--dropdown-header-border);
 }
 
 .options {
@@ -158,12 +170,20 @@
 .option {
     padding: 10px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 2px 0;
 }
 
-.option:hover,
+.option:hover {
+    background-color: var(--option-hover-bg) !important;
+    color: var(--option-hover-text) !important;
+}
+
 .option.selected {
-    background-color: #f0f0f0;
+    background-color: var(--option-selected-bg);
+    color: var(--option-selected-text);
+    font-weight: 500;
 }
 
 .noResults {

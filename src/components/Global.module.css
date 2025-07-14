@@ -5,6 +5,8 @@
     width: 100%;
     border-radius: 4px;
     border: 1px solid #ccc;
+    color: var(--input-value);
+    background-color: var(--input-wrapper-bg);
     height: 56px;
     transition: border-color 0.3s ease;
     margin-bottom: 10px;
@@ -12,12 +14,12 @@
 
 .inputWrapper:not(.inputWrapperError):focus-within,
 .inputWrapper.selectBoxOpen {
-    border-color: #0078d4;
+    border-color: var(--label-focus-color);
 }
 
 .inputWrapper:not(.inputWrapperError):focus-within .label,
 .inputWrapper.selectBoxOpen:not(.inputWrapperError) .label {
-    color: #0078d4;
+    color: var(--label-focus-color);
 }
 
 .inputWrapper::before {
@@ -41,11 +43,12 @@
     top: -10px;
     padding: 0 4px;
     font-size: 0.8rem;
-    color: #808080;
+    color: var(--label-color, var(--label-default-text, #808080));
     transition: color 0.3s ease;
     background-color: transparent;
     z-index: 2;
 }
+
 
 .rightIcon {
     display: inline-flex;
@@ -74,11 +77,139 @@
 }
 
 .label.errorLabel {
-    color: rgb(184, 0, 0);
+    color: var(--label-error-color) !important;
 }
 
 .errorMessage {
-    color: rgb(184, 0, 0);
+    color: var(--label-error-color);
     font-size: 0.8rem;
     margin-top: 1px;
+}
+
+.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+:root {
+    --dropdown-bg: #fff;
+    --dropdown-text: #333;
+    --dropdown-border: #ccc;
+    --option-hover-bg: #f0f0f0;
+    --option-hover-text: #333;
+    --option-selected-bg: #e0e0e0;
+    --option-selected-text: #333;
+    --search-bg: #fff;
+    --search-text: #333;
+    --search-border: #ccc;
+    --placeholder-color: #ccc;
+    --dropdown-header-bg: #fff;
+    --dropdown-header-text: #333;
+    --dropdown-header-border: #ccc;
+    --action-button-hover: #e0e0e0;
+    --action-button-text: #999;
+    --action-button-hover-text: #333;
+    --clear-button-color: #999;
+    --clear-button-hover: #333;
+    --clear-button-active: #000;
+
+    /* Calendar */
+    --calendar-bg: #fff;
+    --calendar-text: #333;
+    --calendar-border: #ccc;
+    --calendar-header-bg: #f5f5f5;
+    --calendar-day-bg: #f9f9f9;
+    --calendar-day-hover: #e0e0e0;
+    --calendar-day-selected: #0078d4;
+    --calendar-day-disabled: #f5f5f5;
+    --calendar-day-disabled-text: #999;
+    
+    /* Time Picker */
+    --timepicker-bg: #fff;
+    --timepicker-text: #333;
+    --timepicker-border: #ccc;
+    --timepicker-header-bg: #f5f5f5;
+    --timepicker-option-hover: #e0e0e0;
+    --timepicker-option-selected: #0078d4;
+    --timepicker-range-bg: #f5f5f5;
+    
+    /* Input */
+    --dateinput-value: #333;
+    --dateinput-bg: #fff;
+    --dateinput-text: #333;
+    --dateinput-placeholder: #999;
+    --dateinput-disabled: #888;
+
+    --label-default-bg: #ffffff;
+    --label-default-text: #808080;
+    --label-focus-color: #0078d4;
+    --label-error-color: #d32f2f;
+
+    --input-wrapper-bg: #fff;
+    --input-placeholder: #999;
+    --input-value: #333;
+    --input-disabled: #888;
+    --input-bg: #fff;
+}
+
+[data-theme="dark"] {
+    --dropdown-bg: #424242;
+    --dropdown-text: #f5f5f5;
+    --dropdown-border: #616161;
+    --option-hover-bg: #535353;
+    --option-hover-text: #fff;
+    --option-selected-bg: #616161;
+    --option-selected-text: #fff;
+    --search-bg: #424242;
+    --search-text: #f5f5f5;
+    --search-border: #616161;
+    --placeholder-color: #aaa;
+    --dropdown-header-bg: #424242;
+    --dropdown-header-text: #f5f5f5;
+    --dropdown-header-border: #616161;
+    --action-button-hover: #757575;
+    --action-button-text: #aaa;
+    --action-button-hover-text: #fff;
+    --clear-button-color: #aaa;
+    --clear-button-hover: #fff;
+    --clear-button-active: #fff;
+
+    /* Calendar */
+    --calendar-bg: #424242;
+    --calendar-text: #f5f5f5;
+    --calendar-border: #616161;
+    --calendar-header-bg: #535353;
+    --calendar-day-bg: transparent;
+    --calendar-day-hover: #535353;
+    --calendar-day-selected: #0078d4;
+    --calendar-day-disabled: #616161;
+    --calendar-day-disabled-text: #757575;
+    
+    /* Time Picker */
+    --timepicker-bg: #424242;
+    --timepicker-text: #f5f5f5;
+    --timepicker-border: #616161;
+    --timepicker-header-bg: #535353;
+    --timepicker-option-hover: #535353;
+    --timepicker-option-selected: #0078d4;
+    --timepicker-range-bg: #535353;
+    
+    /* Input */
+    --dateinput-value: #fff;
+    --dateinput-bg: #424242;
+    --dateinput-text: #f5f5f5;
+    --dateinput-placeholder: #aaa;
+    --dateinput-disabled: #999;
+
+    --label-default-bg: #424242;
+    --label-default-text: #aaaaaa;
+    --label-focus-color: #3a96dd;
+    --label-error-color: #ff6b6b;
+
+    --input-wrapper-bg: #424242;
+    --input-placeholder: #aaa;
+    --input-value: #f5f5f5;
+    --input-disabled: #999;
+    --input-bg: #424242;
 }

@@ -32,6 +32,7 @@ export function SelectBox({
     value = [],
     label = '',
     error = '',
+    disabled = false,
 }: SelectInputType) {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState('');
@@ -41,7 +42,11 @@ export function SelectBox({
     const dropdownRef = useRef<HTMLDivElement>(null);
     const optionsRef = useRef<HTMLUListElement>(null);
 
-    const toggleDropdown = () => setIsOpen(prev => !prev);
+    const toggleDropdown = () => {
+        if (disabled) return;
+        setIsOpen(prev => !prev);
+    };
+
     const closeDropdown = () => setIsOpen(false);
 
     // Calculate dropdown position
@@ -56,7 +61,6 @@ export function SelectBox({
                 dropdownRef.current!.scrollHeight
             );
             
-            // Position above if there's not enough space below but enough above
             if (spaceBelow < dropdownHeight && controlRect.top > dropdownHeight) {
                 setPosition('above');
             } else {
@@ -66,7 +70,6 @@ export function SelectBox({
 
         calculatePosition();
         
-        // Add listeners for dynamic repositioning
         window.addEventListener('scroll', calculatePosition, true);
         window.addEventListener('resize', calculatePosition);
         
@@ -77,6 +80,8 @@ export function SelectBox({
     }, [isOpen, options, search]);
 
     const handleOptionClick = (val: string | number) => {
+        if (disabled) return;
+        
         if (multiple) {
             const updated = Array.isArray(value) ? [...value] : [];
             const newValue = updated.includes(val)
@@ -85,17 +90,20 @@ export function SelectBox({
             onChange(newValue);
         } else {
             onChange(val);
+            closeDropdown();
         }
-        closeDropdown();
     };
 
     const handleSelectAll = () => {
+        if (disabled) return;
         if (multiple) {
             onChange(options.map(option => option.value));
+            closeDropdown();
         }
     };
 
     const handleClearSelected = () => {
+        if (disabled) return;
         onChange([]);
     };
 
@@ -140,6 +148,7 @@ export function SelectBox({
             styles.control,
             isOpen && globalStyles.selectBoxOpen,
             error && globalStyles.inputWrapperError,
+            disabled && globalStyles.disabled,
             className
         ]
             .filter(Boolean)
@@ -154,11 +163,17 @@ export function SelectBox({
     };
 
     return (
-        <div className={styles.selectBox} ref={controlRef}>
+        <div 
+            className={styles.selectBox} 
+            ref={controlRef}
+            data-disabled={disabled}
+            style={style}
+        >
             <div 
                 className={getClassNames()} 
                 onClick={toggleDropdown} 
-                style={{ ...dynamicStyles, ...style }}
+                style={dynamicStyles}
+                aria-disabled={disabled}
             >
                 <label 
                     ref={labelRef} 
@@ -168,21 +183,36 @@ export function SelectBox({
                 </label>
                 <span 
                     className={styles.value} 
-                    style={{ color: !String(value) ? 'rgb(204, 204, 204)' : 'inherit' }}
+                    style={{ 
+                        color: !String(value) ? 'var(--placeholder-color, #ccc)' : 'inherit',
+                        opacity: disabled ? 0.7 : 1
+                    }}
                 >
                     {displayValue()}
                 </span>
-                <span className={styles.arrow}>
+                <span className={styles.arrow} style={{ opacity: disabled ? 0.5 : 1 }}>
                     {isOpen ? '\u005E' : '\u2304'}
                 </span>
             </div>
 
-            {isOpen && (
+            {isOpen && !disabled && (
                 <div 
                     ref={dropdownRef}
                     className={getDropdownClasses()}
+                    style={{
+                        backgroundColor: 'var(--dropdown-bg)',
+                        color: 'var(--dropdown-text)',
+                        borderColor: 'var(--dropdown-border)'
+                    }}
                 >
-                    <div className={styles.dropdownHeader}>
+                    <div 
+                        className={styles.dropdownHeader}
+                        style={{
+                            backgroundColor: 'var(--dropdown-header-bg)',
+                            color: 'var(--dropdown-header-text)',
+                            borderBottomColor: 'var(--dropdown-header-border)'
+                        }}
+                    >
                         {multiple && (
                             <div className={styles.actions}>
                                 <button 
@@ -211,6 +241,11 @@ export function SelectBox({
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 autoFocus
+                                style={{
+                                    backgroundColor: 'var(--search-bg, #fff)',
+                                    color: 'var(--search-text, #333)',
+                                    borderColor: 'var(--search-border, #ccc)'
+                                }}
                             />
                             {search && (
                                 <button
@@ -228,18 +263,41 @@ export function SelectBox({
                     <ul ref={optionsRef} className={styles.options} role="listbox">
                         {filteredOptions.length > 0 ? (
                             filteredOptions.map(option => (
-                                <li
-                                    key={option.value}
-                                    className={`${styles.option} ${
-                                        (Array.isArray(value) && value.includes(option.value)) 
-                                            ? styles.selected 
-                                            : ''
-                                    }`}
-                                    onClick={() => handleOptionClick(option.value)}
-                                    role="option"
-                                >
-                                    {option.label}
-                                </li>
+                            <li
+                                key={option.value}
+                                className={`${styles.option} ${
+                                (multiple 
+                                    ? Array.isArray(value) && value.includes(option.value)
+                                    : value === option.value)
+                                    ? styles.selected 
+                                    : ''
+                                }`}
+                                onClick={() => handleOptionClick(option.value)}
+                                role="option"
+                                aria-selected={
+                                multiple 
+                                    ? Array.isArray(value) && value.includes(option.value)
+                                    : value === option.value
+                                }
+                                style={{
+                                backgroundColor: (
+                                    multiple 
+                                    ? Array.isArray(value) && value.includes(option.value)
+                                    : value === option.value
+                                )
+                                    ? 'var(--option-selected-bg)'
+                                    : 'transparent',
+                                color: (
+                                    multiple 
+                                    ? Array.isArray(value) && value.includes(option.value)
+                                    : value === option.value
+                                )
+                                    ? 'var(--option-selected-text)'
+                                    : 'inherit'
+                                }}
+                            >
+                                {option.label}
+                            </li>
                             ))
                         ) : (
                             <li className={styles.noResults}>No results</li>

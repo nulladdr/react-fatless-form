@@ -537,7 +537,14 @@ export function DateInput({
         });
       
         return (
-            <div className={styles.timePicker}>
+            <div 
+                className={styles.timePicker}
+                style={{
+                    backgroundColor: 'var(--timepicker-bg)',
+                    color: 'var(--timepicker-text)',
+                    borderTopColor: 'var(--timepicker-border)'
+                }}
+            >
                 <div className={styles.timeHeader}>Select Time</div>
                 {minTime && maxTime && (
                     <div className={styles.timeRange}>
@@ -556,6 +563,11 @@ export function DateInput({
             className={`${styles.calendarDropdown} ${isCalendarOpen ? styles.open : ''} ${position === 'above' ? styles.above : styles.below}`} 
             ref={dropdownRef} 
             role="dialog"
+            style={{
+                backgroundColor: 'var(--calendar-bg)',
+                color: 'var(--calendar-text)',
+                borderColor: 'var(--calendar-border)'
+            }}
         >
             <div className={styles.calendarHeader}>
                 <select
@@ -620,13 +632,22 @@ export function DateInput({
                     placeholder={getPlaceholder()}
                     disabled={disabled}
                     className={`${styles.dateInput} ${className || ''}`}
-                    onFocus={() => setIsCalendarOpen(true)}
+                    onFocus={() => !disabled && setIsCalendarOpen(true)}
+                    style={{
+                        color: inputValue ? 'var(--dateinput-value)' : 'var(--dateinput-placeholder)',
+                        backgroundColor: 'var(--dateinput-bg)',
+                        cursor: disabled ? 'not-allowed' : 'pointer',
+                        ...style
+                    }}
                 />
                 <button
                     type="button"
                     onClick={toggleCalendar}
                     disabled={disabled}
                     className={globalStyles.rightIcon}
+                    style={{
+                        color: disabled ? 'var(--dateinput-disabled)' : 'var(--dateinput-value)'
+                    }}
                 >
                     <span>{rightIcon || '🗓️'}</span>
                 </button>
