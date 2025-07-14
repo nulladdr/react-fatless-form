@@ -53,11 +53,14 @@ export function SelectBox({
     useEffect(() => {
         if (!isOpen || !controlRef.current || !dropdownRef.current) return;
 
+        // Force reflow to enable transition
+        dropdownRef.current.getBoundingClientRect();
+
         const calculatePosition = () => {
             const controlRect = controlRef.current!.getBoundingClientRect();
             const spaceBelow = window.innerHeight - controlRect.bottom;
             const dropdownHeight = Math.min(
-                200, // max-height from CSS
+                250, // max-height from CSS
                 dropdownRef.current!.scrollHeight
             );
             
@@ -184,7 +187,7 @@ export function SelectBox({
                 <span 
                     className={styles.value} 
                     style={{ 
-                        color: !String(value) ? 'var(--placeholder-color, #ccc)' : 'inherit',
+                        color: !String(value) ? 'var(--placeholder-color, #cccccc)' : 'inherit',
                         opacity: disabled ? 0.7 : 1
                     }}
                 >

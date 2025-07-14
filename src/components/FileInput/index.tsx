@@ -69,7 +69,7 @@ export function FileInput({
             >
                 <label ref={labelRef} htmlFor={name} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>{label}</label>
                 <span style={{ fontSize: "0.78rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
-                    <span className={styles.uploadSpan} onMouseEnter={(e) => (e.currentTarget.style.color = "#808080")} onMouseLeave={(e) => (e.currentTarget.style.color = "#ccc")} onClick={() => fileInputRef.current?.click()}>
+                    <span className={styles.uploadSpan} onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--input-value)')} onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--placeholder-color, #cccccc)')} onClick={() => fileInputRef.current?.click()}>
                         &#10514;
                         <span style={{ marginLeft: "5px" }}>Click to select, or drag and drop files</span>
                     </span>

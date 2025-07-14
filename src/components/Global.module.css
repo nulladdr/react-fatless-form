@@ -4,12 +4,16 @@
     align-items: center;
     width: 100%;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-wrapper-border);
     color: var(--input-value);
     background-color: var(--input-wrapper-bg);
     height: 56px;
     transition: border-color 0.3s ease;
     margin-bottom: 10px;
+}
+
+.inputWrapper:hover {
+    border: 1px solid var(--input-wrapper-border-hover);
 }
 
 .inputWrapper:not(.inputWrapperError):focus-within,
@@ -93,90 +97,96 @@
 }
 
 :root {
-    --dropdown-bg: #fff;
-    --dropdown-text: #333;
-    --dropdown-border: #ccc;
+    --dropdown-bg: #ffffff;
+    --dropdown-text: #333333;
+    --dropdown-border: #cccccc;
     --option-hover-bg: #f0f0f0;
-    --option-hover-text: #333;
+    --option-hover-text: #333333;
     --option-selected-bg: #e0e0e0;
-    --option-selected-text: #333;
-    --search-bg: #fff;
-    --search-text: #333;
-    --search-border: #ccc;
-    --placeholder-color: #ccc;
-    --dropdown-header-bg: #fff;
-    --dropdown-header-text: #333;
-    --dropdown-header-border: #ccc;
+    --option-selected-text: #333333;
+    --search-bg: #ffffff;
+    --search-text: #333333;
+    --search-border: #cccccc;
+    --placeholder-color: #cccccc;
+    --dropdown-header-bg: #ffffff;
+    --dropdown-header-text: #333333;
+    --dropdown-header-border: #cccccc;
     --action-button-hover: #e0e0e0;
-    --action-button-text: #999;
-    --action-button-hover-text: #333;
-    --clear-button-color: #999;
-    --clear-button-hover: #333;
+    --action-button-text: #999999;
+    --action-button-hover-text: #333333;
+    --clear-button-color: #999999;
+    --clear-button-hover: #333333;
     --clear-button-active: #000;
 
     /* Calendar */
-    --calendar-bg: #fff;
-    --calendar-text: #333;
-    --calendar-border: #ccc;
+    --calendar-bg: #ffffff;
+    --calendar-text: #333333;
+    --calendar-border: #cccccc;
     --calendar-header-bg: #f5f5f5;
     --calendar-day-bg: #f9f9f9;
     --calendar-day-hover: #e0e0e0;
     --calendar-day-selected: #0078d4;
     --calendar-day-disabled: #f5f5f5;
-    --calendar-day-disabled-text: #999;
+    --calendar-day-disabled-text: #999999;
     
     /* Time Picker */
-    --timepicker-bg: #fff;
-    --timepicker-text: #333;
-    --timepicker-border: #ccc;
+    --timepicker-bg: #ffffff;
+    --timepicker-text: #333333;
+    --timepicker-border: #cccccc;
     --timepicker-header-bg: #f5f5f5;
     --timepicker-option-hover: #e0e0e0;
     --timepicker-option-selected: #0078d4;
     --timepicker-range-bg: #f5f5f5;
     
     /* Input */
-    --dateinput-value: #333;
-    --dateinput-bg: #fff;
-    --dateinput-text: #333;
-    --dateinput-placeholder: #999;
-    --dateinput-disabled: #888;
+    --dateinput-value: #333333;
+    --dateinput-bg: #ffffff;
+    --dateinput-text: #333333;
+    --dateinput-placeholder: #999999;
+    --dateinput-disabled: #888888;
 
     --label-default-bg: #ffffff;
     --label-default-text: #808080;
     --label-focus-color: #0078d4;
     --label-error-color: #d32f2f;
 
-    --input-wrapper-bg: #fff;
-    --input-placeholder: #999;
-    --input-value: #333;
-    --input-disabled: #888;
-    --input-bg: #fff;
+    --input-wrapper-bg: #ffffff;
+    --input-wrapper-border: #e0e0e0;
+    --input-wrapper-border-hover: #61616161;
+    --input-placeholder: #999999;
+    --input-value: #333333;
+    --input-disabled: #888888;
+    --input-bg: #ffffff;
 }
 
 [data-theme="dark"] {
-    --dropdown-bg: #424242;
+    --dropdown-bg: #1e1e1e;
     --dropdown-text: #f5f5f5;
     --dropdown-border: #616161;
+    --dropdown-transition-duration: 0.2s;
+    --dropdown-transition-timing: ease-out;
+    --dropdown-opacity: 1;
+
     --option-hover-bg: #535353;
-    --option-hover-text: #fff;
+    --option-hover-text: #ffffff;
     --option-selected-bg: #616161;
-    --option-selected-text: #fff;
-    --search-bg: #424242;
+    --option-selected-text: #ffffff;
+    --search-bg: #1e1e1e;
     --search-text: #f5f5f5;
     --search-border: #616161;
-    --placeholder-color: #aaa;
-    --dropdown-header-bg: #424242;
+    --placeholder-color: #aaaaaa;
+    --dropdown-header-bg: #1e1e1e;
     --dropdown-header-text: #f5f5f5;
     --dropdown-header-border: #616161;
     --action-button-hover: #757575;
-    --action-button-text: #aaa;
-    --action-button-hover-text: #fff;
-    --clear-button-color: #aaa;
-    --clear-button-hover: #fff;
-    --clear-button-active: #fff;
+    --action-button-text: #aaaaaa;
+    --action-button-hover-text: #ffffff;
+    --clear-button-color: #aaaaaa;
+    --clear-button-hover: #ffffff;
+    --clear-button-active: #ffffff;
 
     /* Calendar */
-    --calendar-bg: #424242;
+    --calendar-bg: #1e1e1e;
     --calendar-text: #f5f5f5;
     --calendar-border: #616161;
     --calendar-header-bg: #535353;
@@ -187,7 +197,7 @@
     --calendar-day-disabled-text: #757575;
     
     /* Time Picker */
-    --timepicker-bg: #424242;
+    --timepicker-bg: #1e1e1e;
     --timepicker-text: #f5f5f5;
     --timepicker-border: #616161;
     --timepicker-header-bg: #535353;
@@ -196,20 +206,22 @@
     --timepicker-range-bg: #535353;
     
     /* Input */
-    --dateinput-value: #fff;
-    --dateinput-bg: #424242;
+    --dateinput-value: #ffffff;
+    --dateinput-bg: #1e1e1e;
     --dateinput-text: #f5f5f5;
-    --dateinput-placeholder: #aaa;
-    --dateinput-disabled: #999;
+    --dateinput-placeholder: #aaaaaa;
+    --dateinput-disabled: #999999;
 
-    --label-default-bg: #424242;
+    --label-default-bg: #1e1e1e;
     --label-default-text: #aaaaaa;
     --label-focus-color: #3a96dd;
     --label-error-color: #ff6b6b;
 
-    --input-wrapper-bg: #424242;
-    --input-placeholder: #aaa;
+    --input-wrapper-bg: #1e1e1e;
+    --input-wrapper-border: #616161;
+    --input-wrapper-border-hover: #e0e0e0;
+    --input-placeholder: #aaaaaa;
     --input-value: #f5f5f5;
-    --input-disabled: #999;
-    --input-bg: #424242;
+    --input-disabled: #999999;
+    --input-bg: #1e1e1e;
 }

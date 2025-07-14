@@ -75,7 +75,7 @@ time.icon {
     color: var(--timepicker-text);
     background: var(--timepicker-header-bg);
     border-radius: 4px 4px 0 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #cccccc;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -91,6 +91,7 @@ time.icon {
     color: var(--timepicker-text);
     transition: background-color 0.2s;
     width: 100%;
+    border-radius: 4px;
 }
 
 .timeOption:hover:not(.timeOptionSelected):not(.timeOptionDisabled) {
@@ -153,15 +154,14 @@ time.icon:focus {
 
 .calendarDropdown {
     position: absolute;
-    top: calc(100% + 2px);
     left: 0;
+    width: 100%;
     z-index: 10;
     background: var(--calendar-bg);
     color: var(--calendar-text);
     border: 1px solid var(--calendar-border);
     border-radius: 4px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 320px;
     padding: 16px;
     opacity: 0;
     transition: opacity 0.2s, transform 0.2s;
@@ -233,11 +233,11 @@ time.icon:focus {
 
 .calendarDropdown.above {
     top: auto;
-    bottom: calc(100% + 2px);
+    bottom: calc(100% + 4px);
 }
 
 .calendarDropdown.below {
-    top: calc(100% + 2px);
+    top: calc(100% + 4px);
     bottom: auto;
 }
 
@@ -253,8 +253,7 @@ time.icon:focus {
     padding: 4px 8px;
     text-align: center;
     background-color: var(--timepicker-range-bg);
-    margin-bottom: 4px;
-    border-radius: 4px;
+    margin-bottom: 1px;
 }
 
 @-webkit-keyframes swing {

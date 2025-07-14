@@ -96,33 +96,84 @@ export function TimeInput({
     disabled,
 }: TimeInputType): React.JSX.Element {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [labelRef, dynamicStyles] = useLabelStyle(label)
+    const [position, setPosition] = useState<'above' | 'below'>('below');
+    const [labelRef, dynamicStyles] = useLabelStyle(label);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const controlRef = useRef<HTMLDivElement>(null);
     const timeOptionRefs = useRef<HTMLDivElement[]>([]);
     const times = generateTimes(minTime, maxTime);
 
+    // Calculate dropdown position
+    useEffect(() => {
+        if (!isOpen || !controlRef.current || !dropdownRef.current) return;
+
+        const calculatePosition = () => {
+            const controlRect = controlRef.current!.getBoundingClientRect();
+            const dropdownHeight = Math.min(250, dropdownRef.current!.scrollHeight);
+            const spaceBelow = window.innerHeight - controlRect.bottom;
+            const spaceAbove = controlRect.top;
+            
+            // Choose position with most space
+            setPosition(spaceBelow >= dropdownHeight || spaceBelow >= spaceAbove 
+                ? 'below' 
+                : 'above');
+        };
+
+        calculatePosition();
+        
+        window.addEventListener('scroll', calculatePosition, true);
+        window.addEventListener('resize', calculatePosition);
+        
+        return () => {
+            window.removeEventListener('scroll', calculatePosition, true);
+            window.removeEventListener('resize', calculatePosition);
+        };
+    }, [isOpen, times]);
+
+    // Close when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsOpen(false);
-        }
+            if (controlRef.current && 
+                !controlRef.current.contains(event.target as Node) &&
+                dropdownRef.current && 
+                !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
         };
+        
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Scroll to selected time
     useEffect(() => {
-        if (isOpen && value) {
-            const selectedTimeIndex = times.findIndex(time => time === value);
-
-            if (selectedTimeIndex !== -1) {
-                timeOptionRefs.current[selectedTimeIndex]?.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                });
+        if (isOpen && value && dropdownRef.current) {
+            const selectedIndex = times.findIndex(time => time === value);
+            if (selectedIndex !== -1) {
+                setTimeout(() => {
+                    timeOptionRefs.current[selectedIndex]?.scrollIntoView({
+                        block: 'center',
+                        behavior: 'smooth'
+                    });
+                }, 10);
             }
         }
     }, [isOpen, value, times]);
+
+    const toggleTimePicker = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!disabled) {
+            setIsOpen(prev => {
+                if (!prev) {
+                    // Force reflow when opening to enable transition
+                    setTimeout(() => {
+                        dropdownRef.current?.getBoundingClientRect();
+                    }, 0);
+                }
+                return !prev;
+            });
+        }
+    };
 
     const getClassNames = () => {
         return [
@@ -130,33 +181,54 @@ export function TimeInput({
             styles.control,
             isOpen && globalStyles.selectBoxOpen,
             error && globalStyles.inputWrapperError,
+            disabled && globalStyles.disabled,
             className
         ]
             .filter(Boolean)
             .join(' ');
     };
 
-    const toggleTimePicker = () => {
-        if (!disabled) {
-            setIsOpen(!isOpen);
-        }
+    const getDropdownClasses = () => {
+        return [
+            styles.dropdown,
+            position === 'above' ? styles.above : styles.below
+        ].join(' ');
     };
 
     return (
-        <>
-            <div className={getClassNames()} style={{ ...dynamicStyles, ...style }} ref={dropdownRef}>
-                <label ref={labelRef} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>{label}</label>
-                <div className={`${styles.input}`} onClick={() => !disabled && setIsOpen(!isOpen)} style={{ color: value ? "inherit" : "rgb(204, 204, 204)" }}>
-                    {value ?? placeholder}
+        <div className={styles.timeInput} ref={controlRef}>
+            <div 
+                className={getClassNames()} 
+                onClick={toggleTimePicker}
+                style={{ ...dynamicStyles, ...style }}
+                aria-disabled={disabled}
+            >
+                <label ref={labelRef} className={`${globalStyles.label} ${error ? globalStyles.errorLabel : ''}`}>
+                    {label}
+                </label>
+                <div 
+                    className={styles.input}
+                    style={{ 
+                        color: value ? 'inherit' : 'var(--placeholder-color, #cccccc)',
+                        opacity: disabled ? 0.7 : 1
+                    }}
+                >
+                    {value || placeholder}
                 </div>
+                
                 {isOpen && (
-                    <div className={styles.dropdown}>
+                    <div 
+                        ref={dropdownRef}
+                        className={getDropdownClasses()}
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {times.map((time, index) => (
                             <div
                                 key={time}
-                                ref={(el) => { if (el) timeOptionRefs.current[index] = el; }}
-                                className={`${styles.option} ${time === value ? styles.selected : ""}`}
-                                onClick={() => {
+                                ref={el => { if (el) timeOptionRefs.current[index] = el; }}
+                                className={`${styles.option} ${time === value ? styles.selected : ''}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     onChange(time);
                                     setIsOpen(false);
                                 }}
@@ -166,6 +238,7 @@ export function TimeInput({
                         ))}
                     </div>
                 )}
+                
                 <button
                     type="button"
                     onClick={toggleTimePicker}
@@ -176,6 +249,6 @@ export function TimeInput({
                 </button>
             </div>
             {error && <p className={globalStyles.errorMessage}>{error}</p>}
-        </>
+        </div>
     );
-};
+}

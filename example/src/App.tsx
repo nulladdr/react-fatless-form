@@ -96,15 +96,12 @@ function App() {
               <Input name="age" type="number" label="Age" placeholder="Your age" />
               <Input name="dateAvailable" type="date" label="Date Available" minDate={new Date} timePicker minTime='08:00' maxTime='16:30' dateFormat='MMMM dd, yyyy' noWeekends rightIcon={<IoCalendarNumberSharp color='#ccc' />} />
               <Input name="quittingTime" type="time" label="Quitting time" minTime="3:00 PM" maxTime="4:30 PM" rightIcon={<IoTimeSharp color='#ccc' />} />
-              
-              
-                <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
+              <Input name="preferredCountriesOfWork" type="select" label="Preferred Countries" options={[
                   {label: "Kenya", value: "ke"},
                   {label: "Ethiopia", value: "et"},
                   {label: "Nigeria", value: "ng"},
                   {label: "South Africa", value: "sa"}
-                ]} placeholder="Select countries" multiple />
-              
+              ]} placeholder="Select countries" multiple />
               <Input name="password" type="password" label="Password" placeholder="Password" showIcon={<IoEye color='#ccc' />} hideIcon={<IoEyeOff color='#ccc' />} />
               <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
 

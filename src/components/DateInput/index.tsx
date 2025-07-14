@@ -362,7 +362,18 @@ export function DateInput({
 
     const toggleCalendar = () => {
         if (!disabled) {
-            setIsCalendarOpen((prev) => !prev);
+            // Save scroll position before opening
+            const scrollY = window.scrollY;
+            
+            setIsCalendarOpen(prev => {
+                if (!prev) {
+                    setTimeout(() => {
+                        // Restore scroll position after dropdown opens
+                        window.scrollTo(0, scrollY);
+                    }, 0);
+                }
+                return !prev;
+            });
         }
     };
 

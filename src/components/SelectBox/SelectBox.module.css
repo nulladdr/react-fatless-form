@@ -33,34 +33,40 @@
   position: absolute;
   left: 0;
   width: 100%;
-  background: white;
-  border: 1px solid #ccc;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
   border-radius: 4px;
   z-index: 10;
   max-height: 250px;
   overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.2s, transform 0.2s;
-  visibility: hidden;
+  transition:
+    opacity var(--dropdown-transition-duration) var(--dropdown-transition-timing),
+    transform var(--dropdown-transition-duration) var(--dropdown-transition-timing),
+    visibility 0s linear var(--dropdown-transition-duration);
   scrollbar-width: thin;
   scrollbar-color: #ccc transparent;
 }
 
 .dropdown.above,
 .dropdown.below {
-  visibility: visible;
-  opacity: 1;
+  opacity: var(--dropdown-opacity);
   transform: translateY(0);
+  transition:
+    opacity var(--dropdown-transition-duration) var(--dropdown-transition-timing),
+    transform var(--dropdown-transition-duration) var(--dropdown-transition-timing);
+  visibility: visible;
 }
 
 .dropdown.below {
   top: calc(100% + 4px);
+  transform-origin: top center;
 }
 
 .dropdown.above {
   bottom: calc(100% + 4px);
+  transform-origin: bottom center;
 }
 
 .actions {
@@ -173,6 +179,9 @@
     transition: all 0.2s ease;
     border-radius: 4px;
     margin: 2px 0;
+    transition:
+    background-color var(--dropdown-transition-duration) var(--dropdown-transition-timing),
+    color var(--dropdown-transition-duration) var(--dropdown-transition-timing);
 }
 
 .option:hover {

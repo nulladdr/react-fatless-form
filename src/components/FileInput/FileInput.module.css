@@ -2,14 +2,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 56px;
-    border: 1px dashed #ccc;
+    height: 75px;
+    border: 1px dashed var(--input-wrapper-border);
     transition: border-color 0.3s ease, background-color 0.6s ease;
 }
 
 .dragging {
     background-color: #e6f7ff;
     border: 1px dashed #0078d4;
+}
+
+.container:hover {
+    border: 1px dashed var(--input-wrapper-border-hover);
 }
 
 .container.error {
