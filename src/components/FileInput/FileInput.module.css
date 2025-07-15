@@ -9,7 +9,7 @@
 
 .dragging {
     background-color: #e6f7ff;
-    border: 1px dashed #0078d4;
+    border: 1px dashed var(--input-value);
 }
 
 .container:hover {
@@ -17,24 +17,24 @@
 }
 
 .container.error {
-    border: 1px dashed rgb(184, 0, 0);
+    border: 1px dashed var(--label-error-color);
 }
 
 .uploadSpan {
     display: flex;
     align-items: center;
-    color: #a9a9a9;
+    color: var(--placeholder-color, #cccccc);
     cursor: pointer;
     padding: 8px;
     transition: color 0.3s ease;
 }
 
 .uploadSpan:hover {
-    color: #808080;
+    color: var(--input-value);
 }
 
 .fileInfo {
-    color: #ccc;
+    color: var(--placeholder-color, #cccccc);
     padding: 8px;
     font-size: 0.8rem;
 }
@@ -42,12 +42,12 @@
 .noFileMessage {
     margin-top: 1px;
     font-size: 0.8rem;
-    color: #a9a9a9;
+    color: var(--placeholder-color, #cccccc);
 }
 
 .selectAllContainer {
     margin-bottom: 10px;
-    color: #a9a9a9;
+    color: var(--placeholder-color, #cccccc);
 }
 
 .selectAllCheckbox {
@@ -56,5 +56,5 @@
 
 .selectAllLabel {
     font-size: 0.9rem;
-    color: #a9a9a9;
+    color: var(--placeholder-color, #cccccc);
 }

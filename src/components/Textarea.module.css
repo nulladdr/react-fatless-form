@@ -1,10 +1,13 @@
 .textArea {
     z-index: 1;
-    background-color: transparent;
     width: 100%;
     border: none;
     margin-top: 5px;
     padding: 8px;
+    background-color: inherit;
+    color: var(--input-value);
+    font-size: 16px;
+    font-family: inherit;
 }
 
 .textArea:focus {

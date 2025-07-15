@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Switch.module.css';
+import styles from './Checkbox.module.css';
 export interface BaseCheckboxProps {
     type: "checkbox";
     name: string;
@@ -105,79 +105,88 @@ export type CheckboxInputType = SingleCheckboxProps | MultiCheckboxProps;
  * @returns {JSX.Element | null} The rendered checkbox component.
  */
 export function Checkbox(props: CheckboxInputType) {
-    const { name, label } = props;
+  const { name, label } = props;
 
-    // Single checkbox case
-    if (!('options' in props)) {
-        const { value, onChange, slider } = props;
+  // Single checkbox case
+  if (!('options' in props)) {
+    const { value, onChange, slider } = props;
 
-        const inputElement = (
-            <input
-                id={name}
-                name={name}
-                type="checkbox"
-                checked={value}
-                onChange={(e) => onChange(e.target.checked)}
-            />
-        );
+    const inputElement = (
+      <input
+        id={name}
+        name={name}
+        type="checkbox"
+        checked={value}
+        onChange={(e) => onChange(e.target.checked)}
+        className={styles.checkbox}
+      />
+    );
 
-        const labelElement = label && <span style={{ marginLeft: '8px', cursor: "pointer" }}>{label}</span>;
+    const labelElement = label && (
+      <span className={styles.checkboxLabel}>{label}</span>
+    );
 
-        if (!slider) {
-            return (
-                <label htmlFor={name}>
-                    {inputElement}
-                    {labelElement}
-                </label>
-            );
-        }
-
-        const sliderClass = `${styles.slider} ${slider === 'rounded' ? styles.round : ''}`;
-
-        return (
-            <div>
-                <label className={styles.switch} htmlFor={name}>
-                    {inputElement}
-                    <span className={sliderClass}></span>
-                </label>
-                {labelElement}
-            </div>
-        );
+    if (!slider) {
+      return (
+        <label htmlFor={name} style={{ display: "flex", alignItems: "center" }}>
+          {inputElement}
+          {labelElement}
+        </label>
+      );
     }
 
-    // Multiple checkboxes case
-    const { options, value = [], onChange } = props;
-
-    if (!options || options.length === 0) {
-        return null;
-    }
+    const sliderClass = `${styles.slider} ${slider === 'rounded' ? styles.round : ''}`;
 
     return (
-        <div>
-            {label && <label>{label}</label>}
-            <div>
-                {options.map((option, index) => (
-                    <label
-                        key={`${option.value}-${index}`}
-                        style={{ display: "block", margin: "4px 0", cursor: "pointer" }}
-                    >
-                        <input
-                            id={`${name}-${option.value}`}
-                            type="checkbox"
-                            name={name}
-                            checked={value.includes(option.value)}
-                            onChange={(e) =>
-                                onChange(
-                                    e.target.checked
-                                        ? [...value, option.value]
-                                        : value.filter((v) => v !== option.value)
-                                )
-                            }
-                        />
-                        {option.label}
-                    </label>
-                ))}
-            </div>
-        </div>
+      <div>
+        <label className={styles.switch} htmlFor={name}>
+          {inputElement}
+          <span className={sliderClass}></span>
+        </label>
+        {labelElement}
+      </div>
     );
+  }
+
+  // Multiple checkboxes case
+  const { options, value = [], onChange } = props;
+
+  if (!options || options.length === 0) {
+    return null;
+  }
+
+  return (
+    <div>
+      {label && <label className={styles.checkboxLabel}>{label}</label>}
+      <div>
+        {options.map((option, index) => (
+          <label
+            key={`${option.value}-${index}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "4px 0",
+              cursor: "pointer"
+            }}
+          >
+            <input
+              id={`${name}-${option.value}`}
+              type="checkbox"
+              name={name}
+              checked={value.includes(option.value)}
+              onChange={(e) =>
+                onChange(
+                  e.target.checked
+                    ? [...value, option.value]
+                    : value.filter((v) => v !== option.value)
+                )
+              }
+              className={styles.checkbox}
+            />
+            <span className={styles.checkboxLabel}>{option.label}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
 }

@@ -15,11 +15,12 @@
 .input {
     padding: 10px;
     border: none;
-    background-color: transparent;
+    background-color: inherit;
     color: var(--input-value);
     cursor: pointer;
     text-align: left;
-    font-size: 0.8rem;
+    font-size: 16px;
+    font-family: inherit;
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;

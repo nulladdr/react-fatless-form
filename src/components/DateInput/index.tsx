@@ -646,7 +646,7 @@ export function DateInput({
                     onFocus={() => !disabled && setIsCalendarOpen(true)}
                     style={{
                         color: inputValue ? 'var(--dateinput-value)' : 'var(--dateinput-placeholder)',
-                        backgroundColor: 'var(--dateinput-bg)',
+                        backgroundColor: 'inherit',
                         cursor: disabled ? 'not-allowed' : 'pointer',
                         ...style
                     }}

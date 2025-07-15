@@ -88,7 +88,7 @@ export function FileInput({
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
             />
 
-            <div>
+            <div style={{ marginBottom: "10px"}}>
                 {fileArray.length === 0 ? (
                     <span
                         className={

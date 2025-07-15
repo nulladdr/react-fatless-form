@@ -6,7 +6,7 @@
     border-radius: 4px;
     border: 1px solid var(--input-wrapper-border);
     color: var(--input-value);
-    background-color: var(--input-wrapper-bg);
+    background-color: inherit;
     height: 56px;
     transition: border-color 0.3s ease;
     margin-bottom: 10px;
@@ -46,7 +46,8 @@
     position: absolute;
     top: -10px;
     padding: 0 4px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
+    font-family: inherit;
     color: var(--label-color, var(--label-default-text, #808080));
     transition: color 0.3s ease;
     background-color: transparent;
@@ -140,7 +141,6 @@
     
     /* Input */
     --dateinput-value: #333333;
-    --dateinput-bg: #ffffff;
     --dateinput-text: #333333;
     --dateinput-placeholder: #999999;
     --dateinput-disabled: #888888;
@@ -150,13 +150,15 @@
     --label-focus-color: #0078d4;
     --label-error-color: #d32f2f;
 
-    --input-wrapper-bg: #ffffff;
     --input-wrapper-border: #e0e0e0;
     --input-wrapper-border-hover: #61616161;
     --input-placeholder: #999999;
     --input-value: #333333;
     --input-disabled: #888888;
-    --input-bg: #ffffff;
+
+    --checkbox-unchecked: rgba(0, 0, 0, 0.54);
+    --checkbox-checked: #1976d2;
+    --checkbox-label-color: rgba(0, 0, 0, 0.87);
 }
 
 [data-theme="dark"] {
@@ -207,7 +209,6 @@
     
     /* Input */
     --dateinput-value: #ffffff;
-    --dateinput-bg: #1e1e1e;
     --dateinput-text: #f5f5f5;
     --dateinput-placeholder: #aaaaaa;
     --dateinput-disabled: #999999;
@@ -217,11 +218,13 @@
     --label-focus-color: #3a96dd;
     --label-error-color: #ff6b6b;
 
-    --input-wrapper-bg: #1e1e1e;
     --input-wrapper-border: #616161;
     --input-wrapper-border-hover: #e0e0e0;
     --input-placeholder: #aaaaaa;
     --input-value: #f5f5f5;
     --input-disabled: #999999;
-    --input-bg: #1e1e1e;
+
+    --checkbox-unchecked: rgba(255, 255, 255, 0.7);
+    --checkbox-checked: #90caf9;
+    --checkbox-label-color: rgba(255, 255, 255, 0.87);
 }

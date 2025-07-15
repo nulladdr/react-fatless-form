@@ -1181,19 +1181,35 @@ Each input type enforces its own specific props, ensuring valid usage.
 
 ## Theme Support
 
-The package supports theming via the `data-theme` attribute. If no theme is specified:
+`react-fatless-form` supports light and dark themes via the `data-theme` attribute. This makes it easy to integrate into your design system, including frameworks like MUI, Tailwind, or custom setups.
 
-- Defaults to light theme colors
-- All backgrounds and colors have explicit fallbacks
-- Works without any theme setup
+### Defaults
 
-To enable dark mode:
+If no data-theme is specified:
 
-```html
+- The form components default to light mode
+- All color variables have explicit fallbacks, so the form works reliably even with no theme setup
+- You don’t need to configure anything to get started
+
+### Enabling Dark Mode
+
+To enable dark mode, add `data-theme="dark"` to any parent element:
+
+```typescript
 <form data-theme="dark">
     <Input ...>
 </form>
 ```
+
+Or to apply theme globally across your app:
+
+```typescript
+<div data-theme="dark">
+  <Form ... />
+</div>
+```
+
+You are not limited to using the form tag. Any ancestor element can define the theme using `data-theme`.
 
 ## Full Usage Example :sparkles:
 

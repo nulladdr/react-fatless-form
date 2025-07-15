@@ -1,3 +1,23 @@
+.checkbox {
+  width: 16px;
+  height: 16px;
+  padding: 12px;
+  box-sizing: content-box;
+  cursor: pointer;
+  accent-color: var(--checkbox-checked); /* Used for checked state */
+  appearance: auto;
+}
+
+.checkboxLabel {
+  font-size: 0.875rem;
+  margin-left: 8px;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.43;
+  font-family: Roboto, "Helvetica", "Arial", sans-serif;
+  color: var(--checkbox-label-color, rgba(0, 0, 0, 0.87));
+}
+
 .switch {
   position: relative;
   display: inline-block;
@@ -19,8 +39,7 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -31,21 +50,18 @@
   left: 5px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  transition: 0.4s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background-color: #0078d4;
 }
 
-input:focus+.slider {
+input:focus + .slider {
   box-shadow: 0 0 1px #0078d4;
 }
 
-input:checked+.slider:before {
-  -webkit-transform: translateX(14px);
-  -ms-transform: translateX(14px);
+input:checked + .slider:before {
   transform: translateX(14px);
 }
 

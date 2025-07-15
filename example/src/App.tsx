@@ -103,7 +103,8 @@ function App() {
                   {label: "South Africa", value: "sa"}
               ]} placeholder="Select countries" multiple />
               <Input name="password" type="password" label="Password" placeholder="Password" showIcon={<IoEye color='#ccc' />} hideIcon={<IoEyeOff color='#ccc' />} />
-              <Input name="relevantFiles" type="file" label="Relevant files" accept=".doc,.docx" multiple />
+              <Input name="relevantFiles" type="file" label="Relevant files" accept=".pdf" multiple />
+              <Input name="comments" type="textarea" label="Comments" placeholder="Your comments" />
 
               <button className="submitButton" type="submit">Submit</button>
               <button className="resetButton" type="reset" onClick={resetClickHandler}>Reset</button>
