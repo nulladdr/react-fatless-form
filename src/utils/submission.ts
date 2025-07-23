@@ -5,99 +5,91 @@ import { feedbackManager } from "./FeedbackManager";
 import { validateSchema } from "./validation";
 
 /**
- * Handles form submissions with validation, submission status updates, 
+ * Handles form submissions with validation, submission status tracking, 
  * and optional user feedback via toast notifications.
  *
- * This utility function:
- * - **Validates** the form using the provided `yup` schema.
- * - **Updates submission status** (`"submitting"`, `"success"`, `"error"`).
- * - **Handles feedback messages** based on the provided `feedbackConfig`.
- * - **Allows developers to control feedback handling** by omitting `feedbackConfig` or setting `showFeedback: false`.
+ * This utility:
+ * - Validates the form using the provided `yup` schema.
+ * - Tracks submission status (`"submitting"`, `"success"`, `"error"`).
+ * - Displays optional feedback via `feedbackManager` (e.g., toast).
+ * - Allows developers to suppress feedback manually or customize messages.
  *
- * @template T - The type of form values.
+ * @template T - Form value type.
+ * @template R - Response type from the submission handler.
  *
- * @param {ReturnType<typeof useForm<T>>} form - The form object returned by `useForm`, which manages form state, validation, and submission status.
- * @param {yup.ObjectSchema<T>} schema - A `yup` schema to validate the form values.
- * @param {(values: T) => Promise<{ message?: string } | void>} onSubmit - An asynchronous callback that performs the submission logic. 
- *   - If successful, it may return an object containing `{ message?: string }` (e.g., a success message).
- *   - If an error occurs, it should throw an object with `{ message?: string }` for error handling.
- * @param {() => void} [onSuccess] - An optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
- * @param {Object} [feedbackConfig] - Optional configuration for user feedback.
- * @param {string} [feedbackConfig.successMessage] - A custom success message. Defaults to `"Done!"` if not provided.
- * @param {string} [feedbackConfig.errorMessage] - A custom error message. Defaults to `"An error occurred. Please try again."` if not provided.
- * @param {boolean} [feedbackConfig.showFeedback] - Whether to show feedback messages. Defaults to `true`. 
- *   - If omitted, **feedback messages will still be shown**.
- *   - If `{}` (an empty object) is passed, a warning is logged, and no feedback will be displayed.
+ * @param {ReturnType<typeof useForm<T>>} form - The form instance managing state and validation.
+ * @param {yup.ObjectSchema<T>} schema - The Yup schema for validating form values.
+ * @param {(values: T) => Promise<R>} onSubmit - Async function that performs the actual submission.
+ *   - If successful, may return an object with `{ message?: string }`.
+ *   - If an error occurs, it should `throw` an object with `{ message?: string }`.
+ * @param {(result: R) => void} [onSuccess] - Optional callback executed after a successful submission.
+ * @param {Object} [feedbackConfig] - Optional config to control feedback behavior.
+ * @param {string} [feedbackConfig.successMessage] - Fallback success message. Defaults to `"Done!"`.
+ * @param {string} [feedbackConfig.errorMessage] - Fallback error message. Defaults to `"An error occurred. Please try again."`.
+ * @param {boolean} [feedbackConfig.showFeedback] - Whether to show toast feedback. Defaults to `true`.
+ *   - If omitted, feedback is enabled by default.
+ *   - If an empty object is passed (`{}`), feedback is disabled and a warning is logged.
  *
- * @returns {Promise<void>} A Promise that resolves after submission is complete.
+ * @returns {Promise<void>} A Promise that resolves when submission is complete.
  *
  * @example
- * // 1 Default behavior (implicit feedback handling)
+ * // Default behavior
  * await handleSubmit(form, schema, async (values) => {
- *     const result = await api.submit(values);
- *     return { message: "Profile updated successfully!" };
+ *   return { message: "Saved!" };
  * });
- * // Uses "Profile updated successfully!" from API if available.
- * // Falls back to "Done!" if API does not provide a message.
- * // Displays errors automatically if API throws an error with a message.
  *
  * @example
- * // 2 Custom success message
+ * // Custom success message
  * await handleSubmit(form, schema, async (values) => {
- *     const result = await api.submit(values);
- *     return { message: "Profile updated successfully!" };
+ *   return {};
  * }, {
- *     successMessage: "Update complete!"
+ *   successMessage: "Operation successful!"
  * });
- * // Shows "Profile updated successfully!" from API if available.
- * // Falls back to "Update complete!" if API does not return a message.
  *
  * @example
- * // 3 Custom error message
+ * // Custom error message
  * await handleSubmit(form, schema, async (values) => {
- *     const result = await api.submit(values);
- *     if (!result.ok) throw { message: "Server is unreachable." };
+ *   throw { message: "API is down" };
  * }, {
- *     errorMessage: "Something went wrong. Try again later."
+ *   errorMessage: "Failed to save. Try later."
  * });
- * // Shows "Server is unreachable." if API throws an error with a message.
- * // Falls back to "Something went wrong. Try again later." if no error message is provided.
  *
  * @example
- * // 4 Disabling feedback (you handle feedback manually)
+ * // Suppress feedback manually
  * await handleSubmit(form, schema, async (values) => {
- *     const result = await api.submit(values);
- *     if (!result.ok) throw new Error("Server error");
+ *   await api.save(values);
  * }, {
- *     showFeedback: false
+ *   showFeedback: false
  * });
- * // No automatic feedback messages.
- * // You must handle success/error feedback manually.
  *
  * @example
- * // 5 Empty feedbackConfig (assumes you will handle feedback manually)
+ * // Suppress feedback via empty config
  * await handleSubmit(form, schema, async (values) => {
- *     await api.submit(values);
+ *   return {};
  * }, {});
- * // Logs a warning: "Warning: `feedbackConfig` should not be an empty object. Defaulting to no feedback."
- * // No automatic feedback messages.
- * // You must handle success/error feedback manually.
+ * // Logs: "Warning: `feedbackConfig` should not be an empty object..."
+ *
+ * @example
+ * // Specify the response type (R)
+ * type ApiResponse = { id: string; message?: string };
+ *
+ * await handleSubmit<FormData, ApiResponse>(form, schema, async (values) => {
+ *   const response = await api.submit(values);
+ *   return response;
+ * }, (result) => {
+ *   console.log("Submitted successfully with ID:", result.id);
+ * });
  *
  * @description
- * - **Schema-Based Validation:** 
- *   - Validation is performed using the `validateSchema` utility under the hood, leveraging the provided `yup` schema.
- *   - Validation errors are automatically mapped to the form's error state, ensuring they are accessible in the UI.
- * 
- * - If `feedbackConfig` is **omitted**, feedback will still be shown using API messages or default messages.
- * - If `feedbackConfig` is an **empty object (`{}`)**, a warning is logged, and no feedback will be shown.
- * - If `onSubmit` returns `{ message: string }`, that message takes precedence over `feedbackConfig.successMessage`.
- * - If an error is thrown with `{ message: string }`, that message takes precedence over `feedbackConfig.errorMessage`.
+ * - Uses your `validateSchema()` helper for schema-based validation.
+ * - Gracefully handles `success` and `error` messages with fallback logic.
+ * - Supports typed `R` return types for safer downstream `onSuccess(result)` usage.
  */
-export async function handleSubmit<T extends Record<string, any>>(
+export async function handleSubmit<T extends Record<string, any>, R = void>(
     form: ReturnType<typeof useForm<T>>,
     schema: yup.ObjectSchema<T>,
-    onSubmit: (values: T) => Promise<{ message?: string } | void>,
-    onSuccess?: () => void,
+    onSubmit: (values: T) => Promise<R>,
+    onSuccess?: (result: R) => void,
     feedbackConfig?: {
         successMessage?: string;
         errorMessage?: string;
@@ -125,21 +117,38 @@ export async function handleSubmit<T extends Record<string, any>>(
 
         // Show feedback if either `feedbackConfig` is omitted or `showFeedback` is not explicitly set to false
         if (!feedbackConfig || feedbackConfig.showFeedback !== false) {
-            const successMessage = result?.message || feedbackConfig?.successMessage || "Done!";
+            const successMessage =
+                (typeof result === "object" && result !== null && "message" in result
+                    ? (result as any).message
+                    : undefined) ||
+                feedbackConfig?.successMessage ||
+                "Done!";
+
             if (successMessage) {
-                feedbackManager.addFeedback(successMessage, { variant: "success", onClose: resetSubmissionStatus });
+                feedbackManager.addFeedback(successMessage, {
+                    variant: "success",
+                    onClose: resetSubmissionStatus,
+                });
             }
         }
 
         resetForm();
-        onSuccess?.();
+        onSuccess?.(result);
     } catch (error: any) {
         updateSubmissionStatus("error");
 
         if (!feedbackConfig || feedbackConfig.showFeedback !== false) {
-            const errorMessage = error?.message || error.data.message || feedbackConfig?.errorMessage || "An error occurred. Please try again.";
+            const errorMessage =
+                error?.message ||
+                error?.data?.message ||
+                feedbackConfig?.errorMessage ||
+                "An error occurred. Please try again.";
+
             if (errorMessage) {
-                feedbackManager.addFeedback(errorMessage, { variant: "error", onClose: resetSubmissionStatus });
+                feedbackManager.addFeedback(errorMessage, {
+                    variant: "error",
+                    onClose: resetSubmissionStatus,
+                });
             }
         }
     }
