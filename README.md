@@ -744,7 +744,7 @@ The `handleSubmit` utility simplifies form submissions in React applications by 
 #### Features
 
 - **Schema-Based Validation:** Ensures form data adheres to a defined structure using [yup].
-- **Submission Status Updates:** Automatically updates form status ("submitting", "success", "error") for improved user feedback and state management.
+- **Submission Status Updates:** Automatically updates form status (`submitting`, `success`, `error`) for improved user feedback and state management.
 - **Configurable Feedback Handling:** Allows developers to control success and error messages through feedbackConfig.
 - **Promise-Based API:** Fully compatible with async/await for smooth integration.
 
@@ -753,11 +753,11 @@ The `handleSubmit` utility simplifies form submissions in React applications by 
 #### Signature
 
 ```typescript
-function handleSubmit<T extends Record<string, any>>(
+function handleSubmit<T extends Record<string, unknown>, R = void>(
     form: ReturnType<typeof useForm<T>>,
     schema: yup.ObjectSchema<T>,
-    onSubmit: (values: T) => Promise<void>,
-    onSuccess?: () => void,
+    onSubmit: (values: T) => Promise<R>,
+    onSuccess?: (result: R) => void,
     feedbackConfig?: {
         successMessage?: string;
         errorMessage?: string;
@@ -770,8 +770,12 @@ function handleSubmit<T extends Record<string, any>>(
 
 - `form: ReturnType<typeof useForm<T>>` - The form object returned by the `useForm` hook.
 - `schema: yup.ObjectSchema<T>` - A [yup] schema defining the structure and constraints of form values.
-- `onSubmit: (values: T) => Promise<void>` - An async callback for form submission logic. Receives validated form values as an argument.
-- `onSuccess?: () => void` - Optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
+- `onSubmit: (values: T) => Promise<R>` - Async function that performs the actual submission.
+
+  - If successful, may return an object with `{ message?: string }`.
+  - If an error occurs, it should `throw` an object with `{ message?: string }`.
+
+- `onSuccess?: (result: R) => void` - Optional callback to execute after a successful submission. Useful for closing modals, refetching, etc.
 - `feedbackConfig?: { successMessage?: string; errorMessage?: string; showFeedback?: boolean; }` - Optional configuration object for feedback handling.
 
   - `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
@@ -787,14 +791,16 @@ function handleSubmit<T extends Record<string, any>>(
 ##### Schema Definition with [yup]
 
 ```typescript
-import * as yup from "yup";
 import { useForm } from "react-fatless-form";
+import * as yup from "yup";
 
 // Define a schema
 const schema = yup.object({
     username: yup.string().required("Name is required"),
     age: yup.number().min(18, "Must be at least 18").required("Age is required"),
 });
+
+type FormData = yup.InferType<typeof schema>
 ```
 
 ##### Basic Integration
@@ -802,7 +808,7 @@ const schema = yup.object({
 ```typescript
 import { useForm, handleSubmit } from 'react-fatless-form';
 
-const form = useForm({ username: "", age: 0 });
+const form = useForm<FormData>({ username: "", age: 0 });
 
 const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -814,6 +820,7 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promis
             const result = await api.submitData(values);
             if (!result.ok) throw result;
         },
+        response => console.log(response),
         { successMessage: "Submission successful!" }
     );
 };
@@ -829,6 +836,7 @@ await handleSubmit(
         const result = await api.submitData(values);
         if (!result.ok) throw result;
     },
+    undefined,
     { successMessage: "Successfully submitted!", errorMessage: "Submission failed. Please try again." }
 );
 ```
@@ -850,6 +858,7 @@ const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<vo
             const result = await api.submitData(values);
             if (!result.ok) throw result;
         },
+        undefined,
         { showFeedback: false }
     );
 
@@ -890,8 +899,10 @@ const schema = yup.object({
     age: yup.number().min(18, "Must be at least 18").required("Age is required"),
 });
 
+type FormData = yup.InferType<typeof schema>
+
 function MyForm() {
-    const form = useForm({ username: "", age: 0 });
+    const form = useForm<FormData>({ username: "", age: 0 });
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
@@ -903,6 +914,7 @@ function MyForm() {
                 const result = await api.submitData(values);
                 if (!result.ok) throw result;
             },
+            undefined,
             { successMessage: "Submission successful!" }
         );
     };
@@ -1147,16 +1159,16 @@ Each input type enforces its own specific props, ensuring valid usage.
 
 ```tsx
 <Input
-   value={new Date()} // Pre-select today's date
-   onChange={(date) => console.log('Selected Date:', date)} // Handle date selection
-   minDate={new Date()} // Restrict to no past dates
-   maxDate={new Date(2080, 11, 31)} // Allow dates only up to Dec 31, 2080
-   dateFormat="MMMM dd, yyyy" // Use long month name format
-   noWeekends // Disable selection of weekend dates (Saturday and Sunday)
-   timePicker // Enable time selection
-   minTime="09:00" // Restrict times to 9AM or later
-   maxTime="16:00" // Restrict times to 4PM or earlier
-   className="custom-date-input" // Add custom styling to the input field
+   value={new Date()}
+   onChange={(date) => console.log('Selected Date:', date)}
+   minDate={new Date()}
+   maxDate={new Date(2080, 11, 31)}
+   dateFormat="MMMM dd, yyyy"
+   noWeekends
+   timePicker
+   minTime="09:00"
+   maxTime="16:00"
+   className="custom-date-input"
  />
 ```
 
@@ -1185,7 +1197,7 @@ Each input type enforces its own specific props, ensuring valid usage.
 
 ### Defaults
 
-If no data-theme is specified:
+If no `data-theme` is specified:
 
 - The form components default to light mode
 - All color variables have explicit fallbacks, so the form works reliably even with no theme setup
@@ -1211,11 +1223,40 @@ Or to apply theme globally across your app:
 
 You are not limited to using the form tag. Any ancestor element can define the theme using `data-theme`.
 
+#### Dynamic Theme Integration (e.g. MUI)
+
+If your app switches between themes dynamically (e.g. using MUI's `useTheme`), `react-fatless-form` will automatically detect and respond to theme changes:
+
+```tsx
+import { useTheme } from '@mui/material/styles'
+
+export default function GlobalLayout() {
+  const theme = useTheme()
+
+  return (
+    <div data-theme={theme.palette.mode}> {/* Can be 'light' or 'dark' */}
+      <App />
+    </div>
+  )
+}
+```
+
+##### How It Works Internally
+
+Form components (e.g. labels) use `getComputedStyle` and `MutationObserver` to:
+
+- Detect nearest ancestor with `data-theme`
+- Extract its effective text and background colors
+- Update layout and masking dynamically when the theme changes
+
+This means you **don't** need to pass the theme manually or force rerenders - the form will follow the theme context set via `data-theme`.
+
 ## Full Usage Example :sparkles:
 
 ```tsx
-import * as yup from "yup";
 import { FormProvider, useForm, handleSubmit, Input } from "react-fatless-form";
+import { IoCalendarNumberSharp, IoTimeSharp, IoEye, IoEyeOff } from "react-icons/io5";
+import * as yup from "yup";
 
 // Define a schema
 const schema = yup.object({
@@ -1292,6 +1333,7 @@ function MyForm() {
                 const result = await api.submitData(values);
                 if (!result.ok) throw result;
             },
+            response => console.log(response),
             { successMessage: "Submission successful!" }
         );
     };
