@@ -280,8 +280,6 @@ export function useForm<T>(initialValues: T) {
         setSubmissionStatus("idle");
     }, []);
     
-
-
     return useMemo(() => ({
         ...state,
         submissionStatus,
