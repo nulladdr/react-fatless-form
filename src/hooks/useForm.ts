@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export interface UseForm<T> {
     values: T;
@@ -279,8 +279,10 @@ export function useForm<T>(initialValues: T) {
     const resetSubmissionStatus = useCallback(() => {
         setSubmissionStatus("idle");
     }, []);
+    
 
-    return {
+
+    return useMemo(() => ({
         ...state,
         submissionStatus,
         setFieldValue,
@@ -292,5 +294,17 @@ export function useForm<T>(initialValues: T) {
         resetForm,
         updateSubmissionStatus,
         resetSubmissionStatus,
-    };
+    }), [
+        state, 
+        submissionStatus,
+        setFieldValue,
+        batchSetfieldValues,
+        setFieldArrayValue,
+        setFieldError,
+        setFieldTouched,
+        validate,
+        resetForm,
+        updateSubmissionStatus,
+        resetSubmissionStatus
+    ]);
 }
