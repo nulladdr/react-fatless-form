@@ -193,9 +193,7 @@ export function SelectBox({
                 >
                     {displayValue()}
                 </span>
-                <span className={styles.arrow} style={{ opacity: disabled ? 0.5 : 1 }}>
-                    {isOpen ? '\u005E' : '\u2304'}
-                </span>
+                <div className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`} style={{ opacity: disabled ? 0.5 : 1 }} />
             </div>
 
             {isOpen && !disabled && (

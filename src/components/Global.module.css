@@ -159,6 +159,8 @@
     --checkbox-unchecked: rgba(0, 0, 0, 0.54);
     --checkbox-checked: #1976d2;
     --checkbox-label-color: rgba(0, 0, 0, 0.87);
+
+    --arrow-color: rgba(0, 0, 0, 0.54);
 }
 
 [data-theme="dark"] {
@@ -227,4 +229,6 @@
     --checkbox-unchecked: rgba(255, 255, 255, 0.7);
     --checkbox-checked: #90caf9;
     --checkbox-label-color: rgba(255, 255, 255, 0.87);
+
+    --arrow-color: rgba(255, 255, 255, 0.7);
 }

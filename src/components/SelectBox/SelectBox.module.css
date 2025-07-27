@@ -23,11 +23,20 @@
 }
 
 .arrow {
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 20px;
-    color: #808080;
-    transition: transform 0.2s;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-right: 10px;
+  transition: transform 0.2s ease;
+}
+
+.arrowDown {
+  border-top: 6px solid var(--arrow-color, black);
+}
+
+.arrowUp {
+  border-bottom: 6px solid var(--arrow-color, black);
 }
 
 .dropdown {
