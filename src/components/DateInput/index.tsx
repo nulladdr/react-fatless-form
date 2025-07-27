@@ -553,7 +553,6 @@ export function DateInput({
                 style={{
                     backgroundColor: 'var(--timepicker-bg)',
                     color: 'var(--timepicker-text)',
-                    borderTopColor: 'var(--timepicker-border)'
                 }}
             >
                 <div className={styles.timeHeader}>Select Time</div>
@@ -562,7 +561,7 @@ export function DateInput({
                         Available: {minTime} - {maxTime}
                     </div>
                 )}
-                <div style={{ borderRadius: "4px" }}>
+                <div className={styles.timeOptionsContainer}>
                     {times}
                 </div>
             </div>
@@ -580,43 +579,45 @@ export function DateInput({
                 borderColor: 'var(--calendar-border)'
             }}
         >
-            <div className={styles.calendarHeader}>
-                <select
-                    value={currentMonth}
-                    onChange={(e) => setCurrentMonth(Number(e.target.value))}
-                    disabled={disabled}
-                    role="combobox"
-                    aria-label="month"
-                >
-                    {Array.from({ length: 12 }, (_, index) =>
-                        <option key={index} value={index}>{new Date(0, index).toLocaleString('default', { month: 'long' })}</option>
-                    )}
-                </select>
-                <select
-                    value={currentYear}
-                    onChange={(e) => setCurrentYear(Number(e.target.value))}
-                    disabled={disabled}
-                    role="combobox"
-                    aria-label="year"
-                >
-                    {Array.from(
-                        { length: 20 },
-                        (_, index) => new Date().getFullYear() - 10 + index
-                    ).map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
+            <div className={styles.calendarSection}>
+                <div className={styles.calendarHeader}>
+                    <select
+                        value={currentMonth}
+                        onChange={(e) => setCurrentMonth(Number(e.target.value))}
+                        disabled={disabled}
+                        role="combobox"
+                        aria-label="month"
+                    >
+                        {Array.from({ length: 12 }, (_, index) =>
+                            <option key={index} value={index}>{new Date(0, index).toLocaleString('default', { month: 'long' })}</option>
+                        )}
+                    </select>
+                    <select
+                        value={currentYear}
+                        onChange={(e) => setCurrentYear(Number(e.target.value))}
+                        disabled={disabled}
+                        role="combobox"
+                        aria-label="year"
+                    >
+                        {Array.from(
+                            { length: 20 },
+                            (_, index) => new Date().getFullYear() - 10 + index
+                        ).map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className={styles.daysOfWeek}>
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                        <div key={day} className={styles.dayLabel}>
+                            {day}
+                        </div>
                     ))}
-                </select>
+                </div>
+                <div className={styles.days}>{generateCalendarDays()}</div>
             </div>
-            <div className={styles.daysOfWeek}>
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                    <div key={day} className={styles.dayLabel}>
-                        {day}
-                    </div>
-                ))}
-            </div>
-            <div className={styles.days}>{generateCalendarDays()}</div>
             {timePicker && renderTimePicker()}
         </div>
     );

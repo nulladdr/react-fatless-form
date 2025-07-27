@@ -49,22 +49,13 @@ time.icon {
 }
 
 .timePicker {
-    position: absolute;
-    left: 100.125%;
-    top: 0;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    background: var(--timepicker-bg);
-    border-top: 1px solid var(--timepicker-border);
-    border: 1px solid var(--timepicker-border);
-    border-radius: 4px;
-    scrollbar-color: #ccc transparent;
-    scrollbar-width: thin;
     width: 90px;
-    z-index: 10;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 100%;
+    background: var(--timepicker-bg);
+    border-left: 1px solid var(--timepicker-border);
+    overflow: hidden;
 }
 
 .timeHeader {
@@ -75,7 +66,6 @@ time.icon {
     font-size: 0.7rem;
     color: var(--timepicker-text);
     background: var(--timepicker-header-bg);
-    border-radius: 4px 4px 0 0;
     border-bottom: 1px solid #cccccc;
     position: sticky;
     top: 0;
@@ -155,23 +145,34 @@ time.icon:focus {
 
 .calendarDropdown {
     position: absolute;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 280px;
+    max-width: 75vw;
     z-index: 10;
     background: var(--calendar-bg);
     color: var(--calendar-text);
     border: 1px solid var(--calendar-border);
     border-radius: 4px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 16px;
+    padding: 0;
     opacity: 0;
     transition: opacity 0.2s, transform 0.2s;
-    transform: translateY(-10px);
+    transform: translateY(-10px) translateX(-50%);
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 .calendarDropdown.open {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
+}
+
+.calendarSection {
+    padding: 16px;
+    flex: 1;
+    min-width: 280px;
 }
 
 .calendarHeader {
@@ -243,9 +244,21 @@ time.icon:focus {
 }
 
 .timeOptionsContainer {
-    max-height: 200px;
+    flex: 1;
     overflow-y: auto;
-    border-radius: 0 0 4px 4px;
+    max-height: 300px;
+    padding: 0 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.timeOptionsContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.timeOptionsContainer::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
 }
 
 .timeRange {
@@ -255,6 +268,9 @@ time.icon:focus {
     text-align: center;
     background-color: var(--timepicker-range-bg);
     margin-bottom: 1px;
+    position: sticky;
+    top: 30px; /* height of timeHeader */
+    z-index: 1;
 }
 
 @-webkit-keyframes swing {
