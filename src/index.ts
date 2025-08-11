@@ -5,4 +5,4 @@ export { useForm } from './hooks/useForm';
 export { useFormContext } from './hooks/useFormContext';
 export { feedbackManager } from './utils/FeedbackManager';
 export { handleSubmit } from './utils/submission';
-export { validateSchema } from './utils/validation';
+export { validateSchema, yupResolver } from './utils/validation';

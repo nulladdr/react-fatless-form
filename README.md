@@ -603,7 +603,9 @@ function MyForm() {
 
 ### `validateSchema`
 
-The `validateSchema` utility function is a simple and efficient tool for validating form values against a schema defined using the [yup] validation library. It provides a structured way to collect validation errors, making it easy to integrate with form handling workflows.
+>:warning: Deprecated: This function is deprecated. Prefer using a resolver function directly with `form.validate()` or `handleSubmit` for better integration with the form lifecycle.
+
+The `validateSchema` utility is a generic helper for running a resolver function against a set of values.
 
 #### API Documentation
 
@@ -611,129 +613,42 @@ The `validateSchema` utility function is a simple and efficient tool for validat
 
 ```typescript
 function validateSchema<T extends Record<string, any>>(
-    schema: yup.ObjectSchema<T>, 
-    values: T,
-    abortEarly: boolean = false
+  resolver: (values: T) => Partial<Record<keyof T, string>>,
+  values: T
 ): Partial<Record<keyof T, string>>
 ```
 
 #### Parameters
 
-##### 1. `schema: yup.ObjectSchema<T>`
+**`resolver: (values: T) => ...`**
 
-The validation schema defining the rules for the form fields. This is a yup object schema tailored to the structure of the values being validated.
+A validation function that takes values and returns an error object.
 
-##### 2. `values: T`
+**`values: T`**
 
-The object containing the form field values to be validated against the schema.
-
-##### 3. `abortEarly: boolean`
-
-Whether to stop at the first validation error (`true`) or collect all errors (`false` - default).
+The data object to validate.
 
 #### Return value
 
-An object containing validation errors. Each key represents the name of an invalid field, and its value is the corresponding error message. If no validation errors are found, an empty object `{}` is returned.
-
-#### Behavior
-
-##### Validation Process
-
-- The `validateSchema` function uses the `schema.validateSync()` method from [yup] to perform validation.
-- The `abortEarly: false` option ensures all errors are collected, not just the first one.
-
-##### Error Handling
-
-- If the validation fails, the errors are collected from the inner property of the `yup.ValidationError` object.
-- The errors are returned as a flat object, where each field’s name is mapped to its corresponding error message.
+An object containing validation errors. If validation passes, it returns an empty object `{}`.
 
 #### Example usage
 
-```tsx
-import * as yup from "yup";
-import { FormProvider, useForm, feedbackManager, validateSchema } from "react-fatless-form";
+```typescript
+import { yupResolver } from 'react-fatless-form';
+import * as yup from 'yup';
 
-// Define a schema
-const schema = yup.object({
-    username: yup.string().required("Name is required"),
-    age: yup.number().min(18, "Must be at least 18").required("Age is required"),
-});
+const schema = yup.object({ name: yup.string().required() });
+const values = { name: "" };
 
-function MyForm() {
-    const { 
-      validate, 
-      values,
-      errors,  
-      updateSubmissionStatus, 
-      resetForm, 
-      resetSubmissionStatus,
-      setFieldValue,
-      setFieldTouched,
-    } = useForm({ username: "", age: 0 });
+// Create a resolver
+const resolver = yupResolver(schema);
 
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault();
-        
-        if (!validate(() => validateSchema(schema, values))) {
-            console.warn("Validation failed");
-            return;
-        }
-        
-        updateSubmissionStatus("submitting");
-        
-        try {
-            await apiCall(values);
-            updateSubmissionStatus("success");
-            
-            feedbackManager.addFeedback("Submission successful!", {
-                type: "toast",
-                variant: "success",
-                autoDismiss: true,
-                duration: 5000,
-                onClose: () => console.log("Feedback closed!"),
-            });
-            
-            resetForm();
-        } catch (error) {
-            console.error("Error during submission:", error);
-            updateSubmissionStatus("error");
-            
-            feedbackManager.addFeedback("That didn't go well!", {
-                type: "toast",
-                variant: "error",
-                autoDismiss: true,
-                duration: 5000,
-                onClose: () => console.log("Feedback closed!"),
-            });
-        } finally {
-            resetSubmissionStatus();
-        }
-    };
+// Manually validate the values
+const errors = validateSchema(resolver, values);
 
-    return (
-        <FormProvider form={form}>
-            <form onSubmit={onSubmit}>
-                <input
-                    name="username"
-                    value={values.username}
-                    onChange={(e) => setFieldValue("username", e.target.value)}
-                    onBlur={() => setFieldTouched("username", true)}
-                />
-                {errors.username && <span>{errors.username}</span>}
-    
-                <input 
-                    name: "age"
-                    type="number"
-                    value={values.age}
-                    onChange={(e) => setFieldValue("age", parseInt(e.target.value, 10))}
-                    onBlur={() => setFieldTouched("age", true)}
-                />
-                {errors.age && <span>{errors.age}</span>}
-    
-                <button type="submit">Submit</button>
-            </form>
-        </FormProvider>
-    );
+if (Object.keys(errors).length > 0) {
+  console.log("Validation failed:", errors); // { name: 'Name is required' }
 }
 ```
 
@@ -741,35 +656,38 @@ function MyForm() {
 
 The `handleSubmit` utility simplifies form submissions in React applications by integrating schema-based validation, submission status management, and optional feedback notifications. Designed to work seamlessly with the `useForm` hook, it reduces boilerplate code and enforces best practices for managing the form lifecycle.
 
+It is validation-agnostic, meaning it can work with any validation library (like [Yup], Zod, etc.) through a simple `resolver` function.
+
 #### Features
 
-- **Schema-Based Validation:** Ensures form data adheres to a defined structure using [yup].
-- **Submission Status Updates:** Automatically updates form status (`submitting`, `success`, `error`) for improved user feedback and state management.
-- **Configurable Feedback Handling:** Allows developers to control success and error messages through feedbackConfig.
-- **Promise-Based API:** Fully compatible with async/await for smooth integration.
+- **Validation-Agnostic:** Accepts a `resolver` function to connect with any validation library.
+- **Automated Lifecycle:** Manages form status (`submitting`, `success`, `error`) automatically.
+- **Integrated Feedback:** Shows `success` and `error` toasts using `FeedbackManager`, with options to customize or disable them.
+- **Flexible Callbacks:** Provides an `onSuccess` callback for running side effects like closing a modal or refetching data.
+- **Promise-Based API:** Fully compatible with async/await for modern asynchronous code.
 
 #### API Documentation
 
 #### Signature
 
 ```typescript
-function handleSubmit<T extends Record<string, unknown>, R = void>(
-    form: ReturnType<typeof useForm<T>>,
-    schema: yup.ObjectSchema<T>,
-    onSubmit: (values: T) => Promise<R>,
-    onSuccess?: (result: R) => void,
-    feedbackConfig?: {
-        successMessage?: string;
-        errorMessage?: string;
-        showFeedback?: boolean;
-    }
+function handleSubmit<T extends Record<string, any>, R = void>(
+  form: ReturnType<typeof useForm<T>>,
+  resolver: (values: T) => Partial<Record<keyof T, string>>,
+  onSubmit: (values: T) => Promise<R>,
+  onSuccess?: (result: R) => void,
+  feedbackConfig?: {
+    successMessage?: string;
+    errorMessage?: string;
+    showFeedback?: boolean;
+  }
 ): Promise<void>
 ```
 
 #### Parameters
 
 - `form: ReturnType<typeof useForm<T>>` - The form object returned by the `useForm` hook.
-- `schema: yup.ObjectSchema<T>` - A [yup] schema defining the structure and constraints of form values.
+- `resolver: (values: T) => ...` - A function that receives the current form values and returns validation errors. For a valid form, **it must return an empty object (`{}`)**. For an invalid form, it should return an object mapping field names to error messages (e.g., `{ email: "Invalid email" }`).
 - `onSubmit: (values: T) => Promise<R>` - Async function that performs the actual submission.
 
   - If successful, may return an object with `{ message?: string }`.
@@ -781,6 +699,116 @@ function handleSubmit<T extends Record<string, unknown>, R = void>(
   - `successMessage?: string` - A success message displayed upon successful submission. Defaults to "Done!".
   - `errorMessage?: string` - A custom error message to display when submission fails.
   - `showFeedback?: boolean` - Controls whether feedback notifications are displayed. Defaults to true.
+
+#### The Resolver Pattern
+
+The resolver is the bridge between your validation logic and `handleSubmit`. It's a simple function with a clear contract:
+
+- **Input:** Receives the form's current values.
+- **Output (Success):** Returns an empty object {}.
+- **Output (Failure):** Returns an object where keys are field names and values are their error messages.
+
+This pattern allows you to use any validation library you prefer.
+
+##### Example Usage
+
+**With `yupResolver` (Recommended for [Yup] users)**
+
+`react-fatless-form` includes a `yupResolver` helper to easily connect [Yup] schemas.
+
+```typescript
+import { useForm, handleSubmit, yupResolver } from 'react-fatless-form';
+import * as yup from 'yup';
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+});
+
+const form = useForm({ email: '' });
+
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+  await handleSubmit(
+    form,
+    yupResolver(schema), // Use the helper here
+    async (values) => {
+      // API call logic
+    },
+    result => console.log('Success!', result),
+    { successMessage: 'User created successfully!' }
+  );
+};
+```
+
+**With Zod**
+You can easily create a resolver for other libraries like Zod.
+
+```typescript
+import { useForm, handleSubmit } from 'react-fatless-form';
+import { z } from 'zod';
+
+const schema = z.object({
+  name: z.string().min(1, 'Name is required'),
+});
+
+// Create a Zod resolver
+const zodResolver = (values) => {
+  try {
+    schema.parse(values);
+    return {}; // Return empty object on success
+  } catch (error) {
+    return error.flatten().fieldErrors; // Return Zod's error object
+  }
+};
+
+const form = useForm({ name: '' });
+
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+  await handleSubmit(form, zodResolver, async (values) => { /* ... */ });
+};
+```
+
+### `yupResolver`
+
+A helper function that creates a resolver compatible with `handleSubmit` from a [Yup] schema. This provides an easy integration path for projects that use [Yup] for validation.
+
+#### API Documentation
+
+#### Signature
+
+```typescript
+function yupResolver<T extends Record<string, any>>(
+  schema: yup.ObjectSchema<T>,
+  abortEarly: boolean = false
+): (values: T) => Partial<Record<keyof T, string>>
+```
+
+#### Parameters
+
+- `schema: yup.ObjectSchema<T>` - The Yup validation schema.
+- `abortEarly: boolean` - If `true`, stops validation on the first error. Defaults to `false` to collect all errors.
+
+#### Returns
+
+A resolver function that can be passed directly to `handleSubmit`.
+
+##### Example Usage
+
+```typescript
+import { yupResolver } from "react-fatless-form";
+import * as yup from "yup";
+
+const schema = yup.object({
+  username: yup.string().required(),
+});
+
+// Create the resolver
+const resolver = yupResolver(schema);
+
+// Use it with handleSubmit
+await handleSubmit(form, resolver, onSubmit);
+```
 
 #### Returns
 

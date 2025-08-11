@@ -1,67 +1,49 @@
 import * as yup from "yup";
 
 /**
- * Validates a given schema against a set of values and returns validation errors if any.
- *
- * This function uses the `yup` validation library to check if the provided values conform 
- * to the given schema. It supports configurable error handling through the `abortEarly` option.
- *
- * - When `abortEarly` is `true`, validation stops at the first encountered error.
- * - When `abortEarly` is `false` (default), all validation errors are collected and returned.
- *
- * @template T - The shape of the schema and values being validated.
- *
- * @param {yup.ObjectSchema<T>} schema - The Yup schema defining validation rules.
- * @param {T} values - The object containing values to be validated.
- * @param {boolean} [abortEarly=false] - Whether to stop at the first validation error (`true`)
- * or collect all errors (`false`).
- *
- * @returns {Partial<Record<keyof T, string>>} An object containing validation errors, where:
- *  - Keys represent the field names with errors.
- *  - Values are the corresponding error messages.
- *  - If no errors are found, an empty object `{}` is returned.
- *
+ * Creates a Yup-based resolver for handleSubmit.
+ * Maintains backward compatibility for existing Yup users.
+ * 
+ * @template T - Form value type
+ * @param {yup.ObjectSchema<T>} schema - Yup validation schema
+ * @param {boolean} [abortEarly=false] - Stop validation at first error
+ * @returns {(values: T) => Partial<Record<keyof T, string>>} Resolver function
+ * 
  * @example
- * // Define a schema
- * const schema = yup.object().shape({
- *   name: yup.string().required("Name is required"),
- *   age: yup.number().min(18, "Must be at least 18").required("Age is required"),
- * });
- *
- * // Example input values
- * const values = { name: "", age: 15 };
- *
- * // Validate with default behavior (collect all errors)
- * const errors = validateSchema(schema, values);
- * console.log(errors);
- * // Output:
- * // {
- * //   name: "Name is required",
- * //   age: "Must be at least 18"
- * // }
- *
- * @example
- * // Validate with abortEarly = true (stops at the first error)
- * const errors = validateSchema(schema, values, true);
- * console.log(errors);
- * // Output:
- * // { name: "Name is required" }
- *
- * @throws {Error} This function does not throw errors; instead, it returns a structured object
- * containing validation messages.
+ * // Using with handleSubmit
+ * import { yupResolver } from "./validation";
+ * 
+ * handleSubmit(
+ *   form,
+ *   yupResolver(schema),
+ *   onSubmit
+ * );
+ */
+export function yupResolver<T extends Record<string, any>>(
+  schema: yup.ObjectSchema<T>,
+  abortEarly: boolean = false
+): (values: T) => Partial<Record<keyof T, string>> {
+  return (values: T) => {
+    try {
+      schema.validateSync(values, { abortEarly });
+      return {};
+    } catch (validationError: any) {
+      return validationError.inner.reduce((acc: Record<string, string>, err: any) => {
+        if (err.path) acc[err.path] = err.message;
+        return acc;
+      }, {});
+    }
+  };
+}
+
+/**
+ * Generic validation helper (optional - for direct usage)
+ * 
+ * @deprecated Prefer using resolver functions directly
  */
 export function validateSchema<T extends Record<string, any>>(
-    schema: yup.ObjectSchema<T>, 
-    values: T, 
-    abortEarly: boolean = false // Default: collect all errors
+  resolver: (values: T) => Partial<Record<keyof T, string>>,
+  values: T
 ): Partial<Record<keyof T, string>> {
-    try {
-        schema.validateSync(values, { abortEarly });
-        return {};
-    } catch (validationError: any) {
-        return validationError.inner.reduce((acc: Record<string, string>, err: any) => {
-            acc[err.path] = err.message;
-            return acc;
-        }, {});
-    }
+  return resolver(values);
 }
